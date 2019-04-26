@@ -12,6 +12,8 @@ import br.senac.backend.model.Auth;
 import br.senac.backend.model.User;
 import br.senac.backend.util.JWTUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
 
@@ -23,6 +25,10 @@ public class AuthService {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Sucesso! Retornará o JWT Token"),
+			@ApiResponse(code = 401, message = "Usuário sem autorização")
+	})
 	public Response authenticateUser(Auth auth) {
 		
 		try {

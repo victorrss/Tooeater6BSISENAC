@@ -27,7 +27,7 @@ public class CommentDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Comment> findAll(final int tooeatId) {
-		Query query = em.createQuery("FROM " +CommentDao.class.getName()+ " WHERE enabled = 1 AND tooeat_id=:tooeat_id");
+		Query query = em.createQuery("FROM " +Comment.class.getName()+ " WHERE enabled = 1 AND tooeat_id=:tooeat_id");
 		query.setParameter("tooeat_id", tooeatId);
 		return query.getResultList();
 	}

@@ -21,6 +21,8 @@ import br.senac.backend.exception.UserException;
 import br.senac.backend.model.User;
 import br.senac.backend.validator.UserValidator;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
 
@@ -28,41 +30,45 @@ import io.swagger.annotations.Tag;
 @Api("/User Service")
 @SwaggerDefinition(tags= {@Tag (name="User Service", description="REST Endpoint for User Service")})
 public class UserService {
-    @Context
-    SecurityContext securityContext;
-    
+	@Context
+	SecurityContext securityContext;
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiResponses(value = { 
+			@ApiResponse(code = 204, message = "Sucesso!"),
+			@ApiResponse(code = 406, message = "User Exception, various message "+ "{\\\"message\\\": \\\"Message\\\"}"),
+			@ApiResponse(code = 400, message = "Fail on create, try-catch") 
+	})
 	public Response create(User user) {
-		Response response;
+		System.out.println(user.getBirthday());
 		try {
 			UserException userException = UserValidator.validate(user);
 			if (userException != null)
 				throw userException;
 
 			UserDao.getInstance().persist(user);
-			response = Response
+			return Response
 					.status(Response.Status.NO_CONTENT)
 					.build();
 		} catch (UserException e) {
 			e.printStackTrace();
-			response = Response
+			return Response
 					.status(Response.Status.NOT_ACCEPTABLE)
 					.entity("{\\\"message\\\": \\\""+e.getMessage()+"\\\"}")
 					.type(MediaType.APPLICATION_JSON)
 					.build();
 		} catch (Exception e) {
 			e.printStackTrace();
-			response = Response
+			return Response
 					.status(Response.Status.BAD_REQUEST)
 					.build();
 		}
-		return response;
 	}
 
 	@GET
-    @Secured
+	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response read(@Context SecurityContext securityContext) {
 		securityContext.getUserPrincipal().getName();

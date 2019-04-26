@@ -27,13 +27,13 @@ public class UserDao {
 	}
 
 	public User getByNickName(final String nickname) {
-		Query query = em.createQuery("FROM "+UserDao.class.getName()+" where enabled = 1 AND nickname=:nickname");
+		Query query = em.createQuery("FROM "+User.class.getName()+" where enabled = 1 AND nickname=:nickname");
 		query.setParameter("nickname", nickname);
 		return (User) query.getSingleResult();
 	}
 
 	public User getByEmail(final String email) {
-		Query query = em.createQuery("FROM "+UserDao.class.getName()+" where enabled = 1 AND email=:email");
+		Query query = em.createQuery("FROM "+User.class.getName()+" where enabled = 1 AND email=:email");
 		query.setParameter("email", email);
 		return (User) query.getSingleResult();
 	}
@@ -47,7 +47,7 @@ public class UserDao {
 
 	@SuppressWarnings("unchecked")
 	public List<User> findAll() {
-		return em.createQuery("FROM " +UserDao.class.getName()+ " WHERE enabled = 1").getResultList();
+		return em.createQuery("FROM " +User.class.getName()+ " WHERE enabled = 1").getResultList();
 	}
 
 	public void persist(User user) {

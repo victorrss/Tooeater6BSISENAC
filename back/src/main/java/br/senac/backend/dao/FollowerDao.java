@@ -26,21 +26,21 @@ public class FollowerDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Follower> findAllFollowing(final Integer userId) {
-		Query query = em.createQuery("FROM " +FollowerDao.class.getName()+ " WHERE enabled = 1 AND slave_user_id=:user_id");
+		Query query = em.createQuery("FROM " +Follower.class.getName()+ " WHERE enabled = 1 AND slave_user_id=:user_id");
 		query.setParameter("user_id", userId);
 		return query.getResultList();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Follower> findAllFollowers(final Integer userId) {
-		Query query = em.createQuery("FROM " +FollowerDao.class.getName()+ " WHERE enabled = 1 AND master_user_id=:user_id");
+		Query query = em.createQuery("FROM " +Follower.class.getName()+ " WHERE enabled = 1 AND master_user_id=:user_id");
 		query.setParameter("user_id", userId);
 		return query.getResultList();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Follower> findAllInvites(final Integer userId) {
-		Query query = em.createQuery("FROM " +FollowerDao.class.getName()+ " WHERE enabled is null AND master_user_id=:user_id");
+		Query query = em.createQuery("FROM " +Follower.class.getName()+ " WHERE enabled is null AND master_user_id=:user_id");
 		query.setParameter("user_id", userId);
 		return query.getResultList();
 	}

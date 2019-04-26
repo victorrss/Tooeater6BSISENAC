@@ -7,12 +7,18 @@ import br.senac.backend.util.Util;
 
 public class UserValidator {
 	public static UserException validate(User user) {
+	
 		if (!Util.isDate(user.getBirthday()))
 			return new UserException("A data de aniversário está inválida.");
 		
 		if (!Util.isDate(user.getCreatedAt()))
 			return new UserException("A data de criação do usuário está inválida.");
 
+		// Email 
+		if (!Util.isValidEmailAddress(user.getEmail()))
+			return new UserException("O endereço de e-mail está inválido.");
+
+		
 		// NOT NULL
 		if (Util.empty(user.getFirstName()))
 			return new UserException("O nome é obrigatório.");

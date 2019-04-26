@@ -14,6 +14,19 @@ public class Util {
 		return s == null || s.trim().isEmpty();
 	}
 
+	public static boolean isDate(final Calendar d) {
+		Calendar cal = Calendar.getInstance();
+		cal.setLenient(false);
+		cal.setTime(d.getTime());
+		try {
+			cal.getTime();
+			return true;
+		}
+		catch (Exception e) {
+			return false;
+		}
+	}
+	
 	public static boolean isDate(final Date d) {
 		Calendar cal = Calendar.getInstance();
 		cal.setLenient(false);
