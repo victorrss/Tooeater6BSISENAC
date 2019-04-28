@@ -8,7 +8,7 @@ import br.senac.backend.util.Util;
 
 public class UserDao {
 
-	
+
 	private static UserDao instance;
 	protected EntityManager em;
 
@@ -27,15 +27,25 @@ public class UserDao {
 	}
 
 	public User getByNickName(final String nickname) {
-		Query query = em.createQuery("FROM "+User.class.getName()+" where enabled = 1 AND nickname=:nickname");
+		Query query = em.createQuery("FROM User where enabled = 1 AND nickname=:nickname");
 		query.setParameter("nickname", nickname);
-		return (User) query.getSingleResult();
+
+		try {
+			return (User) query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public User getByEmail(final String email) {
-		Query query = em.createQuery("FROM "+User.class.getName()+" where enabled = 1 AND email=:email");
+		Query query = em.createQuery("FROM User where enabled = 1 AND email=:email");
 		query.setParameter("email", email);
-		return (User) query.getSingleResult();
+
+		try {
+			return (User) query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public User getByUserName(final String username) {
@@ -47,14 +57,12 @@ public class UserDao {
 
 	@SuppressWarnings("unchecked")
 	public List<User> findAll() {
-		return em.createQuery("FROM " +User.class.getName()+ " WHERE enabled = 1").getResultList();
+		return em.createQuery("FROM User WHERE enabled = 1").getResultList();
 	}
 
 	public void persist(User user) {
 		try {
 			em.getTransaction().begin();
-			user.setCreatedAt(Util.getDateNow());
-			user.setEnabled(true);
 			em.persist(user);
 			em.getTransaction().commit();
 		} catch (Exception ex) {
@@ -66,7 +74,6 @@ public class UserDao {
 	public void merge(User user) {
 		try {
 			em.getTransaction().begin();
-			user.setUpdateAt(Util.getDateNow());
 			em.merge(user);
 			em.getTransaction().commit();
 		} catch (Exception ex) {
@@ -75,10 +82,9 @@ public class UserDao {
 		}
 	}
 
-	public void remove(User user) {
+	void remove(User user) {
 		try {
 			em.getTransaction().begin();
-			user.setEnabled(false); 
 			em.merge(user);
 			em.getTransaction().commit();
 		} catch (Exception ex) {
@@ -90,6 +96,7 @@ public class UserDao {
 	public void removeById(final int id) {
 		try {
 			User user = getById(id);
+			user.setEnabled(false); 
 			remove(user);
 		} catch (Exception ex) {
 			ex.printStackTrace();

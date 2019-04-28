@@ -19,8 +19,11 @@ import br.senac.backend.annotation.Secured;
 import br.senac.backend.dao.UserDao;
 import br.senac.backend.exception.UserException;
 import br.senac.backend.model.User;
+import br.senac.backend.util.Util;
 import br.senac.backend.validator.UserValidator;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.SwaggerDefinition;
@@ -38,7 +41,7 @@ public class UserService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiResponses(value = { 
 			@ApiResponse(code = 204, message = "Sucesso!"),
-			@ApiResponse(code = 406, message = "User Exception, various message "+ "{\\\"message\\\": \\\"Message\\\"}"),
+			@ApiResponse(code = 406, message = "User Exception, various message "+ "{\"message\": \"Message\"}"),
 			@ApiResponse(code = 400, message = "Fail on create, try-catch") 
 	})
 	public Response create(User user) {
@@ -48,6 +51,9 @@ public class UserService {
 			if (userException != null)
 				throw userException;
 
+			user.setPassword(Util.sha1(user.getPassword()));
+			user.setCreatedAt(Util.getDateNow());
+
 			UserDao.getInstance().persist(user);
 			return Response
 					.status(Response.Status.NO_CONTENT)
@@ -56,7 +62,7 @@ public class UserService {
 			e.printStackTrace();
 			return Response
 					.status(Response.Status.NOT_ACCEPTABLE)
-					.entity("{\\\"message\\\": \\\""+e.getMessage()+"\\\"}")
+					.entity("{\"message\": \""+e.getMessage()+"\"}")
 					.type(MediaType.APPLICATION_JSON)
 					.build();
 		} catch (Exception e) {
@@ -70,8 +76,16 @@ public class UserService {
 	@GET
 	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiImplicitParams({@ApiImplicitParam(
+		name = "Authorization", 
+		value = "Bearer {JWT Token}",
+		required = true,
+		dataType = "string",
+		paramType = "header"
+	)})
 	public Response read(@Context SecurityContext securityContext) {
 		securityContext.getUserPrincipal().getName();
+
 		Response response;
 		try {
 			List<User> list = UserDao.getInstance().findAll();
@@ -99,6 +113,8 @@ public class UserService {
 			if (userException != null)
 				throw userException;
 
+			user.setUpdateAt(Util.getDateNow());
+
 			UserDao.getInstance().merge(user);
 			response = Response
 					.status(Response.Status.NO_CONTENT)
@@ -107,13 +123,14 @@ public class UserService {
 			e.printStackTrace();
 			response = Response
 					.status(Response.Status.NOT_ACCEPTABLE)
-					.entity("{\\\"message\\\": \\\""+e.getMessage()+"\\\"}")
+					.entity("{\"message\": \""+e.getMessage()+"\"}")
 					.type(MediaType.APPLICATION_JSON)
 					.build();
 		} catch (Exception e) {
 			e.printStackTrace();
 			response = Response
 					.status(Response.Status.BAD_REQUEST)
+					.entity(null)
 					.build();
 		}
 

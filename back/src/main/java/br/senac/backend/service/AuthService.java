@@ -11,6 +11,7 @@ import br.senac.backend.dao.UserDao;
 import br.senac.backend.model.Auth;
 import br.senac.backend.model.User;
 import br.senac.backend.util.JWTUtil;
+import br.senac.backend.util.Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -30,7 +31,7 @@ public class AuthService {
 			@ApiResponse(code = 401, message = "Usuário sem autorização")
 	})
 	public Response authenticateUser(Auth auth) {
-		
+
 		try {
 			// Authenticate the user using the credentials provided
 			authenticate(auth.getUsername(), auth.getPassword());
@@ -39,7 +40,11 @@ public class AuthService {
 			String token = issueToken(auth.getUsername());
 
 			// Return the token on the response
-			return Response.ok(token).build();
+			return Response
+					.status(Response.Status.OK)
+					.entity("{\"token\": \""+token+"\"}")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
 		} catch (Exception e) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
@@ -48,8 +53,7 @@ public class AuthService {
 	private void authenticate(String username, String password) throws Exception {
 		User user = null;
 		user = UserDao.getInstance().getByUserName(username);
-
-		if(user != null && user.getPassword() == password)
+		if(user != null && user.getPassword().equals(Util.sha1(password)))
 			return;
 		else
 			throw new Exception();

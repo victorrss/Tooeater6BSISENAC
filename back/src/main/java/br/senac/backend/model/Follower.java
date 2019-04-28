@@ -1,6 +1,5 @@
 package br.senac.backend.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,10 +13,11 @@ import javax.persistence.Table;
 public class Follower {
 	@Id
 	private int id;
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "slave_user_id", nullable=false)  
 	private User userSlave;
-	@ManyToOne(cascade = CascadeType.ALL)
+
+	@ManyToOne
 	@JoinColumn(name = "master_user_id", nullable=false)
 	private User userMaster;
 	@Column

@@ -45,7 +45,7 @@ public class FollowerService {
 			e.printStackTrace();
 			response = Response
 					.status(Response.Status.NOT_ACCEPTABLE)
-					.entity("{\\\"message\\\": \\\""+e.getMessage()+"\\\"}")
+					.entity("{\"message\": \""+e.getMessage()+"\"}")
 					.type(MediaType.APPLICATION_JSON)
 					.build();
 		} catch (Exception e) {
@@ -142,7 +142,7 @@ public class FollowerService {
 			e.printStackTrace();
 			response = Response
 					.status(Response.Status.NOT_ACCEPTABLE)
-					.entity("{\\\"message\\\": \\\""+e.getMessage()+"\\\"}")
+					.entity("{\"message\": \""+e.getMessage()+"\"}")
 					.type(MediaType.APPLICATION_JSON)
 					.build();
 		} catch (Exception e) {

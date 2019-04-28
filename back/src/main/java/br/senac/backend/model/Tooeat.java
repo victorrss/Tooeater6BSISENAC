@@ -1,14 +1,12 @@
 package br.senac.backend.model;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -25,8 +23,6 @@ public class Tooeat {
 	private User user;
 	@OneToMany(mappedBy="tooeat")
     private Set<Comment> comments;
-	@ManyToMany(mappedBy = "likes")
-    private Set<User> usersLiked = new HashSet<>();
 	@Column
 	private String text;
 	@Column
@@ -80,12 +76,6 @@ public class Tooeat {
 	}
 	public void setComments(Set<Comment> comments) {
 		this.comments = comments;
-	}
-	public Set<User> getUsersLiked() {
-		return usersLiked;
-	}
-	public void setUsersLiked(Set<User> usersLiked) {
-		this.usersLiked = usersLiked;
 	}
 	public String getMedia() {
 		return media;
