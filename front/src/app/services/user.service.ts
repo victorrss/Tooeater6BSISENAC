@@ -1,9 +1,21 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { User } from '../models/user';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
+
+  listUsers(): Observable<User[]> {
+    return this.http.get<User[]>('http://localhost:8080/api/user');
+  }
+
+  addUser(user: User): Observable<any> {
+    return this.http.post('http://localhost:8080/api/user', user);
+  }
+
 }
