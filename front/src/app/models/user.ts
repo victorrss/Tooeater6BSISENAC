@@ -17,5 +17,4 @@ export class User {
     nickname: string;
     createdAt: Date;
     updateAt: Date;
-    enabled: boolean;
 }
