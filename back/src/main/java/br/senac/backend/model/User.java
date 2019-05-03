@@ -6,6 +6,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -14,18 +16,16 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 @Table(name="user")
-@JsonIgnoreProperties({"password"})
 public class User {
 
 	@ApiModelProperty(hidden = true,readOnly = true)
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@ApiModelProperty(hidden = true,readOnly = true)
 	@OneToMany(mappedBy="user")
@@ -51,10 +51,8 @@ public class User {
 	@Column
 	private String bio;
 	@Column
-	@JsonIgnore
 	private String email;
 	@Column
-	@JsonIgnore
 	@ApiModelProperty(hidden = false,readOnly = true)
 	private String password;
 	@Column
@@ -68,6 +66,7 @@ public class User {
 	@Temporal(TemporalType.TIMESTAMP)
 	@JsonFormat(locale = "pt-BR", timezone = "Brazil/East")
 	@Column(name="update_at")
+	@JsonIgnore
 	private Date updateAt;
 	@ApiModelProperty(hidden = true,readOnly = true)
 	@Column
