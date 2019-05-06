@@ -8,6 +8,12 @@ import { FollowerComponent } from './views/follower/follower.component';
 import { LikeComponent } from './views/like/like.component';
 import { TooeatComponent } from './views/tooeat/tooeat.component';
 import { CommentComponent } from './views/comment/comment.component';
+import { SignUpComponent } from './views/user/sign-up/sign-up.component';
+import { FormsModule } from '@angular/forms';
+import { SignInComponent } from './views/user/sign-in/sign-in.component';
+import { HomeComponent } from './home/home.component';
+import { RouterModule } from '@angular/router';
+import { appRoutes } from './routes';
 
 @NgModule({
   declarations: [
@@ -16,12 +22,17 @@ import { CommentComponent } from './views/comment/comment.component';
     FollowerComponent,
     LikeComponent,
     TooeatComponent,
-    CommentComponent
+    CommentComponent,
+    SignUpComponent,
+    SignInComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    RouterModule.forRoot(appRoutes)
   ],
   providers: [],
   bootstrap: [AppComponent]

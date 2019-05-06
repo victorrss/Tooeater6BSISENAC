@@ -1,7 +1,10 @@
-<div>
-  <button (click)="newUser()">Novo Usuário</button>
-  <br/>
-  <button (click)="addUser()">Salvar Usuário</button>
-  <br/>
-  <button (click)="listUser()">Listar Usuários</button>
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <!-- Tabs Titles -->
+    <h2 routerLink="/signin" class="inactive underlineHover">Entrar</h2>
+    <h2 routerLink="/signup" class="inactive underlineHover">Cadastrar</h2>
+  <div class="row">
+    <router-outlet></router-outlet>
+  </div>
+  </div>
 </div>

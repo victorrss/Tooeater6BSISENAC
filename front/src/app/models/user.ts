@@ -2,19 +2,19 @@ import { Binary } from 'selenium-webdriver/firefox';
 
 export class User {
     // incomplete!!!--------------------
-    id: number;
+    //id: number;
     // tooeats:
     // following:
     // followers:
     firstName: string;
     lastName: string;
-    // birthday:
+    birthday: Date;
     gender: boolean;
     photo: string;
     bio: string;
     email: string;
     password: string;
     nickname: string;
-    createdAt: Date;
-    updateAt: Date;
+    // createdAt: Date;
+    // updateAt: Date;
 }
