@@ -18,8 +18,4 @@ export class UserService {
     return this.http.post('http://localhost:8080/tooeater/api/user', user);
   }
 
-  userAuthentication(email,password){
-    return this.http.post('http://localhost:8080/tooeater/api/auth', {email, password});
-  }
-
 }

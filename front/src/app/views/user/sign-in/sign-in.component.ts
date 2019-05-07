@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
+import { JwtService } from 'src/app/services/jwt.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -10,14 +10,13 @@ import { Router } from '@angular/router';
 })
 export class SignInComponent implements OnInit {
   isLoginError : boolean = false;
-  constructor(private userService : UserService, private router : Router) { }
+  constructor(private jwtService : JwtService, private router : Router) { }
 
   ngOnInit() {
   }
 
   OnSubmit(email,password){
-    this.userService.userAuthentication(email,password).subscribe((data : any)=>{
-      localStorage.setItem('token',data.acess_token);
+    this.jwtService.login(email,password).subscribe((data : any)=>{
       this.router.navigate(['/home']);
     },
     (err : HttpErrorResponse)=>{
