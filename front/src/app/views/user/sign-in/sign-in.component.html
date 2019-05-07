@@ -1,5 +1,25 @@
-<form>
+<!-- <form>
   <input type="text" class="fadeIn second" name="login" placeholder="Email">
   <input type="password" class="fadeIn second" name="login" placeholder="Senha">
   <input type="submit" class="fadeIn second" value="Entrar">
+</form> -->
+<div *ngIf="isLoginError">
+    <i>ERROR</i> Email ou Senha incorretos!
+</div>
+<form #loginForm="ngForm" class="col s12 white" (ngSubmit)="OnSubmit(Email.value, Password.value)">
+  <div class="row">
+    <div class="input-field col s12">
+      <input type="text" #Email ngModel name="email" placeholder="Email">
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <input type="password" #Password ngModel name="password" placeholder="Senha">
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <input type="submit" value="Entrar" placeholder="Login">
+    </div>
+  </div>
 </form>
