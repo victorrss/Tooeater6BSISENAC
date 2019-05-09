@@ -7,9 +7,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class UserService {
-   httpOptions = {
+  httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type':  'application/json',
+      'Content-Type': 'application/json',
       // 'Authorization': 'my-auth-token'
     })
   }
@@ -21,6 +21,14 @@ export class UserService {
 
   addUser(user: User): Observable<any> {
     return this.http.post('http://localhost:8080/tooeater/api/user', user, this.httpOptions);
+  }
+
+  remove(id: number): Observable<any> {
+    return this.http.delete('http://localhost:8080/tooeater/api/user' + id);
+  }
+
+  update(user: User): Observable<any> {
+    return this.http.put('http://localhost:8080/tooeater/api/user', user);
   }
 
 }

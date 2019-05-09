@@ -32,7 +32,7 @@ export class SignUpComponent implements OnInit {
         console.log(result);
         alert('Usuário inserido com sucesso!!!');
       },
-      (err) =>{
+      (err) => {
         console.log(err);
       }
     );
@@ -46,4 +46,15 @@ export class SignUpComponent implements OnInit {
     );
   }
 
+  remove(id: number): void {
+    this.userService.remove(id).subscribe(() => {
+      alert('Usuário removido');
+    });
+  }
+
+  update(id: number): void {
+    this.userService.update(this.userSel).subscribe(() => {
+      alert('Usuário atualizado');
+    });
+  }
 }
