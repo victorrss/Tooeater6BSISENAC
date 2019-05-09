@@ -26,9 +26,14 @@ export class SignUpComponent implements OnInit {
   }
 
   addUser(): void {
+    console.log(JSON.stringify(this.userSel));
     this.userService.addUser(this.userSel).subscribe(
-      () => {
+      (result) => {
+        console.log(result);
         alert('Usuário inserido com sucesso!!!');
+      },
+      (err) =>{
+        console.log(err);
       }
     );
   }

@@ -1,5 +1,3 @@
-import { Binary } from 'selenium-webdriver/firefox';
-
 export class User {
     // incomplete!!!--------------------
     //id: number;

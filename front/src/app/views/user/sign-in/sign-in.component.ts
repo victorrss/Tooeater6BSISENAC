@@ -9,19 +9,18 @@ import { Router } from '@angular/router';
   styleUrls: ['./sign-in.component.css']
 })
 export class SignInComponent implements OnInit {
-  isLoginError : boolean = false;
-  constructor(private jwtService : JwtService, private router : Router) { }
+  isLoginError = false;
+  constructor(private jwtService: JwtService, private router: Router) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {  }
 
-  OnSubmit(email,password){
-    this.jwtService.login(email,password).subscribe((data : any)=>{
+  OnSubmit(email, password) {
+    this.jwtService.login(email, password).subscribe((data: any) => {
       this.router.navigate(['/home']);
     },
-    (err : HttpErrorResponse)=>{
-      this.isLoginError = true;
-    });
+      (err: HttpErrorResponse) => {
+        this.isLoginError = true;
+      });
   }
 
 }

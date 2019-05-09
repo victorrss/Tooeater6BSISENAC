@@ -6,21 +6,22 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class JwtService {
-
+  uri = 'http://localhost:8080/tooeater/api'
   constructor(private httpClient: HttpClient) { }
 
-  login(email: string, password: string) {
-    return this.httpClient.post<{ access_token: string }>('http://localhost:8080/tooeater/api/auth', { email, password }).pipe(tap(res => {
-      localStorage.setItem('token', res.access_token);
-    }))
+  login(username: string, password: string) {
+    return this.httpClient.post<{ token: string }>(this.uri + '/auth', { username, password })
+      .pipe(tap((res: any) => {
+        localStorage.setItem('token', res.token);
+      }))
   }
 
   logout() {
     localStorage.removeItem('token');
   }
 
-  public get loggedIn(): boolean{
-    return localStorage.getItem('token') !==  null;
+  public get loggedIn(): boolean {
+    return localStorage.getItem('token') !== null;
   }
 
 

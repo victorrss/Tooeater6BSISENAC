@@ -7,7 +7,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class UserService {
-
+   httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type':  'application/json',
+      // 'Authorization': 'my-auth-token'
+    })
+  }
   constructor(private http: HttpClient) { }
 
   listUsers(): Observable<User[]> {
@@ -15,7 +20,7 @@ export class UserService {
   }
 
   addUser(user: User): Observable<any> {
-    return this.http.post('http://localhost:8080/tooeater/api/user', user);
+    return this.http.post('http://localhost:8080/tooeater/api/user', user, this.httpOptions);
   }
 
 }

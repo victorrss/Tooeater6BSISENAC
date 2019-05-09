@@ -11,11 +11,13 @@ import { CommentComponent } from './views/comment/comment.component';
 import { SignUpComponent } from './views/user/sign-up/sign-up.component';
 import { FormsModule } from '@angular/forms';
 import { SignInComponent } from './views/user/sign-in/sign-in.component';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './views/home/home.component';
 import { RouterModule } from '@angular/router';
 import { appRoutes } from './routes';
 import { JwtModule } from '@auth0/angular-jwt';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ViewsModule } from './views/views.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,15 +31,19 @@ import { JwtModule } from '@auth0/angular-jwt';
     HomeComponent
   ],
   imports: [
+    BrowserAnimationsModule,
     BrowserModule,
+    FlexLayoutModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    ViewsModule,
     RouterModule.forRoot(appRoutes),
     JwtModule.forRoot({
       config: {
-        tokenGetter: function  tokenGetter() {
-             return     localStorage.getItem('access_token');},
+        tokenGetter: function tokenGetter() {
+          return localStorage.getItem('access_token');
+        },
         whitelistedDomains: ['localhost:8080'],
         blacklistedRoutes: ['http://localhost:8080/tooeater/api/auth']
       }
