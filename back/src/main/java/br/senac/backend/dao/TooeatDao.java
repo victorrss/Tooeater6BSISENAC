@@ -29,7 +29,7 @@ public class TooeatDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Tooeat> getByUserId(final Integer userId) {
-		Query query = em.createQuery("FROM "+Tooeat.class.getName()+" where user_id=:user_id");
+		Query query = em.createQuery("FROM "+Tooeat.class.getName()+" WHERE enabled = 1 AND user=:user_id");
 		query.setParameter("user_id", userId);
 		return query.getResultList();
 	}
@@ -39,14 +39,13 @@ public class TooeatDao {
 		return em.createQuery("FROM " +Tooeat.class.getName()+ " t"+
 				" WHERE t.enabled = 1 "+
 				" AND t.user IN ("+userId+", (SELECT f.userMaster FROM "+Follower.class.getName()+" f WHERE f.userSlave = " + userId+ "))"+
-				" ").getResultList();
+				" ORDER BY 1 DESC").getResultList();
 	}
 
 	public void persist(Tooeat tooeat) {
 		try {
 			em.getTransaction().begin();
 			tooeat.setCreatedAt(Util.getDateNow());
-			tooeat.setEnabled(true);
 			em.persist(tooeat);
 			em.getTransaction().commit();
 		} catch (Exception ex) {

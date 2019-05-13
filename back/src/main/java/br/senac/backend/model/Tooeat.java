@@ -47,7 +47,7 @@ public class Tooeat {
 	private Date updateAt;
 	@JsonIgnore
 	@Column
-	private Boolean enabled;
+	private Boolean enabled = true;
 
 	public int getId() {
 		return id;

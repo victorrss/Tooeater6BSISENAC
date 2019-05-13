@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
+import * as moment from 'moment';
 
 @Injectable()
 export class Globals {
@@ -20,5 +21,12 @@ export class Globals {
         })
       }
     }
+  }
+
+  getTimeRelative(d) {
+    let m = moment;
+    m.locale('pt-br')
+    return m(d, "YYYY-MM-DDTHH:mm:ssZ").fromNow();
+    //  YYYY-MM-DDTHH:mm:ss.SSS
   }
 }

@@ -39,7 +39,7 @@ public class UserService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiResponses(value = { 
 			@ApiResponse(code = 204, message = "Sucesso!"),
-			@ApiResponse(code = 406, message = "User Exception, various message "+ "{\"message\": \"Message\"}"),
+			@ApiResponse(code = 406, message = "Falha validação, User Exception com retorno de: "+ "{\"message\": \"Message\"}"),
 			@ApiResponse(code = 400, message = "Fail on create, try-catch") 
 	})
 	public Response create(UserCreatePojo pojo) {

@@ -15,6 +15,7 @@ import { AuthService } from './services/auth/auth.service';
 import { AuthGuardService } from './services/auth/auth-guard.service';
 import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
 import { Globals } from './services/globals';
+import { ApiService } from './services/api.service';
 
 @NgModule({
   imports: [
@@ -29,12 +30,13 @@ import { Globals } from './services/globals';
   declarations: [
     AppComponent,
     AppLayoutComponent,
-    AuthLayoutComponent
+    AuthLayoutComponent,
   ],
   providers: [
     AuthGuardService,
     AuthService,
-    Globals
+    Globals,
+    ApiService
   ],
   bootstrap: [AppComponent]
 })

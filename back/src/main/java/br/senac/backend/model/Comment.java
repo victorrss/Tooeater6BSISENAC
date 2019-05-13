@@ -12,7 +12,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="tooeat_comment")
@@ -30,10 +32,12 @@ public class Comment {
 	@Column
 	private String text;
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(locale = "pt-BR", timezone = "Brazil/East")
 	@Column(name="created_at")
 	private Date createdAt;
 	@Column
-	private Boolean enabled;
+	@JsonIgnore
+	private Boolean enabled = true;
 
 	public int getId() {
 		return id;
@@ -65,6 +69,7 @@ public class Comment {
 	public void setTooeat(Tooeat tooeat) {
 		this.tooeat = tooeat;
 	}
+	@JsonIgnoreProperties({"email","password","birthday","gender","bio","createdAt","updateAt"})
 	public User getUser() {
 		return user;
 	}
