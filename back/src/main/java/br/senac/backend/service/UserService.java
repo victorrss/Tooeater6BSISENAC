@@ -1,7 +1,5 @@
 package br.senac.backend.service;
 
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -19,6 +17,7 @@ import br.senac.backend.annotation.Secured;
 import br.senac.backend.dao.UserDao;
 import br.senac.backend.exception.UserException;
 import br.senac.backend.model.User;
+import br.senac.backend.model.pojo.UserCreatePojo;
 import br.senac.backend.util.Util;
 import br.senac.backend.validator.UserValidator;
 import io.swagger.annotations.Api;
@@ -33,8 +32,7 @@ import io.swagger.annotations.Tag;
 @Api("/User Service")
 @SwaggerDefinition(tags= {@Tag (name="User Service", description="REST Endpoint for User Service")})
 public class UserService {
-	@Context
-	SecurityContext securityContext;
+	@Context SecurityContext securityContext;
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -44,9 +42,9 @@ public class UserService {
 			@ApiResponse(code = 406, message = "User Exception, various message "+ "{\"message\": \"Message\"}"),
 			@ApiResponse(code = 400, message = "Fail on create, try-catch") 
 	})
-	public Response create(User user) {
-		System.out.println(user.getBirthday());
+	public Response create(UserCreatePojo pojo) {
 		try {
+			User user = UserCreatePojo.convertToModel(pojo);
 			UserException userException = UserValidator.validate(user);
 			if (userException != null)
 				throw userException;
@@ -74,24 +72,25 @@ public class UserService {
 	}
 
 	@GET
+	@Path("/me")
 	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiImplicitParams({@ApiImplicitParam(
-		name = "Authorization", 
-		value = "Bearer {JWT Token}",
-		required = true,
-		dataType = "string",
-		paramType = "header"
-	)})
-	public Response read(@Context SecurityContext securityContext) {
-		securityContext.getUserPrincipal().getName();
-
+			name = "Authorization", 
+			value = "Bearer {JWT Token}",
+			required = true,
+			dataType = "string",
+			paramType = "header"
+			)})
+	public Response readMe(@Context SecurityContext securityContext) {
 		Response response;
 		try {
-			List<User> list = UserDao.getInstance().findAll();
+			Integer userId = Util.stringToInteger(securityContext.getUserPrincipal().getName());
+			User user = UserDao.getInstance().getById(userId);
+			user.setPassword(null);
 			response = Response
 					.status(Response.Status.OK)
-					.entity(list)
+					.entity(user)
 					.type(MediaType.APPLICATION_JSON)
 					.build();
 		} catch (Exception e) {

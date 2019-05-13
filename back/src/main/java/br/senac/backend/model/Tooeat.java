@@ -1,6 +1,7 @@
 package br.senac.backend.model;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -15,6 +16,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="tooeat")
 public class Tooeat {
@@ -25,16 +30,22 @@ public class Tooeat {
 	@JoinColumn(name="user_id", nullable=false)
 	private User user;
 	@OneToMany(mappedBy="tooeat")
-    private Set<Comment> comments;
+	private Set<Comment> comments  = new HashSet<Comment>();
+	@OneToMany(mappedBy="tooeat")
+	private Set<Like> likes  = new HashSet<Like>();
 	@Column
 	private String text;
 	@Column
 	private String media;
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(locale = "pt-BR", timezone = "Brazil/East")
 	@Column(name="created_at")
 	private Date createdAt;
-	@Column(name="update_at")
+	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(locale = "pt-BR", timezone = "Brazil/East")
+	@Column(name="update_at")	
 	private Date updateAt;
+	@JsonIgnore
 	@Column
 	private Boolean enabled;
 
@@ -44,6 +55,7 @@ public class Tooeat {
 	public void setId(int id) {
 		this.id = id;
 	}
+	@JsonIgnoreProperties({"email","password","birthday","gender","bio","createdAt","updateAt"})
 	public User getUser() {
 		return user;
 	}
@@ -74,11 +86,18 @@ public class Tooeat {
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
-	public Set<Comment> getComments() {
-		return comments;
+	public Integer getComments() {
+		return this.comments == null ? 0 : this.comments.size();
 	}
 	public void setComments(Set<Comment> comments) {
 		this.comments = comments;
+	}
+	public Integer getLikes() {
+		//return this.likes;
+		return this.likes == null ? 0 : this.likes.size();
+	}
+	public void setLikes(Set<Like> likes) {
+		this.likes = likes;
 	}
 	public String getMedia() {
 		return media;
@@ -86,5 +105,4 @@ public class Tooeat {
 	public void setMedia(String media) {
 		this.media = media;
 	}
-	
 }

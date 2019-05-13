@@ -9,7 +9,6 @@ import io.swagger.jaxrs.config.BeanConfig;
 public class SwaggerConfigurationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		BeanConfig beanCfg = new BeanConfig();

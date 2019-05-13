@@ -17,23 +17,18 @@ import javax.persistence.TemporalType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import io.swagger.annotations.ApiModelProperty;
-
 @Entity
 @Table(name="user")
 public class User {
 
-	@ApiModelProperty(hidden = true,readOnly = true)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@ApiModelProperty(hidden = true,readOnly = true)
 	@OneToMany(mappedBy="user")
+	@JsonIgnore
 	private Set<Tooeat> tooeats;
-	@ApiModelProperty(hidden = true,readOnly = true)
 	@OneToMany(mappedBy="userSlave")
 	private Set<Follower> following;
-	@ApiModelProperty(hidden = true,readOnly = true)
 	@OneToMany(mappedBy="userMaster")
 	private Set<Follower> followers;
 	@Column
@@ -53,24 +48,18 @@ public class User {
 	@Column
 	private String email;
 	@Column
-	@ApiModelProperty(hidden = false,readOnly = true)
 	private String password;
 	@Column
 	private String nickname;
-	@ApiModelProperty(hidden = true,readOnly = true)
 	@Temporal(TemporalType.TIMESTAMP)
 	@JsonFormat(locale = "pt-BR", timezone = "Brazil/East")
 	@Column(name="created_at")
 	private Date createdAt = new Date();
-	@ApiModelProperty(hidden = true,readOnly = true)
 	@Temporal(TemporalType.TIMESTAMP)
 	@JsonFormat(locale = "pt-BR", timezone = "Brazil/East")
 	@Column(name="update_at")
-	@JsonIgnore
 	private Date updateAt;
-	@ApiModelProperty(hidden = true,readOnly = true)
 	@Column
-	@JsonIgnore
 	private Boolean enabled = true;
 
 	public int getId() {
@@ -148,20 +137,21 @@ public class User {
 	public void setUpdateAt(Date updateAt) {
 		this.updateAt = updateAt;
 	}
+	@JsonIgnore
 	public Boolean isEnabled() {
 		return enabled;
 	}
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
-	public Set<Follower> getFollowing() {
-		return following;
+	public Integer getFollowing() {
+		return following == null ? 0 : following.size();
 	}
 	public void setFollowing(Set<Follower> following) {
 		this.following = following;
 	}
-	public Set<Follower> getFollowers() {
-		return followers;
+	public Integer getFollowers() {
+		return followers == null ? 0 : followers.size();
 	}
 
 	public void setFollowers(Set<Follower> followers) {
@@ -173,5 +163,4 @@ public class User {
 	public void setTooeats(Set<Tooeat> tooeats) {
 		this.tooeats = tooeats;
 	}
-
 }

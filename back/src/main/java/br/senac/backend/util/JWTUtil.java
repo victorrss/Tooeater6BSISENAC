@@ -6,10 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 public class JWTUtil {
-
     private static String key = "JWT_TOOEATER";
-
-    
     public static final String TOKEN_HEADER = "Authentication";
 
     public static String create(String subject) {

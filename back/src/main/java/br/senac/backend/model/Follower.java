@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name="follower")
+@Table(name="user_follower")
 public class Follower {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

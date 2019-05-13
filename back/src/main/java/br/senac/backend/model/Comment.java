@@ -12,14 +12,17 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name="comment")
+@Table(name="tooeat_comment")
 public class Comment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@ManyToOne
 	@JoinColumn(name="tooeat_id", nullable=false)
+	@JsonIgnore
 	private Tooeat tooeat;
 	@ManyToOne
 	@JoinColumn(name="user_id", nullable=false)
@@ -31,7 +34,7 @@ public class Comment {
 	private Date createdAt;
 	@Column
 	private Boolean enabled;
-	
+
 	public int getId() {
 		return id;
 	}
@@ -68,5 +71,4 @@ public class Comment {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
 }

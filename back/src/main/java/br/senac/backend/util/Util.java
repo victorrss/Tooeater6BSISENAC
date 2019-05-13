@@ -41,7 +41,7 @@ public class Util {
 	}
 
 	public static Date getDateNow(){
-		return  new Date();
+		return new Date();
 	}
 
 	public static boolean isValidEmailAddress(String email) {
@@ -57,5 +57,13 @@ public class Util {
 		}
 
 		return sb.toString().toUpperCase();
+	}
+	
+	public static Integer stringToInteger(String s) {
+		try {
+			return Integer.parseInt(s);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 }

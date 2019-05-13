@@ -19,7 +19,7 @@
 		<properties>
 			<!-- dados da conexao -->
 			<property name="javax.persistence.jdbc.driver"
-				value="com.mysql.jdbc.Driver" />
+				value="com.mysql.cj.jdbc.Driver" />
 			<property name="javax.persistence.jdbc.url"
 				value="jdbc:mysql://localhost:3306/tooeater?useTimezone=true&amp;serverTimezone=America/Sao_Paulo" />
 			<property name="javax.persistence.jdbc.user" value="root" />

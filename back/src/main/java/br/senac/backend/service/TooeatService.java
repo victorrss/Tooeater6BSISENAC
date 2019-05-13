@@ -10,14 +10,22 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
+import br.senac.backend.annotation.Secured;
 import br.senac.backend.dao.TooeatDao;
+import br.senac.backend.dao.UserDao;
 import br.senac.backend.exception.TooeatException;
 import br.senac.backend.model.Tooeat;
+import br.senac.backend.model.pojo.TooeatCreatePojo;
+import br.senac.backend.util.Util;
 import br.senac.backend.validator.TooeatValidator;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
 
@@ -25,13 +33,30 @@ import io.swagger.annotations.Tag;
 @Api("/Tooeat Service")
 @SwaggerDefinition(tags= {@Tag (name="Tooeat Service", description="REST Endpoint for Tooeat Service")})
 public class TooeatService {
+	@Context SecurityContext securityContext;
 
 	@POST
+	@Secured
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response create(Tooeat tooeat) {
+	@ApiImplicitParams({@ApiImplicitParam(
+			name = "Authorization", 
+			value = "Bearer {JWT Token}",
+			required = true,
+			dataType = "string",
+			paramType = "header"
+			)})
+	public Response create(TooeatCreatePojo pojo, @Context SecurityContext securityContext) {
 		Response response;
 		try {
+			Integer userId = Util.stringToInteger(securityContext.getUserPrincipal().getName());
+
+			Tooeat tooeat = TooeatCreatePojo.convertToModel(pojo);
+
+			tooeat.setCreatedAt(Util.getDateNow());
+			tooeat.setUser(UserDao.getInstance().getById(userId));
+			tooeat.setEnabled(true);
+
 			TooeatException tooeatException = TooeatValidator.validate(tooeat);
 			if (tooeatException != null)
 				throw tooeatException;
@@ -58,10 +83,20 @@ public class TooeatService {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response read() {
+	@Secured
+	@ApiImplicitParams({@ApiImplicitParam(
+			name = "Authorization", 
+			value = "Bearer {JWT Token}",
+			required = true,
+			dataType = "string",
+			paramType = "header"
+			)})
+	public Response read(@Context SecurityContext securityContext) {
 		Response response;
 		try {
-			List<Tooeat> list = TooeatDao.getInstance().findAll();
+			Integer userId = Util.stringToInteger(securityContext.getUserPrincipal().getName());
+
+			List<Tooeat> list = TooeatDao.getInstance().findAll(userId);
 			response = Response
 					.status(Response.Status.OK)
 					.entity(list)

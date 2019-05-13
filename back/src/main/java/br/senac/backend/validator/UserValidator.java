@@ -28,6 +28,9 @@ public class UserValidator {
 
 		if (Util.empty(user.getNickname()))
 			return new UserException("O nickname é obrigatório.");
+		
+		if (Util.empty(user.getPassword()))
+			return new UserException("A senha é obrigatória.");
 
 		// UNIQUE
 

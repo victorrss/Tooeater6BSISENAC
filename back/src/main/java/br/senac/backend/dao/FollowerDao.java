@@ -6,7 +6,7 @@ import javax.persistence.Query;
 import br.senac.backend.model.Follower;
 
 public class FollowerDao {
-	
+
 	private static FollowerDao instance;
 	protected EntityManager em;
 
@@ -30,14 +30,14 @@ public class FollowerDao {
 		query.setParameter("user_id", userId);
 		return query.getResultList();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Follower> findAllFollowers(final Integer userId) {
 		Query query = em.createQuery("FROM " +Follower.class.getName()+ " WHERE enabled = 1 AND master_user_id=:user_id");
 		query.setParameter("user_id", userId);
 		return query.getResultList();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Follower> findAllInvites(final Integer userId) {
 		Query query = em.createQuery("FROM " +Follower.class.getName()+ " WHERE enabled is null AND master_user_id=:user_id");
@@ -56,7 +56,7 @@ public class FollowerDao {
 			em.getTransaction().rollback();
 		}
 	}
-	
+
 	public void merge(Follower follower) {
 		try {
 			em.getTransaction().begin();
@@ -87,5 +87,5 @@ public class FollowerDao {
 			ex.printStackTrace();
 		}
 	}
-	
+
 }

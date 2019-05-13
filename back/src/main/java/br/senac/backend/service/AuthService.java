@@ -34,10 +34,10 @@ public class AuthService {
 
 		try {
 			// Authenticate the user using the credentials provided
-			authenticate(auth.getUsername(), auth.getPassword());
+			String userId = authenticate(auth.getUsername(), auth.getPassword());
 
 			// Issue a token for the user
-			String token = issueToken(auth.getUsername());
+			String token = issueToken(userId);
 
 			// Return the token on the response
 			return Response
@@ -49,17 +49,16 @@ public class AuthService {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
 	}
-
-	private void authenticate(String username, String password) throws Exception {
+	private String authenticate(String username, String password) throws Exception {
 		User user = null;
 		user = UserDao.getInstance().getByUserName(username);
 		if(user != null && user.getPassword().equals(Util.sha1(password)))
-			return;
+			return user.getId()+"";
 		else
 			throw new Exception();
 	}
 
-	private String issueToken(String username) {
-		return JWTUtil.create(username);
+	private String issueToken(String userId) {
+		return JWTUtil.create(userId);
 	}
 }
