@@ -29,4 +29,17 @@ export class Globals {
     return m(d, "YYYY-MM-DDTHH:mm:ssZ").fromNow();
     //  YYYY-MM-DDTHH:mm:ss.SSS
   }
+
+  getSimpleDate(d) {
+    let m = moment;
+    m.locale('pt-br')
+    return m(d, "YYYY-MM-DDTHH:mm:ssZ").format('LLL');
+    //  YYYY-MM-DDTHH:mm:ss.SSS
+  }
+
+  arrayRemove(arr, value) {
+    return arr.filter((ele) => {
+      return ele != value;
+    });
+  }
 }

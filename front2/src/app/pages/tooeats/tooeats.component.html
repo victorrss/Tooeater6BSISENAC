@@ -9,10 +9,15 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title text-uppercase text-muted mb-0">Novo tooeat</h5>
-              <form>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
-                  placeholder="Espalhe uma novidade..."></textarea>
-                <button type="submit" class="m-0 mt-2 btn btn-info btn-lg btn-block">Tooetar</button>
+
+              <form (ngSubmit)="onSubmit()" role="form" #tooeatForm="ngForm">
+                <div class="form-group mb-0">
+                  <textarea [(ngModel)]="form.text" name="text" #text="ngModel" class="form-control" rows="3"
+                    placeholder="Espalhe uma novidade..."
+                    [class]="(text.valid)  ? 'form-control is-valid' : 'form-control is-invalid'" required></textarea>
+                  <button type="submit" class="m-0 mt-2 btn btn-info btn-lg btn-block"
+                    [disabled]="!tooeatForm.form.valid">Tooetar</button>
+                </div>
               </form>
 
             </div>
@@ -111,14 +116,15 @@
                 </div>
                 <div class="col ml-4">
                   <h4 class="p-0 m-0">{{t.user.nickname}}</h4>
-                  <p class="h5 font-weight-300 p-0 m-0">{{ global.getTimeRelative(t.createdAt) }}</p>
+                  <a class="h5 font-weight-300 p-0 m-0" title="{{ globals.getSimpleDate(t.createdAt) }}">
+                    {{ globals.getTimeRelative(t.createdAt) }}</a>
 
                 </div>
               </div>
             </div>
             <div class="col">
               <div class="row d-flex justify-content-end">
-                <li ngbDropdown placement="bottom-right">
+                <li ngbDropdown placement="bottom-right" *ngIf="t.user.id == 1">
                   <a class="pr-3" role="button" ngbDropdownToggle>
                     <i class="ni ni-bold-down"></i>
                   </a>
@@ -127,7 +133,7 @@
                       <i class="fas fa-edit"></i>
                       <span>Editar</span>
                     </a>
-                    <a routerLinkActive="active" [routerLink]="['/user-profile']" class="dropdown-item">
+                    <a (click)="deleteTooeat(t)" class="dropdown-item">
                       <i class="far fa-trash-alt text-danger"></i>
                       <span>Excluir</span>
                     </a>
