@@ -1,25 +1,18 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders } from '@angular/common/http';
 import * as moment from 'moment';
+import { ToastrService } from 'ngx-toastr';
+import { UserModel } from '../model/user.model';
 
 @Injectable()
 export class Globals {
   uri: string = 'http://localhost:8080/tooeater/api';
-
-  getHttpOptions(token: string = null) {
-    if (token == null) {
-      return {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json'
-        })
-      }
-    } else {
-      return {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token
-        })
-      }
+  loading: boolean = false;
+  userLoggedIn: UserModel;
+  constructor(private toastr: ToastrService) {
+    try {
+      this.userLoggedIn = <UserModel>JSON.parse(localStorage.getItem('user'));
+    } catch (error) {
+      this.userLoggedIn = null;
     }
   }
 
@@ -27,19 +20,37 @@ export class Globals {
     let m = moment;
     m.locale('pt-br')
     return m(d, "YYYY-MM-DDTHH:mm:ssZ").fromNow();
-    //  YYYY-MM-DDTHH:mm:ss.SSS
   }
 
   getSimpleDate(d) {
     let m = moment;
     m.locale('pt-br')
     return m(d, "YYYY-MM-DDTHH:mm:ssZ").format('LLL');
-    //  YYYY-MM-DDTHH:mm:ss.SSS
   }
 
   arrayRemove(arr, value) {
-    return arr.filter((ele) => {
-      return ele != value;
+    return arr.filter((el) => {
+      return el != value;
     });
+  }
+
+  showToast(title, message, typeMsg) {
+    let options: any = {
+      disableTimeOut: false,
+      closeButton: true,
+      progressBar: true,
+      progressAnimation: 'decreasing',
+    }
+    switch (typeMsg) {
+      case 'success':
+        this.toastr.success(message, title, options);
+        break;
+      case 'error':
+        this.toastr.error(message, title, options);
+        break;
+      default:
+        break;
+    }
+
   }
 }

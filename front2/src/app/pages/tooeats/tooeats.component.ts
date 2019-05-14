@@ -1,10 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Globals } from 'src/app/services/globals';
 import { ApiService } from 'src/app/services/api.service';
 import { TooeatModel } from 'src/app/model/tooeat.model';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Globals } from 'src/app/services/globals';
-
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-tooeats',
@@ -12,14 +10,12 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./tooeats.component.scss']
 })
 export class TooeatsComponent implements OnInit, OnDestroy {
-  form = {
-    text: ''
-  }
+  form = { text: '' }
   tooeats: TooeatModel[] = [];
-  errorMsg: string = null;
   apiSubscription: any;
   tooeatSelected: number;
-  constructor(private apiSvc: ApiService, protected globals: Globals, private modalService: NgbModal) { }
+
+  constructor(private apiSvc: ApiService, private globals: Globals, private modalService: NgbModal) { }
 
   ngOnInit() {
     this.getTooeats();
@@ -35,33 +31,32 @@ export class TooeatsComponent implements OnInit, OnDestroy {
     this.sendTooeat(t);
   }
 
-  sendTooeat(t) {
-    this.apiSubscription = this.apiSvc.postTooeat(t).subscribe((result) => {
-      this.form.text = '';
-      this.getTooeats();
-    }, (err) => {
-      this.errorMsg = "Não foi possível enviar seu tooeat!";
-    })
+  sendTooeat(t: TooeatModel) {
+    this.apiSubscription = this.apiSvc.postTooeat(t).subscribe(
+      () => {
+        this.form.text = '';
+        this.getTooeats();
+      },
+      (err) => this.globals.showToast('Erro!', err.error.message, 'error')
+    )
   }
 
-  deleteTooeat(t:TooeatModel){
-    this.apiSubscription = this.apiSvc.deleteTooeat(t.id).subscribe((result) => {
-      this.tooeats = this.globals.arrayRemove(this.tooeats,t);
-    }, (err) => {
-      this.errorMsg = "Não foi possível excluir seu tooeat!";
-    })
+  deleteTooeat(ev: Event, t: TooeatModel) {
+    if (ev) {
+      this.tooeats = this.globals.arrayRemove(this.tooeats, t)
+      this.globals.showToast('Sucesso!', 'Tooeat excluído com sucesso!', 'success')
+    }
+    else this.globals.showToast('Erro!', "Não foi possível excluir seu tooeat!", 'error')
   }
-  
+
+  updateTooeat(ev: Event) {
+    if (ev) this.globals.showToast('Sucesso!', 'Tooeat editado com sucesso!', 'success')
+    else this.globals.showToast('Erro!', "Não foi possível editar seu tooeat!", 'error')
+  }
+
   getTooeats() {
-    this.apiSubscription = this.apiSvc.getTooeatFeed().subscribe((result: TooeatModel[]) => {
-      this.tooeats = result;
-    }, (err: HttpErrorResponse) => {
-      this.errorMsg = "Não foi possível consultar os últimos tooeats";// if (err.status == 400)
-    })
-  }
-
-  openModalComments(content, tooeatId) {
-    this.tooeatSelected = tooeatId;
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' })
+    this.apiSubscription = this.apiSvc.getTooeatFeed().subscribe(
+      (result: TooeatModel[]) => this.tooeats = result,
+      () => this.globals.showToast('Erro!', "Não foi possível consultar os últimos tooeats", 'error'))
   }
 }

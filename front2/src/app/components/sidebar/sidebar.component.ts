@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { UserModel } from 'src/app/model/user.model';
+import { Globals } from 'src/app/services/globals';
 
 declare interface RouteInfo {
   path: string;
@@ -28,7 +30,7 @@ export class SidebarComponent implements OnInit {
   public menuItems: any[];
   public isCollapsed = true;
 
-  constructor(private router: Router, private authService: AuthService) { }
+  constructor(private router: Router, private authService: AuthService, protected globals: Globals) { }
 
   ngOnInit() {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
@@ -39,5 +41,9 @@ export class SidebarComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+  }
+
+  getUser(): UserModel {
+    return this.globals.userLoggedIn;
   }
 }

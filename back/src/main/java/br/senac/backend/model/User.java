@@ -17,6 +17,8 @@ import javax.persistence.TemporalType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import br.senac.backend.dao.Manager;
+
 @Entity
 @Table(name="user")
 public class User {
@@ -25,7 +27,6 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@OneToMany(mappedBy="user")
-	@JsonIgnore
 	private Set<Tooeat> tooeats;
 	@OneToMany(mappedBy="userSlave")
 	private Set<Follower> following;
@@ -60,7 +61,7 @@ public class User {
 	@Column(name="update_at")
 	private Date updateAt;
 	@Column
-	private Boolean enabled = true;
+	private boolean enabled = true;
 
 	public int getId() {
 		return id;
@@ -138,27 +139,41 @@ public class User {
 		this.updateAt = updateAt;
 	}
 	@JsonIgnore
-	public Boolean isEnabled() {
+	public boolean isEnabled() {
 		return enabled;
 	}
-	public void setEnabled(Boolean enabled) {
+	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-	public Integer getFollowing() {
-		return following == null ? 0 : following.size();
+	@SuppressWarnings("deprecation")
+	public Long getFollowing() {
+		return (Long) Manager
+				.getInstance()
+				.getSession()
+				.createFilter(this.following, "select count(*) where enabled=1" )
+				.uniqueResult();
 	}
 	public void setFollowing(Set<Follower> following) {
 		this.following = following;
 	}
-	public Integer getFollowers() {
-		return followers == null ? 0 : followers.size();
+	@SuppressWarnings("deprecation")
+	public Long getFollowers() {
+		return (Long) Manager
+				.getInstance()
+				.getSession()
+				.createFilter(this.followers, "select count(*) where enabled=1" )
+				.uniqueResult();
 	}
-
 	public void setFollowers(Set<Follower> followers) {
 		this.followers = followers;
 	}
-	public Set<Tooeat> getTooeats() {
-		return tooeats;
+	@SuppressWarnings("deprecation")
+	public Long getTooeats() {
+		return (Long) Manager
+				.getInstance()
+				.getSession()
+				.createFilter(this.tooeats, "select count(*) where enabled=1" )
+				.uniqueResult();
 	}
 	public void setTooeats(Set<Tooeat> tooeats) {
 		this.tooeats = tooeats;

@@ -35,7 +35,7 @@
 			<!-- atualiza o banco, gera as tabelas se for preciso -->
 			<property name="hibernate.hbm2ddl.auto" value="update" />
 			<!-- <property name="hibernate.jdbc.time_zone" value="GMT-03:00"/> -->
-
+		
 		</properties>
 	</persistence-unit>
 </persistence>

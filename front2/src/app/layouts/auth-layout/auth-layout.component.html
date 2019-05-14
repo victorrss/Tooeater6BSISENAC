@@ -1,18 +1,19 @@
 <div class="main-content">
   <nav class="navbar navbar-top navbar-horizontal navbar-expand-md navbar-dark">
     <div class="container px-4">
-      <a class="navbar-brand" routerLinkActive="active" [routerLink]="['/dashboard']">
+      <a class="navbar-brand" routerLinkActive="active" [routerLink]="['/tooeats']">
         <img src="assets/img/brand/argon-white.png" />
       </a>
+      <!-- 
       <button class="navbar-toggler" type="button" (click)="isCollapsed=!isCollapsed" aria-controls="sidenav-collapse-main">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" [ngbCollapse]="isCollapsed" id="sidenav-collapse-main">
-        <!-- Collapse header -->
+
         <div class="navbar-collapse-header d-md-none">
           <div class="row">
             <div class="col-6 collapse-brand">
-              <a routerLinkActive="active" [routerLink]="['/dashboard']">
+              <a routerLinkActive="active" [routerLink]="['/tooeats']">
                 <img src="assets/img/brand/blue.png">
               </a>
             </div>
@@ -24,11 +25,11 @@
             </div>
           </div>
         </div>
-        <!-- Navbar items -->
-        <!-- 
+    
+        
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link nav-link-icon" routerLinkActive="active" [routerLink]="['/dashboard']">
+            <a class="nav-link nav-link-icon" routerLinkActive="active" [routerLink]="['/tooeats']">
               <i class="ni ni-planet"></i>
               <span class="nav-link-inner--text">Dashboard</span>
             </a>
@@ -52,8 +53,9 @@
             </a>
           </li>
         </ul> 
-        -->
-      </div>
+       
+      </div> 
+    -->
     </div>
   </nav>
   <router-outlet></router-outlet>
@@ -63,8 +65,8 @@
     <div class="row align-items-center justify-content-xl-between">
       <div class="col-xl-6">
         <div class="copyright text-center text-xl-left text-muted">
-          &copy; {{ test | date: "yyyy" }} <a href="https://www.creative-tim.com?ref=ada-footer-auth-layout" class="font-weight-bold ml-1"
-            target="_blank">Tooeater</a>
+          &copy; {{ test | date: "yyyy" }} <a href="https://www.creative-tim.com?ref=ada-footer-auth-layout"
+            class="font-weight-bold ml-1" target="_blank">Tooeater</a>
         </div>
       </div>
       <!-- 

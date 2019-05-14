@@ -1,0 +1,99 @@
+<div class="row mt-2">
+
+    <div class="col-1"></div>
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col-1">
+                                <img src="{{ t.photo }}" class="avatar rounded-circle">
+                            </div>
+                            <div class="col ml-4">
+                                <h4 class="p-0 m-0">{{t.user.nickname}}</h4>
+                                <a class="h5 font-weight-300 p-0 m-0" title="{{ globals.getSimpleDate(t.createdAt) }}">
+                                    {{ globals.getTimeRelative(t.createdAt) }}</a>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row d-flex justify-content-end">
+                            <li ngbDropdown placement="bottom-right" *ngIf="t.user.id == 1">
+                                <a class="pr-3" role="button" ngbDropdownToggle>
+                                    <i class="ni ni-bold-down"></i>
+                                </a>
+                                <div class="dropdown-menu-arrow dropdown-menu-right" ngbDropdownMenu>
+                                    <a (click)="changeMode()" class="dropdown-item">
+                                        <i class="fas fa-edit" style="color: goldenrod;"></i>
+                                        <span>{{mode == 'create' ? 'Editar' : 'Cancelar edição' }}</span>
+                                    </a>
+                                    <a (click)="delete()" class="dropdown-item">
+                                        <i class="far fa-trash-alt text-danger"></i>
+                                        <span>Excluir</span>
+                                    </a>
+                                </div>
+                            </li>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <form *ngIf="mode == 'update'" (ngSubmit)="onSubmitUpdate()" role="form" #tooeatUpdateForm="ngForm">
+                    <textarea type="text" [(ngModel)]="formUpdate.text" name="text" #text="ngModel" rows="3"
+                        class="form-control m-0 mt-2 {{ (text.valid) ? 'is-valid' : 'is-invalid' }}"
+                        required></textarea>
+                    <button type="submit" class="m-0 mt-2 btn btn-info btn-lg btn-block"
+                        [disabled]="!tooeatUpdateForm.form.valid">Editar</button>
+                </form>
+
+                <div *ngIf="mode == 'create'">
+                    <p class="card-text p-0 m-0 mt-3">{{ t.text }}</p>
+                    <hr class="my-3">
+                    <div class="row">
+                        <div class="col m-0 mr-1">
+                            <button class="btn btn-icon btn-outline-primary btn-block" type="button">
+                                <span class="btn-inner--icon"><i class="ni ni-like-2"></i></span>
+                                <span class="btn-inner--text">Curtir({{ t.likes }})</span>
+                            </button>
+                        </div>
+                        <div class="col m-0 ml-1">
+                            <button class="btn btn-icon btn-outline-primary btn-block" type="button"
+                                (click)="openModalComments(content,t.id)">
+                                <span class="btn-inner--icon"><i class="far fa-comments"></i></span>
+                                <span class="btn-inner--text">Comentar({{ t.comments }})</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-1"></div>
+</div>
+
+<ng-template #content let-modal class="row">
+    <div class="modal-header">
+        <h4 class="modal-title">Comentários</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <p>One fine body&hellip;</p>
+    </div>
+
+    <form>
+        <div class="row w-100 p-0 m-0">
+            <div class="col-md-9 col-sm-8 col-9 p-1 m-0 pl-3 pb-3">
+                <textarea class="form-control" id="txAreaComment" rows="3" placeholder="Comente..."></textarea>
+            </div>
+            <div class="col-md-3 col-sm-4 col-3 p-1 m-0 pr-3 pb-3">
+                <button type="submit" class="btn btn-default btn-lg w-100 h-100">Comentar</button>
+            </div>
+        </div>
+    </form>
+</ng-template>

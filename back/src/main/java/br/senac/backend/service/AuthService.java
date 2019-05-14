@@ -10,6 +10,7 @@ import javax.ws.rs.core.Response;
 import br.senac.backend.dao.UserDao;
 import br.senac.backend.model.Auth;
 import br.senac.backend.model.User;
+import br.senac.backend.model.pojo.AuthAuthenticatePojo;
 import br.senac.backend.util.JWTUtil;
 import br.senac.backend.util.Util;
 import io.swagger.annotations.Api;
@@ -33,27 +34,39 @@ public class AuthService {
 	public Response authenticateUser(Auth auth) {
 
 		try {
+			AuthAuthenticatePojo pojo = new AuthAuthenticatePojo();
+
 			// Authenticate the user using the credentials provided
-			String userId = authenticate(auth.getUsername(), auth.getPassword());
+			User user = authenticate(auth.getUsername(), auth.getPassword());
+
+			String userId = user.getId()+"";
 
 			// Issue a token for the user
 			String token = issueToken(userId);
 
+			pojo.setToken(token);
+			pojo.setUser(user);
+
 			// Return the token on the response
 			return Response
 					.status(Response.Status.OK)
-					.entity("{\"token\": \""+token+"\"}")
+					.entity(pojo)
+					/*.entity("{"
+							+ "\"token\": \""+token+"\", "
+							+ "\"user\": \""+userJson+"\" "
+							+ "}")*/
 					.type(MediaType.APPLICATION_JSON)
 					.build();
 		} catch (Exception e) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
 	}
-	private String authenticate(String username, String password) throws Exception {
+	
+	private User authenticate(String username, String password) throws Exception {
 		User user = null;
 		user = UserDao.getInstance().getByUserName(username);
 		if(user != null && user.getPassword().equals(Util.sha1(password)))
-			return user.getId()+"";
+			return user;
 		else
 			throw new Exception();
 	}

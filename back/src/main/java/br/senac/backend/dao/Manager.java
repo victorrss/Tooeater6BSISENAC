@@ -4,6 +4,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import org.hibernate.Session;
+
 public class Manager {
 
 	private static Manager instance;
@@ -24,6 +26,10 @@ public class Manager {
 		if (entityManager == null) 
 			entityManager = factory.createEntityManager();
 		return entityManager;
+	}
+
+	public Session getSession() {
+		return entityManager.unwrap(Session.class);
 	}
 
 }

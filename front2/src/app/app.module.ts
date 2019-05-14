@@ -1,7 +1,7 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
@@ -16,6 +16,10 @@ import { AuthGuardService } from './services/auth/auth-guard.service';
 import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
 import { Globals } from './services/globals';
 import { ApiService } from './services/api.service';
+import { ToastrModule } from 'ngx-toastr';
+import { HttpConfigInterceptor } from './interceptor/http.interceptor';
+import { TooeatComponent } from './components/tooeat/tooeat.component';
+
 
 @NgModule({
   imports: [
@@ -26,17 +30,23 @@ import { ApiService } from './services/api.service';
     RouterModule,
     AppRoutingModule,
     NgbModule,
+    ToastrModule.forRoot({
+      timeOut: 10000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    })
   ],
   declarations: [
     AppComponent,
     AppLayoutComponent,
-    AuthLayoutComponent,
+    AuthLayoutComponent
   ],
   providers: [
     AuthGuardService,
     AuthService,
     Globals,
-    ApiService
+    ApiService,
+    { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

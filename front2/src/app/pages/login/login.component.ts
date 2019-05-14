@@ -2,6 +2,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { UserModel } from 'src/app/model/user.model';
+import { AuthModel } from 'src/app/model/auth.model';
+import { Globals } from 'src/app/services/globals';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +20,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   errorMsg: string = null;
   success: boolean = false;
   loading = false;
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router, private globals: Globals, private apiSvc: ApiService) { }
 
   ngOnInit() {
     if (this.authService.isAuthenticated())
@@ -27,11 +31,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.loading = true;
     this.errorMsg = null;
-    this.authService.getToken(this.form).subscribe(
-      (success: any) => {
+    this.apiSvc.getAuthToken(this.form).subscribe(
+      (auth: AuthModel) => {
         this.success = true;
         this.loading = false;
-        localStorage.setItem('token', success.token);
+        localStorage.setItem('token', auth.token);
+        localStorage.setItem('user', JSON.stringify(auth.user));
+        this.globals.userLoggedIn = auth.user;
         this.router.navigate(['../tooeats']);
       },
       (err: HttpErrorResponse) => {

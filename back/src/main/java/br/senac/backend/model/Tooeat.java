@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import br.senac.backend.dao.Manager;
+
 @Entity
 @Table(name="tooeat")
 public class Tooeat {
@@ -47,8 +49,14 @@ public class Tooeat {
 	private Date updateAt;
 	@JsonIgnore
 	@Column
-	private Boolean enabled = true;
+	private boolean enabled = true;
 
+	public boolean isEnabled() {
+		return enabled;
+	}
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 	public int getId() {
 		return id;
 	}
@@ -80,21 +88,24 @@ public class Tooeat {
 	public void setUpdateAt(Date updateAt) {
 		this.updateAt = updateAt;
 	}
-	public Boolean getEnabled() {
-		return enabled;
-	}
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}
-	public Integer getComments() {
-		return this.comments == null ? 0 : this.comments.size();
+	@SuppressWarnings("deprecation")
+	public Long getComments() {
+		return (Long) Manager
+				.getInstance()
+				.getSession()
+				.createFilter(this.comments, "select count(*) WHERE enabled=1" )
+				.uniqueResult();
 	}
 	public void setComments(Set<Comment> comments) {
 		this.comments = comments;
 	}
-	public Integer getLikes() {
-		//return this.likes;
-		return this.likes == null ? 0 : this.likes.size();
+	@SuppressWarnings("deprecation")
+	public Long getLikes() {
+		return (Long) Manager
+				.getInstance()
+				.getSession()
+				.createFilter(this.likes, "select count(*)" )
+				.uniqueResult();
 	}
 	public void setLikes(Set<Like> likes) {
 		this.likes = likes;
