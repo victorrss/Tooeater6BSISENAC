@@ -12,7 +12,7 @@
 
               <form (ngSubmit)="onSubmit()" role="form" #tooeatForm="ngForm">
                 <div class="form-group mb-0">
-                  <textarea [(ngModel)]="form.text" name="text" #text="ngModel" class="form-control" rows="3"
+                  <textarea [(ngModel)]="form.text" name="text" #text="ngModel" rows="3"
                     (keydown.control.enter)="tooeatForm.form.valid ? onSubmit(): ''"
                     placeholder="Espalhe uma novidade..."
                     [class]="(text.valid) ? 'form-control is-valid' : 'form-control is-invalid'" required></textarea>

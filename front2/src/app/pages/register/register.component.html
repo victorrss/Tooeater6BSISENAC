@@ -25,13 +25,14 @@
           <div class="text-center text-muted mb-4">
             <h1>Criar conta</h1>
           </div>
-          <form role="form">
+          <form (ngSubmit)="onSubmit()" role="form" #tooeatForm="ngForm">
             <div class="form-group">
               <div class="input-group input-group-alternative mb-3">
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
                 </div>
-                <input class="form-control" placeholder="Nome" type="text">
+                <input type="text" placeholder="Nome" [(ngModel)]="user.firstName" name="firstName" #firstName="ngModel"
+                  [class]="(firstName.valid) ? 'form-control is-valid' : 'form-control is-invalid'" required>
               </div>
             </div>
             <div class="form-group">
@@ -39,7 +40,9 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
                 </div>
-                <input class="form-control" placeholder="Sobrenome" type="text">
+                <input type="text" placeholder="Sobrenome" [(ngModel)]="user.lastName" name="lastName"
+                  #lastName="ngModel" [class]="(lastName.valid) ? 'form-control is-valid' : 'form-control is-invalid'"
+                  required>
               </div>
             </div>
             <div class="form-group">
@@ -47,7 +50,9 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-single-02"></i></span>
                 </div>
-                <input class="form-control" placeholder="Nickname" type="text">
+                <input type="text" placeholder="Nickname" [(ngModel)]="user.nickname" name="nickname"
+                  #nickname="ngModel" [class]="(nickname.valid) ? 'form-control is-valid' : 'form-control is-invalid'" 
+                  required>
               </div>
             </div>
             <div class="form-group">
@@ -55,17 +60,20 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                 </div>
-                <input class="form-control" placeholder="Nascimento" type="date">
+                <input type="date" placeholder="Nascimento" [(ngModel)]="user.birthday" name="birthday"
+                  #birthday="ngModel" [class]="(birthday.valid) ? 'form-control is-valid' : 'form-control is-invalid'"
+                  required>
               </div>
-            </div> 
+            </div>
             <div class="form-group">
               <div class="input-group input-group-alternative mb-3">
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-satisfied"></i></span>
                 </div>
-                <select class="form-control">
-                  <option value="1">Masculino</option>
-                  <option value="0">Feminino</option>
+                <select [(ngModel)]="user.gender" name="gender" #gender="ngModel"
+                  [class]="(gender.valid) ? 'form-control is-valid' : 'form-control is-invalid'" required>
+                  <option [value]="true">Masculino</option>
+                  <option [value]="false">Feminino</option>
                 </select>
               </div>
             </div>
@@ -75,7 +83,8 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                 </div>
-                <input class="form-control" placeholder="E-mail" type="text">
+                <input type="email" placeholder="E-mail" [(ngModel)]="user.email" name="email" #email="ngModel"
+                  [class]="(email.valid) ? 'form-control is-valid' : 'form-control is-invalid'" required>
               </div>
             </div>
             <div class="form-group">
@@ -83,22 +92,26 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                 </div>
-                <input class="form-control" placeholder="Senha" type="password">
+                <input type="password" placeholder="Senha" [(ngModel)]="user.password" name="password"
+                  #password="ngModel" [class]="(password.valid) ? 'form-control is-valid' : 'form-control is-invalid'"
+                  required>
               </div>
             </div>
-            <div class="text-muted font-italic"><small>password strength: <span class="text-success font-weight-700">strong</span></small></div>
+            <!-- <div class="text-muted font-italic">
+              <small>password strength: <span class="text-success font-weight-700">strong</span></small>
+            </div> -->
             <div class="row my-4">
               <div class="col-12">
                 <div class="custom-control custom-control-alternative custom-checkbox">
-                  <input class="custom-control-input" id="customCheckRegister" type="checkbox">
+                  <input class="custom-control-input" id="customCheckRegister" type="checkbox" required>
                   <label class="custom-control-label" for="customCheckRegister">
-                    <span class="text-muted">Eu aceito a <a href="#!">Política de Privavidade</a> do Tooeater</span>
+                    <span class="text-muted">Eu aceito a <a (click)="openModalPolicy(content)">Política de Privavidade</a> do Tooeater</span>
                   </label>
                 </div>
               </div>
             </div>
             <div class="text-center">
-              <button type="button" class="btn btn-primary mt-4">Criar Conta</button>
+              <button type="submit" class="btn btn-primary mt-4">Criar Conta</button>
             </div>
           </form>
         </div>
@@ -106,3 +119,58 @@
     </div>
   </div>
 </div>
+
+
+<ng-template #content let-modal class="row">
+  <div class="modal-header">
+    <h4 class="modal-title">Política de Privavidade do Tooeater</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h2>Política de privacidade para <a href='http://www.tooeater.com'>Tooeater</a></h2>
+    <p>Todas as suas informações pessoais recolhidas, serão usadas para o ajudar a tornar a sua visita no nosso site o
+      mais produtiva e agradável possível.</p>
+    <p>A garantia da confidencialidade dos dados pessoais dos utilizadores do nosso site é importante para o Tooeater.
+    </p>
+    <p>Todas as informações pessoais relativas a membros, assinantes, clientes ou visitantes que usem o Tooeater serão
+      tratadas em concordância com a Lei da Proteção de Dados Pessoais de 26 de outubro de 1998 (Lei n.º 67/98).</p>
+    <p>A informação pessoal recolhida pode incluir o seu nome, e-mail, número de telefone e/ou telemóvel, morada, data
+      de nascimento e/ou outros.</p>
+    <p>O uso do Tooeater pressupõe a aceitação deste Acordo de privacidade. A equipa do Tooeater reserva-se ao direito
+      de alterar este acordo sem aviso prévio. Deste modo, recomendamos que consulte a nossa política de privacidade com
+      regularidade de forma a estar sempre atualizado.</p>
+    <h2>Os anúncios</h2>
+    <p>Tal como outros websites, coletamos e utilizamos informação contida nos anúncios. A informação contida nos
+      anúncios, inclui o seu endereço IP (Internet Protocol), o seu ISP (Internet Service Provider, como o Sapo, Clix,
+      ou outro), o browser que utilizou ao visitar o nosso website (como o Internet Explorer ou o Firefox), o tempo da
+      sua visita e que páginas visitou dentro do nosso website.</p>
+    <h2>Cookie DoubleClick Dart</h2>
+    <p>O Google, como fornecedor de terceiros, utiliza cookies para exibir anúncios no nosso website;</p>
+    <p>Com o cookie DART, o Google pode exibir anúncios com base nas visitas que o leitor fez a outros websites na
+      Internet;</p>
+    <p>Os utilizadores podem desativar o cookie DART visitando a Política de privacidade da rede de conteúdo e dos
+      anúncios do Google.</p>
+    <h2>Os Cookies e Web Beacons</h2>
+    <p>Utilizamos cookies para armazenar informação, tais como as suas preferências pessoas quando visita o nosso
+      website. Isto poderá incluir um simples popup, ou uma ligação em vários serviços que providenciamos, tais como
+      fóruns.</p>
+    <p>Em adição também utilizamos publicidade de terceiros no nosso website para suportar os custos de manutenção.
+      Alguns destes publicitários, poderão utilizar tecnologias como os cookies e/ou web beacons quando publicitam no
+      nosso website, o que fará com que esses publicitários (como o Google através do Google AdSense) também recebam a
+      sua informação pessoal, como o endereço IP, o seu ISP, o seu browser, etc. Esta função é geralmente utilizada para
+      geotargeting (mostrar publicidade de Lisboa apenas aos leitores oriundos de Lisboa por ex.) ou apresentar
+      publicidade direcionada a um tipo de utilizador (como mostrar publicidade de restaurante a um utilizador que
+      visita sites de culinária regularmente, por ex.).</p>
+    <p>Você detém o poder de desligar os seus cookies, nas opções do seu browser, ou efetuando alterações nas
+      ferramentas de programas Anti-Virus, como o Norton Internet Security. No entanto, isso poderá alterar a forma como
+      interage com o nosso website, ou outros websites. Isso poderá afetar ou não permitir que faça logins em programas,
+      sites ou fóruns da nossa e de outras redes.</p>
+    <h2>Ligações a Sites de terceiros</h2>
+    <p>O Tooeater possui ligações para outros sites, os quais, a nosso ver, podem conter informações / ferramentas úteis
+      para os nossos visitantes. A nossa política de privacidade não é aplicada a sites de terceiros, pelo que, caso
+      visite outro site a partir do nosso deverá ler a politica de privacidade do mesmo.</p>
+    <p>Não nos responsabilizamos pela política de privacidade ou conteúdo presente nesses mesmos sites.</p>
+  </div>
+</ng-template>

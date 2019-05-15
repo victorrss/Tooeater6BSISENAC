@@ -124,19 +124,37 @@ public class TooeatService {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@ApiImplicitParams({@ApiImplicitParam(
+			name = "Authorization", 
+			value = "Bearer {JWT Token}",
+			required = true,
+			dataType = "string",
+			paramType = "header"
+			)})
 	@ApiResponses(value = { 
 			@ApiResponse(code = 204, message = "Sucesso!"),
 			@ApiResponse(code = 400, message = "Falha geral, try-catch"), 
 			@ApiResponse(code = 406 , message = "Falha validação, Tooeat Exception com retorno de: {\"message\\\": \"Message\"}")
 	})
-	public Response update(Tooeat tooeat){
+	public Response update(Tooeat tooeat, @Context SecurityContext securityContext){
 		Response response;
-		try {
-			TooeatException userException = TooeatValidator.validate(tooeat);
-			if (userException != null)
-				throw userException;
+		try {		
+			Tooeat t = TooeatDao.getInstance().getById(tooeat.getId());
+			
+			Integer userId = Util.stringToInteger(securityContext.getUserPrincipal().getName());
 
-			TooeatDao.getInstance().merge(tooeat);
+			if (t.getUser().getId() != userId)
+				throw new TooeatException("Você não é o autor deste tooeat!");
+			
+			t.setText(tooeat.getText());
+			t.setUpdateAt(Util.getDateNow());
+			
+			TooeatException tooeatException = TooeatValidator.validate(t);
+			if (tooeatException != null)
+				throw tooeatException;
+
+			TooeatDao.getInstance().merge(t);
 			response = Response
 					.status(Response.Status.NO_CONTENT)
 					.build();

@@ -17,8 +17,8 @@ export class ApiService {
     getTooeatFeed(): Observable<TooeatModel[]> {
         return <Observable<TooeatModel[]>>this.http.get(this.globals.uri + '/tooeat');
     }
-    updateTooeat(tooeatId: number, t: TooeatModel) {
-        return this.http.put(this.globals.uri + '/tooeat/' + tooeatId, t);
+    updateTooeat(t: TooeatModel) {
+        return this.http.put(this.globals.uri + '/tooeat', t);
     }
     deleteTooeat(tooeatId: number) {
         return this.http.delete(this.globals.uri + '/tooeat/' + tooeatId);

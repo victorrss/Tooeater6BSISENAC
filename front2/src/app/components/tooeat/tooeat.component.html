@@ -13,7 +13,10 @@
                             <div class="col ml-4">
                                 <h4 class="p-0 m-0">{{t.user.nickname}}</h4>
                                 <a class="h5 font-weight-300 p-0 m-0" title="{{ globals.getSimpleDate(t.createdAt) }}">
-                                    {{ globals.getTimeRelative(t.createdAt) }}</a>
+                                    {{ globals.getTimeRelative(t.createdAt) }}</a> <span
+                                    class="h5 font-weight-300 p-0 m-0"
+                                    title="{{ globals.getSimpleDate(t.updateAt) }}, {{ globals.getTimeRelative(t.updateAt) }}"
+                                    *ngIf="t.updateAt"> - Editado</span>
 
                             </div>
                         </div>

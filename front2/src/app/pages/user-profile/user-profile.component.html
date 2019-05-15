@@ -124,9 +124,16 @@
                 <div class="col-lg-6">
                   <div class="form-group">
                     <label class="form-control-label">Nascimento</label>
-                    <input placeholder="Nascimento" type="date" [(ngModel)]="user.birthday" name="birthday"
+                    <!-- <input placeholder="Nascimento" type="date" [(ngModel)]="user.birthday" name="birthday"
                       #birthday="ngModel"
-                      [class]="(birthday.valid) ? 'form-control is-valid' : 'form-control is-invalid'">
+                      [class]="(birthday.valid) ? 'form-control is-valid' : 'form-control is-invalid'"> -->
+
+                    <input type="date" name="birthday" [ngModel]="user.birthday | date:'yyyy-MM-dd'"
+                      (ngModelChange)="user.birthday = $event" [value]="user.birthday | date:'yyyy-MM-dd'"
+                      #birthday="ngModel"
+                      [class]="(birthday.valid) ? 'form-control is-valid' : 'form-control is-invalid'" required>
+
+
                   </div>
                 </div>
               </div>
@@ -135,13 +142,15 @@
                 <div class="col-lg-6">
                   <div class="form-group">
                     <label class="form-control-label">Nickname</label>
-                    <input type="text" placeholder="Nickname" value="lucky.jesse">
+                    <input type="text" placeholder="Nickname" [(ngModel)]="user.nickname" name="nickname"
+                      #nickname="ngModel"
+                      [class]="(nickname.valid) ? 'form-control is-valid' : 'form-control is-invalid'">
                   </div>
                 </div>
                 <div class="col-lg-6">
                   <div class="form-group">
                     <label class="form-control-label">E-mail</label>
-                    <input type="email" placeholder="too@eater.com.br" value="user.firstName" disabled>
+                    <input type="email" class="form-control" [value]="user.email" disabled>
                   </div>
                 </div>
               </div>
@@ -150,13 +159,13 @@
                 <div class="col-lg-6">
                   <div class="form-group">
                     <label class="form-control-label">Tooeater desde</label>
-                    <input type="text" placeholder="too@eater.com.br" value="user.firstName" disabled>
+                    <input type="text" class="form-control" [value]="user.createdAt | date:'dd/MM/yyyy HH:mm'" disabled>
                   </div>
                 </div>
                 <div class="col-lg-6">
                   <div class="form-group">
                     <label class="form-control-label">Última atualização de perfil</label>
-                    <input type="text" placeholder="too@eater.com.br" value="user.firstName" disabled>
+                    <input type="text" class="form-control" [value]="user.updateAt | date:'dd/MM/yyyy HH:mm'" disabled>
                   </div>
                 </div>
               </div>
@@ -206,7 +215,8 @@
             <div class="pl-lg-4">
               <div class="form-group">
                 <label>Bio</label>
-                <textarea rows="4" placeholder="Algumas palavras sobre você...">{{user.bio}}</textarea>
+                <textarea rows="4" placeholder="Algumas palavras sobre mim..." [(ngModel)]="user.bio" name="bio"
+                  #bio="ngModel" [class]="(bio.valid) ? 'form-control is-valid' : 'form-control is-invalid'"></textarea>
               </div>
             </div>
           </form>

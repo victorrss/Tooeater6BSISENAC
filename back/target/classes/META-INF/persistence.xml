@@ -15,6 +15,7 @@
 		<class>br.senac.backend.model.Tooeat</class>
 		<class>br.senac.backend.model.Follower</class>
 		<class>br.senac.backend.model.User</class>
+		<class>br.senac.backend.model.Like</class>
 
 		<properties>
 			<!-- dados da conexao -->

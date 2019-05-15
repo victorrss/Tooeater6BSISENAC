@@ -14,7 +14,7 @@ export class TooeatComponent {
     apiSubscription: any;
     @Input('tooeat') t: TooeatModel;
     @Output() onDelete = new EventEmitter<boolean>();
-    @Output() onUpdate = new EventEmitter<boolean>();
+    @Output() onUpdate = new EventEmitter<any>();
     mode: string = 'create' // create or update
     tooeatUpdateStage: TooeatModel;
     constructor(private modalService: NgbModal, private globals: Globals, private apiSvc: ApiService) { }
@@ -32,13 +32,16 @@ export class TooeatComponent {
 
     onSubmitUpdate() {
         let tooeat = new TooeatModel();
+        tooeat.id = this.t.id
         tooeat.text = this.formUpdate.text;
-        this.apiSubscription = this.apiSvc.updateTooeat(this.t.id, tooeat).subscribe(
+        this.apiSubscription = this.apiSvc.updateTooeat(tooeat).subscribe(
             () => {
-                this.onUpdate.emit(true)
+                this.onUpdate.emit({ success: true })
                 this.t.text = this.formUpdate.text;
+                this.t.updateAt = new Date();
+                this.changeMode()
             },
-            () => this.onUpdate.emit(false)
+            (err) => this.onUpdate.emit({ success: false, message: err.error.message })
         )
     }
 
@@ -46,8 +49,6 @@ export class TooeatComponent {
         if (this.mode == 'create') {
             this.mode = 'update'
             this.formUpdate.text = this.t.text;
-        }
-        else
-            this.mode = 'create'
+        } else this.mode = 'create'
     }
 }

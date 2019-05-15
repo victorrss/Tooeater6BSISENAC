@@ -44,14 +44,14 @@ export class TooeatsComponent implements OnInit, OnDestroy {
   deleteTooeat(ev: Event, t: TooeatModel) {
     if (ev) {
       this.tooeats = this.globals.arrayRemove(this.tooeats, t)
-      this.globals.showToast('Sucesso!', 'Tooeat excluído com sucesso!', 'success')
+      //this.globals.showToast('Sucesso!', 'Tooeat excluído com sucesso!', 'success')
     }
     else this.globals.showToast('Erro!', "Não foi possível excluir seu tooeat!", 'error')
   }
 
-  updateTooeat(ev: Event) {
-    if (ev) this.globals.showToast('Sucesso!', 'Tooeat editado com sucesso!', 'success')
-    else this.globals.showToast('Erro!', "Não foi possível editar seu tooeat!", 'error')
+  updateTooeat(ev: any) {
+    if (!ev.success) 
+      this.globals.showToast('Erro!', ev.message, 'error')
   }
 
   getTooeats() {
