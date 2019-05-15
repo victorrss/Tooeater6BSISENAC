@@ -30,6 +30,9 @@ export class ApiService {
     getUserMe(): Observable<UserModel> {
         return <Observable<UserModel>>this.http.get(this.globals.uri + '/user/me');
     }
+    postUser(user: UserModel) {
+        return <Observable<UserModel>>this.http.post(this.globals.uri + '/user', user);
+    }
     // END - CRUD USER
 
 
@@ -41,7 +44,7 @@ export class ApiService {
 
 
     // BEGIN - CRUD AUTH
-    getAuthToken(body):Observable<AuthModel> {
+    getAuthToken(body): Observable<AuthModel> {
         return <Observable<AuthModel>>this.http.post(this.globals.uri + '/auth', body);
     }
     // END - CRUD AUTH

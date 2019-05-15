@@ -42,23 +42,15 @@ public class LikeDao {
 		}
 	}
 
-	public void remove(Like like) {
+	public void removeById(final int id) {
 		try {
 			em.getTransaction().begin();
+			Like like = getById(id);
 			em.remove(like);
 			em.getTransaction().commit();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			em.getTransaction().rollback();
-		}
-	}
-
-	public void removeById(final int id) {
-		try {
-			Like like = getById(id);
-			remove(like);
-		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
 	}
 

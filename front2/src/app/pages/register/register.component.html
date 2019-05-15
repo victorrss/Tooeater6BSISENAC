@@ -1,4 +1,4 @@
-<div class="header bg-gradient-danger py-7 py-lg-8">
+<div class="header bg-gradient-primary py-7 py-lg-8">
   <div class="container">
     <div class="header-body text-center mb-7">
       <div class="row justify-content-center">
@@ -25,93 +25,124 @@
           <div class="text-center text-muted mb-4">
             <h1>Criar conta</h1>
           </div>
-          <form (ngSubmit)="onSubmit()" role="form" #tooeatForm="ngForm">
-            <div class="form-group">
-              <div class="input-group input-group-alternative mb-3">
+          <form (ngSubmit)="onSubmit()" role="form" #registerForm="ngForm" class="needs-validation" novalidate>
+            <div class="form-group mb-3 {{firstName.pristine?'':(firstName.valid)?'has-success':'has-danger'}}">
+              <div class="input-group input-group-alternative mb-1">
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
                 </div>
-                <input type="text" placeholder="Nome" [(ngModel)]="user.firstName" name="firstName" #firstName="ngModel"
-                  [class]="(firstName.valid) ? 'form-control is-valid' : 'form-control is-invalid'" required>
+                <input type="text" class="form-control" placeholder="Nome" [(ngModel)]="user.firstName" name="firstName"
+                  #firstName="ngModel" required>
               </div>
             </div>
-            <div class="form-group">
-              <div class="input-group input-group-alternative mb-3">
+            <div class="form-group mb-3 {{lastName.pristine?'':(lastName.valid)?'has-success':'has-danger'}}">
+              <div class="input-group input-group-alternative mb-1">
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
                 </div>
-                <input type="text" placeholder="Sobrenome" [(ngModel)]="user.lastName" name="lastName"
-                  #lastName="ngModel" [class]="(lastName.valid) ? 'form-control is-valid' : 'form-control is-invalid'"
-                  required>
+                <input type="text" class="form-control" placeholder="Sobrenome" [(ngModel)]="user.lastName"
+                  name="lastName" #lastName="ngModel">
               </div>
             </div>
-            <div class="form-group">
-              <div class="input-group input-group-alternative mb-3">
+            <div class="form-group mb-3 {{nickname.pristine?'':(nickname.valid)?'has-success':'has-danger'}}">
+              <div class="input-group input-group-alternative mb-1">
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-single-02"></i></span>
                 </div>
-                <input type="text" placeholder="Nickname" [(ngModel)]="user.nickname" name="nickname"
-                  #nickname="ngModel" [class]="(nickname.valid) ? 'form-control is-valid' : 'form-control is-invalid'" 
-                  required>
+                <input type="text" class="form-control" placeholder="Nickname" [(ngModel)]="user.nickname"
+                  name="nickname" #nickname="ngModel" required>
               </div>
             </div>
-            <div class="form-group">
-              <div class="input-group input-group-alternative mb-3">
+            <div class="form-group mb-3 {{birthday.pristine?'':(birthday.valid)?'has-success':'has-danger'}}">
+              <div class="input-group input-group-alternative mb-1">
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                 </div>
-                <input type="date" placeholder="Nascimento" [(ngModel)]="user.birthday" name="birthday"
-                  #birthday="ngModel" [class]="(birthday.valid) ? 'form-control is-valid' : 'form-control is-invalid'"
-                  required>
+                <input type="date" class="form-control" name="birthday" [ngModel]="user.birthday | date:'yyyy-MM-dd'"
+                  (ngModelChange)="user.birthday = $event" [value]="user.birthday | date:'yyyy-MM-dd'"
+                  max="{{ today | date:'yyyy-MM-dd' }}" #birthday="ngModel" placeholder="Nascimento" required>
               </div>
             </div>
-            <div class="form-group">
-              <div class="input-group input-group-alternative mb-3">
+            <div class="form-group mb-3 {{gender.pristine?'':(gender.valid)?'has-success':'has-danger'}}">
+              <div class="input-group input-group-alternative mb-1">
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-satisfied"></i></span>
                 </div>
-                <select [(ngModel)]="user.gender" name="gender" #gender="ngModel"
-                  [class]="(gender.valid) ? 'form-control is-valid' : 'form-control is-invalid'" required>
-                  <option [value]="true">Masculino</option>
+                <select class="form-control" [(ngModel)]="user.gender" name="gender" #gender="ngModel" required>
+                  <option [value]="true" selected>Masculino</option>
                   <option [value]="false">Feminino</option>
                 </select>
               </div>
             </div>
 
-            <div class="form-group">
-              <div class="input-group input-group-alternative mb-3">
+            <div class="form-group mb-3 {{email.pristine?'':(email.valid)?'has-success':'has-danger'}}">
+              <div class="input-group input-group-alternative mb-1">
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                 </div>
-                <input type="email" placeholder="E-mail" [(ngModel)]="user.email" name="email" #email="ngModel"
-                  [class]="(email.valid) ? 'form-control is-valid' : 'form-control is-invalid'" required>
+                <input type="email" class="form-control" placeholder="E-mail" [(ngModel)]="user.email" name="email"
+                  #email="ngModel" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
               </div>
             </div>
-            <div class="form-group">
+
+            <div class="form-group mb-3 {{password.pristine?'':(password.valid)?'has-success':'has-danger'}}">
               <div class="input-group input-group-alternative">
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                 </div>
-                <input type="password" placeholder="Senha" [(ngModel)]="user.password" name="password"
-                  #password="ngModel" [class]="(password.valid) ? 'form-control is-valid' : 'form-control is-invalid'"
-                  required>
+                <input class="form-control" type="password" placeholder="Senha" [(ngModel)]="user.password"
+                  name="password" #password="ngModel" required autocomplete="off">
               </div>
             </div>
-            <!-- <div class="text-muted font-italic">
-              <small>password strength: <span class="text-success font-weight-700">strong</span></small>
-            </div> -->
+
             <div class="row my-4">
               <div class="col-12">
                 <div class="custom-control custom-control-alternative custom-checkbox">
-                  <input class="custom-control-input" id="customCheckRegister" type="checkbox" required>
+                  <input class="custom-control-input" id="customCheckRegister" type="checkbox"
+                    [(ngModel)]="user.acceptPolicy" name="acceptPolicy" #acceptPolicy="ngModel" required>
                   <label class="custom-control-label" for="customCheckRegister">
-                    <span class="text-muted">Eu aceito a <a (click)="openModalPolicy(content)">Política de Privavidade</a> do Tooeater</span>
+                    <span class="text-muted">Eu aceito a <a href="javascript:void(0)" class="font-weight-bold"
+                        (click)="openModalPolicy(content)">Política de Privavidade</a> do Tooeater</span>
                   </label>
                 </div>
               </div>
             </div>
+            <div class="text-center text-danger">
+              <ul class="list-group">
+                <li class="list-group-item p-1"
+                  *ngIf="email && !email.pristine && email.errors && email.errors.pattern">
+                  <p class="m-0 font-weight-bold">E-mail inválido</p>
+                </li>
+                <li class="list-group-item p-1"
+                  *ngIf="firstName && !firstName.pristine && firstName.errors && firstName.errors.required">
+                  <p class="m-0 font-weight-bold">O nome é obrigatório</p>
+                </li>
+                <li class="list-group-item p-1"
+                  *ngIf="nickname && !nickname.pristine && nickname.errors && nickname.errors.required">
+                  <p class="m-0 font-weight-bold">O nickname é obrigatório</p>
+                </li>
+                <li class="list-group-item p-1"
+                  *ngIf="birthday && !birthday.pristine && birthday.errors && birthday.errors.required">
+                  <p class="m-0 font-weight-bold">A data de nascimento é obrigatória</p>
+                </li>
+                <li class="list-group-item p-1"
+                  *ngIf="gender && !gender.pristine && gender.errors && gender.errors.required">
+                  <p class="m-0 font-weight-bold">O sexo é obrigatório</p>
+                </li>
+                <li class="list-group-item p-1"
+                  *ngIf="email && !email.pristine && email.errors && email.errors.required">
+                  <p class="m-0 font-weight-bold">O e-mail é obrigatório</p>
+                </li>
+                <li class="list-group-item p-1"
+                  *ngIf="password && !password.pristine && password.errors && password.errors.required">
+                  <p class="m-0 font-weight-bold">A senha é obrigatória</p>
+                </li>
+              </ul>
+            </div>
             <div class="text-center">
-              <button type="submit" class="btn btn-primary mt-4">Criar Conta</button>
+              <button type="submit" class="btn btn-primary mt-4"
+                [disabled]="!registerForm.form.valid || registerForm.form.pristine">Criar
+                Conta</button>
             </div>
           </form>
         </div>

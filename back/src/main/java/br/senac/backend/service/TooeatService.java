@@ -20,6 +20,7 @@ import br.senac.backend.dao.TooeatDao;
 import br.senac.backend.dao.UserDao;
 import br.senac.backend.exception.TooeatException;
 import br.senac.backend.model.Tooeat;
+import br.senac.backend.model.User;
 import br.senac.backend.model.pojo.TooeatCreatePojo;
 import br.senac.backend.util.Util;
 import br.senac.backend.validator.TooeatValidator;
@@ -59,9 +60,9 @@ public class TooeatService {
 			Integer userId = Util.stringToInteger(securityContext.getUserPrincipal().getName());
 
 			Tooeat tooeat = TooeatCreatePojo.convertToModel(pojo);
-
+			User user = (User) UserDao.getInstance().getById(userId);
 			tooeat.setCreatedAt(Util.getDateNow());
-			tooeat.setUser(UserDao.getInstance().getById(userId));
+			tooeat.setUser(user);
 			tooeat.setEnabled(true);
 
 			TooeatException tooeatException = TooeatValidator.validate(tooeat);
@@ -141,15 +142,15 @@ public class TooeatService {
 		Response response;
 		try {		
 			Tooeat t = TooeatDao.getInstance().getById(tooeat.getId());
-			
+
 			Integer userId = Util.stringToInteger(securityContext.getUserPrincipal().getName());
 
 			if (t.getUser().getId() != userId)
 				throw new TooeatException("Você não é o autor deste tooeat!");
-			
+
 			t.setText(tooeat.getText());
 			t.setUpdateAt(Util.getDateNow());
-			
+
 			TooeatException tooeatException = TooeatValidator.validate(t);
 			if (tooeatException != null)
 				throw tooeatException;
@@ -202,7 +203,7 @@ public class TooeatService {
 						.build();
 			} else {
 				response = Response
-						.status(Response.Status.UNAUTHORIZED)
+						.status(Response.Status.FORBIDDEN)
 						.build();
 			}
 		} catch (Exception e) {

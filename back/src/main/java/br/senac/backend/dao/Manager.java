@@ -21,7 +21,7 @@ public class Manager {
 		entityManager = getEntityManager();
 	}
 
-	private EntityManager getEntityManager() {
+	protected EntityManager getEntityManager() {
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("tooeater");
 		if (entityManager == null) 
 			entityManager = factory.createEntityManager();

@@ -22,7 +22,8 @@ export class TooeatsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.apiSubscription.unsubscribe();
+    if (this.apiSubscription)
+      this.apiSubscription.unsubscribe();
   }
 
   onSubmit() {
@@ -37,26 +38,24 @@ export class TooeatsComponent implements OnInit, OnDestroy {
         this.form.text = '';
         this.getTooeats();
       },
-      (err) => this.globals.showToast('Erro!', err.error.message, 'error')
+      (err) => this.globals.showToast('Oh não!', err.error.message, 'error')
     )
   }
 
   deleteTooeat(ev: Event, t: TooeatModel) {
-    if (ev) {
+    if (ev)
       this.tooeats = this.globals.arrayRemove(this.tooeats, t)
-      //this.globals.showToast('Sucesso!', 'Tooeat excluído com sucesso!', 'success')
-    }
-    else this.globals.showToast('Erro!', "Não foi possível excluir seu tooeat!", 'error')
+    else this.globals.showToast('Oh não!', "Não foi possível excluir seu tooeat!", 'error')
   }
 
   updateTooeat(ev: any) {
-    if (!ev.success) 
-      this.globals.showToast('Erro!', ev.message, 'error')
+    if (!ev.success)
+      this.globals.showToast('Oh não!', ev.message, 'error')
   }
 
   getTooeats() {
     this.apiSubscription = this.apiSvc.getTooeatFeed().subscribe(
       (result: TooeatModel[]) => this.tooeats = result,
-      () => this.globals.showToast('Erro!', "Não foi possível consultar os últimos tooeats", 'error'))
+      () => { this.globals.showToast('Oh não!', "Não foi possível consultar os últimos tooeats", 'error') })
   }
 }

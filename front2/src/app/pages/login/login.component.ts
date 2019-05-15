@@ -19,31 +19,33 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
   errorMsg: string = null;
   success: boolean = false;
-  loading = false;
+  apiSubscription: any;
+
   constructor(private authService: AuthService, private router: Router, private globals: Globals, private apiSvc: ApiService) { }
 
   ngOnInit() {
     if (this.authService.isAuthenticated())
       this.router.navigate(['../tooeats']);
   }
-  ngOnDestroy() { }
+
+  ngOnDestroy(): void {
+    if (this.apiSubscription)
+      this.apiSubscription.unsubscribe();
+  }
 
   onSubmit() {
-    this.loading = true;
     this.errorMsg = null;
-    this.apiSvc.getAuthToken(this.form).subscribe(
+    this.apiSubscription = this.apiSvc.getAuthToken(this.form).subscribe(
       (auth: AuthModel) => {
         this.success = true;
-        this.loading = false;
         localStorage.setItem('token', auth.token);
         localStorage.setItem('user', JSON.stringify(auth.user));
         this.globals.userLoggedIn = auth.user;
         this.router.navigate(['../tooeats']);
       },
       (err: HttpErrorResponse) => {
-        this.loading = false;
         switch (err.status) {
-          case 401:
+          case 403:
             this.errorMsg = "Usuário ou senha inválida!";
             break;
           default:

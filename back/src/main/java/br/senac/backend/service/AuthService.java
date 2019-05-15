@@ -29,7 +29,7 @@ public class AuthService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Sucesso! Retornará o JWT Token"),
-			@ApiResponse(code = 401, message = "Usuário sem autorização")
+			@ApiResponse(code = 403, message = "Usuário ou senha inválida")
 	})
 	public Response authenticateUser(Auth auth) {
 
@@ -45,6 +45,7 @@ public class AuthService {
 			String token = issueToken(userId);
 
 			pojo.setToken(token);
+			//if (user != null)
 			pojo.setUser(user);
 
 			// Return the token on the response
@@ -58,10 +59,10 @@ public class AuthService {
 					.type(MediaType.APPLICATION_JSON)
 					.build();
 		} catch (Exception e) {
-			return Response.status(Response.Status.UNAUTHORIZED).build();
+			return Response.status(Response.Status.FORBIDDEN).build();
 		}
 	}
-	
+
 	private User authenticate(String username, String password) throws Exception {
 		User user = null;
 		user = UserDao.getInstance().getByUserName(username);

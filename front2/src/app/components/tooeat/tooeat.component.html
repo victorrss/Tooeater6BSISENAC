@@ -23,7 +23,7 @@
                     </div>
                     <div class="col">
                         <div class="row d-flex justify-content-end">
-                            <li ngbDropdown placement="bottom-right" *ngIf="t.user.id == 1">
+                            <li ngbDropdown placement="bottom-right" *ngIf="t.user.id == globals.userLoggedIn.id">
                                 <a class="pr-3" role="button" ngbDropdownToggle>
                                     <i class="ni ni-bold-down"></i>
                                 </a>

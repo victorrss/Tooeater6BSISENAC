@@ -22,8 +22,7 @@
         <div class="dropdown-menu-arrow dropdown-menu-right" ngbDropdownMenu>
           <div class=" dropdown-header noti-title">
             <h6 *ngIf="!getUser()" class="text-overflow m-0">Tooeater!</h6>
-            <h6 *ngIf="getUser()" class="text-overflow m-0">Tooeater! Olá, {{ getUser().firstName}}
-              {{ getUser().lastName }}</h6>
+            <h6 *ngIf="getUser()" class="text-overflow m-0">Tooeater! Olá, {{ getUser().firstName}}{{ ' '+getUser().lastName }}</h6>
           </div>
           <a routerLinkActive="active" [routerLink]="['/user-profile']" class="dropdown-item">
             <i class="ni ni-single-02"></i>

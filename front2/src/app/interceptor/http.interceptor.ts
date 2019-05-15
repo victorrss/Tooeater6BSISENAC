@@ -11,10 +11,12 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Globals } from '../services/globals';
+import { Router } from '@angular/router';
+import { AuthService } from '../services/auth/auth.service';
 
 @Injectable()
 export class HttpConfigInterceptor implements HttpInterceptor {
-    constructor(private globals : Globals) { }
+    constructor(private globals: Globals, private router: Router, private authSvc: AuthService) { }
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         this.globals.loading = true;
         const token: string = localStorage.getItem('token');
@@ -38,13 +40,20 @@ export class HttpConfigInterceptor implements HttpInterceptor {
                 return event;
             }),
             catchError((error: HttpErrorResponse) => {
+                console.log('error interceptor--->>>', error);
+
                 this.globals.loading = false;
+                if (error.status == 401) {
+                    this.authSvc.logout();
+                    this.router.navigate(['/login']);
+                }
+
                 let data = {};
                 data = {
                     reason: error && error.error.reason ? error.error.reason : '',
                     status: error.status
                 };
-    
+
                 return throwError(error);
             }));
     }

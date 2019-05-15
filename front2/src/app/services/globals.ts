@@ -8,6 +8,7 @@ export class Globals {
   uri: string = 'http://localhost:8080/tooeater/api';
   loading: boolean = false;
   userLoggedIn: UserModel;
+  
   constructor(private toastr: ToastrService) {
     try {
       this.userLoggedIn = <UserModel>JSON.parse(localStorage.getItem('user'));

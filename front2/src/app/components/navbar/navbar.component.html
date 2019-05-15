@@ -23,8 +23,7 @@
               <img *ngIf="getUser()" src="{{ getUser().photo }}">
             </span>
             <div class="media-body ml-2 d-none d-lg-block">
-              <span class="mb-0 text-sm  font-weight-bold" *ngIf="getUser()">{{ getUser().firstName }}
-                {{ getUser().lastName }}</span>
+              <span class="mb-0 text-sm  font-weight-bold" *ngIf="getUser()">{{ getUser().firstName }}{{ ' '+getUser().lastName }}</span>
             </div>
           </div>
         </a>

@@ -146,7 +146,7 @@ public class CommentService {
 						.build();
 			} else {
 				response = Response
-						.status(Response.Status.UNAUTHORIZED)
+						.status(Response.Status.FORBIDDEN)
 						.build();
 			}
 		} catch (Exception e) {

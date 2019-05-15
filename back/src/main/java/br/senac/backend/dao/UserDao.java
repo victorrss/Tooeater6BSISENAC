@@ -82,24 +82,16 @@ public class UserDao {
 		}
 	}
 
-	void remove(User user) {
+	public void removeById(final int id) {
 		try {
 			em.getTransaction().begin();
+			User user = getById(id);
+			user.setEnabled(false); 
 			em.merge(user);
 			em.getTransaction().commit();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			em.getTransaction().rollback();
-		}
-	}
-
-	public void removeById(final int id) {
-		try {
-			User user = getById(id);
-			user.setEnabled(false); 
-			remove(user);
-		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
 	}
 

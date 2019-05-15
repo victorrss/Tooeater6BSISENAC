@@ -68,23 +68,16 @@ public class FollowerDao {
 		}
 	}
 
-	public void remove(Follower follower) {
+	public void removeById(final int id) {
 		try {
 			em.getTransaction().begin();
-			em.remove(follower);
+			Follower follower = getById(id);
+			follower.setEnabled(true);
+			em.merge(follower);
 			em.getTransaction().commit();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			em.getTransaction().rollback();
-		}
-	}
-
-	public void removeById(final int id) {
-		try {
-			Follower follower = getById(id);
-			remove(follower);
-		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
 	}
 
