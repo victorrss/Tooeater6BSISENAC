@@ -1,55 +1,51 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { UserComponent } from './views/user/user.component';
-import { HttpClientModule } from '@angular/common/http';
-import { FollowerComponent } from './views/follower/follower.component';
-import { LikeComponent } from './views/like/like.component';
-import { TooeatComponent } from './views/tooeat/tooeat.component';
-import { CommentComponent } from './views/comment/comment.component';
-import { SignUpComponent } from './views/user/sign-up/sign-up.component';
-import { FormsModule } from '@angular/forms';
-import { SignInComponent } from './views/user/sign-in/sign-in.component';
-import { HomeComponent } from './views/home/home.component';
-import { RouterModule } from '@angular/router';
-import { appRoutes } from './routes';
-import { JwtModule } from '@auth0/angular-jwt';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ViewsModule } from './views/views.module';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+
+import { AppComponent } from './app.component';
+import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
+
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
+import { AppRoutingModule } from './app.routing';
+import { ComponentsModule } from './components/components.module';
+import { AuthService } from './services/auth/auth.service';
+import { AuthGuardService } from './services/auth/auth-guard.service';
+import { AppLayoutComponent } from './layouts/app-layout/app-layout.component';
+import { Globals } from './services/globals';
+import { ApiService } from './services/api.service';
+import { ToastrModule } from 'ngx-toastr';
+import { HttpConfigInterceptor } from './interceptor/http.interceptor';
+
 @NgModule({
-  declarations: [
-    AppComponent,
-    UserComponent,
-    FollowerComponent,
-    LikeComponent,
-    TooeatComponent,
-    CommentComponent,
-    SignUpComponent,
-    SignInComponent,
-    HomeComponent
-  ],
   imports: [
     BrowserAnimationsModule,
-    BrowserModule,
-    FlexLayoutModule,
-    AppRoutingModule,
-    HttpClientModule,
     FormsModule,
-    ViewsModule,
-    RouterModule.forRoot(appRoutes),
-    JwtModule.forRoot({
-      config: {
-        tokenGetter: function tokenGetter() {
-          return localStorage.getItem('access_token');
-        },
-        whitelistedDomains: ['localhost:8080'],
-        blacklistedRoutes: ['http://localhost:8080/tooeater/api/auth']
-      }
-    })
+    HttpClientModule,
+    ComponentsModule,
+    RouterModule,
+    AppRoutingModule,
+    NgbModule,
+    ToastrModule.forRoot({
+      timeOut: 10000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    }),
   ],
-  providers: [],
+  declarations: [
+    AppComponent,
+    AppLayoutComponent,
+    AuthLayoutComponent
+  ],
+  providers: [
+    AuthGuardService,
+    AuthService,
+    Globals,
+    ApiService,
+    { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
