@@ -3,10 +3,7 @@ import { HttpClientModule } from '@angular/common/http'; import { RouterModule }
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { IconsComponent } from '../../pages/icons/icons.component';
-import { MapsComponent } from '../../pages/maps/maps.component';
 import { UserProfileComponent } from '../../pages/user-profile/user-profile.component';
-import { TablesComponent } from '../../pages/tables/tables.component';
 import { TooeatsComponent } from 'src/app/pages/tooeats/tooeats.component';
 
 import { AppLayoutRoutes } from './app-layout.routing';
@@ -23,14 +20,11 @@ import { ClipboardModule } from 'ngx-clipboard';
     HttpClientModule,
     NgbModule,
     ClipboardModule,
-    ComponentsModule
+    ComponentsModule,
   ],
   declarations: [
     TooeatsComponent,
     UserProfileComponent,
-    TablesComponent,
-    IconsComponent,
-    MapsComponent
   ],
   providers: [
   ]

@@ -3,6 +3,7 @@ import { Globals } from 'src/app/services/globals';
 import { ApiService } from 'src/app/services/api.service';
 import { TooeatModel } from 'src/app/model/tooeat.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-tooeats',
@@ -38,14 +39,20 @@ export class TooeatsComponent implements OnInit, OnDestroy {
         this.form.text = '';
         this.getTooeats();
       },
-      (err) => this.globals.showToast('Oh não!', err.error.message, 'error')
+      (err: HttpErrorResponse) => {
+        if (err.status == 406)
+          this.globals.showToast('Oh não!', err.error.message, 'error')
+        else {
+          this.globals.showToast('Oh não!', this.globals.msgErrApi, 'error')
+        }
+      }
     )
   }
 
   deleteTooeat(ev: Event, t: TooeatModel) {
     if (ev)
       this.tooeats = this.globals.arrayRemove(this.tooeats, t)
-    else this.globals.showToast('Oh não!', "Não foi possível excluir seu tooeat!", 'error')
+    else this.globals.showToast('Oh não!', this.globals.msgErrApi, 'error')
   }
 
   updateTooeat(ev: any) {
@@ -56,6 +63,6 @@ export class TooeatsComponent implements OnInit, OnDestroy {
   getTooeats() {
     this.apiSubscription = this.apiSvc.getTooeatFeed().subscribe(
       (result: TooeatModel[]) => this.tooeats = result,
-      () => { this.globals.showToast('Oh não!', "Não foi possível consultar os últimos tooeats", 'error') })
+      () => { this.globals.showToast('Oh não!', this.globals.msgErrApi, 'error') })
   }
 }

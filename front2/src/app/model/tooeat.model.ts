@@ -1,4 +1,5 @@
 import { UserModel } from "./user.model";
+import { CommentModel } from "./comment.model";
 
 export class TooeatModel {
     public id: number;
@@ -9,4 +10,6 @@ export class TooeatModel {
     public media: string;
     public createdAt: Date;
     public updateAt: Date;
+
+    public commentsObj: CommentModel[]
 }

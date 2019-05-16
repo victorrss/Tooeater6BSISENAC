@@ -40,7 +40,7 @@ export class HttpConfigInterceptor implements HttpInterceptor {
                 return event;
             }),
             catchError((error: HttpErrorResponse) => {
-                console.log('error interceptor--->>>', error);
+                console.log('error interceptor--->>>', error, request.body);
 
                 this.globals.loading = false;
                 if (error.status == 401) {

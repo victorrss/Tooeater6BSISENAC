@@ -18,8 +18,6 @@ import { Globals } from './services/globals';
 import { ApiService } from './services/api.service';
 import { ToastrModule } from 'ngx-toastr';
 import { HttpConfigInterceptor } from './interceptor/http.interceptor';
-import { TooeatComponent } from './components/tooeat/tooeat.component';
-
 
 @NgModule({
   imports: [
@@ -34,7 +32,7 @@ import { TooeatComponent } from './components/tooeat/tooeat.component';
       timeOut: 10000,
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,
-    })
+    }),
   ],
   declarations: [
     AppComponent,

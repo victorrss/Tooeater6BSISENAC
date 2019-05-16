@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="tooeat_like")
@@ -30,7 +31,7 @@ public class Like {
 	public void setId(int id) {
 		this.id = id;
 	}
-	@JsonIgnore
+	@JsonIgnoreProperties({"email","tooeats","following","followers","password","birthday","gender","bio","createdAt","updateAt"})
 	public User getUser() {
 		return user;
 	}

@@ -33,9 +33,9 @@
 </div>
 <div class="container-fluid mt--7">
 
-    <!-- LIST TOOEATS -->
-    <div *ngFor="let t of tooeats">
-      <app-tooeat [tooeat]="t" (onDelete)="deleteTooeat($event,t)" (onUpdate)="updateTooeat($event)"></app-tooeat>
-    </div>
+  <!-- LIST TOOEATS -->
+  <div *ngFor="let t of tooeats">
+    <app-tooeat [tooeat]="t" (onDelete)="deleteTooeat($event,t)" (onUpdate)="updateTooeat($event)"></app-tooeat>
+  </div>
 
 </div>

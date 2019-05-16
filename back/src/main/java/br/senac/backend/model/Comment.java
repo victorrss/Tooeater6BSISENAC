@@ -1,6 +1,8 @@
 package br.senac.backend.model;
 
 import java.util.Date;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,11 +24,10 @@ public class Comment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name="tooeat_id", nullable=false)
-	@JsonIgnore
 	private Tooeat tooeat;
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name="user_id", nullable=false)
 	private User user;
 	@Column
@@ -63,13 +64,14 @@ public class Comment {
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
+	@JsonIgnore
 	public Tooeat getTooeat() {
 		return tooeat;
 	}
 	public void setTooeat(Tooeat tooeat) {
 		this.tooeat = tooeat;
 	}
-	@JsonIgnoreProperties({"email","password","birthday","gender","bio","createdAt","updateAt"})
+	@JsonIgnoreProperties({"email","tooeats","following","followers","password","birthday","gender","bio","createdAt","updateAt"})
 	public User getUser() {
 		return user;
 	}

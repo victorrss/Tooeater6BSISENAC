@@ -19,6 +19,8 @@ import br.senac.backend.dao.TooeatDao;
 import br.senac.backend.dao.UserDao;
 import br.senac.backend.exception.CommentException;
 import br.senac.backend.model.Comment;
+import br.senac.backend.model.Tooeat;
+import br.senac.backend.model.User;
 import br.senac.backend.model.pojo.CommentCreatePojo;
 import br.senac.backend.util.Util;
 import br.senac.backend.validator.CommentValidator;
@@ -49,7 +51,7 @@ public class CommentService {
 			paramType = "header"
 			)})
 	@ApiResponses(value = { 
-			@ApiResponse(code = 204, message = "Sucesso!"),
+			@ApiResponse(code = 200, message = "Sucesso! Retorna o obj Comment com o id, completo"),
 			@ApiResponse(code = 406, message = "Falha validação, Comment Exception com retorno de: "+ "{\"message\": \"Message\"}"),
 			@ApiResponse(code = 400, message = "Falha geral, try-catch") 
 	})
@@ -58,9 +60,11 @@ public class CommentService {
 		try {
 			Integer userId = Util.stringToInteger(securityContext.getUserPrincipal().getName());
 			Comment comment = CommentCreatePojo.convertToModel(pojo);
-			comment.setTooeat(TooeatDao.getInstance().getById(tooeatId));
+			Tooeat tooeat =TooeatDao.getInstance().getById(tooeatId);
+			comment.setTooeat(tooeat);
 			comment.setCreatedAt(Util.getDateNow());
-			comment.setUser(UserDao.getInstance().getById(userId));
+			User user = UserDao.getInstance().getById(userId);
+			comment.setUser(user);
 
 			CommentException exception = CommentValidator.validate(comment);
 			if (exception != null)
@@ -68,7 +72,8 @@ public class CommentService {
 
 			CommentDao.getInstance().persist(comment);
 			response = Response
-					.status(Response.Status.NO_CONTENT)
+					.status(Response.Status.OK)
+					.entity(comment)
 					.build();
 		} catch (CommentException e) {
 			e.printStackTrace();

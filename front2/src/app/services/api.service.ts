@@ -5,6 +5,7 @@ import { TooeatModel } from '../model/tooeat.model';
 import { Observable } from 'rxjs';
 import { UserModel } from '../model/user.model';
 import { AuthModel } from '../model/auth.model';
+import { CommentModel } from '../model/comment.model';
 
 @Injectable()
 export class ApiService {
@@ -27,11 +28,17 @@ export class ApiService {
 
 
     // BEGIN - CRUD USER
+    postUser(user: UserModel) {
+        return <Observable<UserModel>>this.http.post(this.globals.uri + '/user', user);
+    }
     getUserMe(): Observable<UserModel> {
         return <Observable<UserModel>>this.http.get(this.globals.uri + '/user/me');
     }
-    postUser(user: UserModel) {
-        return <Observable<UserModel>>this.http.post(this.globals.uri + '/user', user);
+    updateUser(user: UserModel) {
+        return this.http.put(this.globals.uri + '/user', user);
+    }
+    deleteUser() {
+        return this.http.delete(this.globals.uri + '/user');
     }
     // END - CRUD USER
 
@@ -39,6 +46,12 @@ export class ApiService {
     // BEGIN - CRUD COMMENT
     getComments(tooeatId: number) {
         return this.http.get(this.globals.uri + '/comment/' + tooeatId);
+    }
+    postComment(tooeatId: number, c: CommentModel) {
+        return this.http.post(this.globals.uri + '/comment/' + tooeatId, c);
+    }
+    deleteComment(commentId: number) {
+        return this.http.delete(this.globals.uri + '/comment/' + commentId);
     }
     // END - CRUD COMMENT
 

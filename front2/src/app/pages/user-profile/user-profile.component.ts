@@ -3,6 +3,7 @@ import { Globals } from 'src/app/services/globals';
 import { UserModel } from 'src/app/model/user.model';
 import * as moment from 'moment';
 import { ApiService } from 'src/app/services/api.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-user-profile',
@@ -12,7 +13,7 @@ import { ApiService } from 'src/app/services/api.service';
 export class UserProfileComponent implements OnInit {
   user: UserModel;
   apiSubscription: any;
-
+  today = new Date();
   constructor(private globals: Globals, private apiSvc: ApiService) { }
 
   ngOnInit() {
@@ -25,9 +26,29 @@ export class UserProfileComponent implements OnInit {
       this.apiSubscription.unsubscribe();
   }
 
+  onSubmit() {
+    let userUpdate = this.user;
+    delete(userUpdate.tooeats)
+    delete(userUpdate.following)
+    delete(userUpdate.followers)
+    delete(userUpdate.photo)
+    delete(userUpdate.email)
+    delete(userUpdate.createdAt)
+    delete(userUpdate.updateAt)
+
+    this.apiSubscription = this.apiSvc.updateUser(this.user).subscribe(
+      () => {
+        this.globals.showToast('Aí sim!', 'Usuário atualizado com sucesso!', 'success')
+        this.getUser()
+      },
+      (err: HttpErrorResponse) => this.globals.showToast('Oh não!', (err.status == 406) ? err.error.message : this.globals.msgErrApi, 'error')
+    );
+  }
+
   getBirthday() {
     let d: Date = new Date(this.user.birthday);
-    return moment().diff(d, 'years');
+    let age: number = moment().diff(d, 'years');
+    return !Number.isInteger(age) || age > 130 ? '' : age
   }
 
   getUser() {

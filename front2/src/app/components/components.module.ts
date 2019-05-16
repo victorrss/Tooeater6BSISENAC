@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     RouterModule,
     NgbModule,
-    FormsModule
+    FormsModule,
   ],
   declarations: [
     FooterComponent,

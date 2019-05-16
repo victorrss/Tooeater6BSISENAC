@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,7 +28,7 @@ public class Tooeat {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@ManyToOne(cascade = CascadeType.DETACH)
+	@ManyToOne
 	@JoinColumn(name="user_id", nullable=false)
 	private User user;
 	@OneToMany(mappedBy="tooeat")
@@ -64,7 +63,7 @@ public class Tooeat {
 	public void setId(int id) {
 		this.id = id;
 	}
-	@JsonIgnoreProperties({"email","password","birthday","gender","bio","createdAt","updateAt"})
+	@JsonIgnoreProperties({"email","tooeats","following","followers","password","birthday","gender","bio","createdAt","updateAt"})
 	public User getUser() {
 		return user;
 	}

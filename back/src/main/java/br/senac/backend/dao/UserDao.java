@@ -22,14 +22,15 @@ public class UserDao {
 		em = Manager.getInstance().entityManager;
 	}
 
-	public User getById(final int id) {
+	public User getById(final int id) { 
+		em.clear();
 		return em.find(User.class, id);
 	}
 
 	public User getByNickName(final String nickname) {
+		em.clear();
 		Query query = em.createQuery("FROM User where enabled = 1 AND nickname=:nickname");
 		query.setParameter("nickname", nickname);
-
 		try {
 			return (User) query.getSingleResult();
 		} catch (Exception e) {
@@ -38,9 +39,10 @@ public class UserDao {
 	}
 
 	public User getByEmail(final String email) {
+		em.clear();
 		Query query = em.createQuery("FROM User where enabled = 1 AND email=:email");
 		query.setParameter("email", email);
-
+	
 		try {
 			return (User) query.getSingleResult();
 		} catch (Exception e) {
@@ -57,6 +59,7 @@ public class UserDao {
 
 	@SuppressWarnings("unchecked")
 	public List<User> findAll() {
+		em.clear();
 		return em.createQuery("FROM User WHERE enabled = 1").getResultList();
 	}
 
@@ -69,9 +72,11 @@ public class UserDao {
 			ex.printStackTrace();
 			em.getTransaction().rollback();
 		}
+		em.clear();
 	}
 
 	public void merge(User user) {
+
 		try {
 			em.getTransaction().begin();
 			em.merge(user);
@@ -80,6 +85,7 @@ public class UserDao {
 			ex.printStackTrace();
 			em.getTransaction().rollback();
 		}
+		em.clear();
 	}
 
 	public void removeById(final int id) {
@@ -93,6 +99,7 @@ public class UserDao {
 			ex.printStackTrace();
 			em.getTransaction().rollback();
 		}
+		em.clear();
 	}
 
 }

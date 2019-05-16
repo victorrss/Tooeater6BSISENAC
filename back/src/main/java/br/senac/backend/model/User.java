@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,7 +26,7 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@OneToMany(mappedBy="user", cascade = CascadeType.DETACH)
+	@OneToMany(mappedBy="user")
 	private Set<Tooeat> tooeats;
 	@OneToMany(mappedBy="userSlave")
 	private Set<Follower> following;
@@ -146,6 +145,15 @@ public class User {
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
+	public void setTooeats(Set<Tooeat> tooeats) {
+		this.tooeats = tooeats;
+	}
+	public void setFollowing(Set<Follower> following) {
+		this.following = following;
+	}
+	public void setFollowers(Set<Follower> followers) {
+		this.followers = followers;
+	}
 	@SuppressWarnings("deprecation")
 	public Long getFollowing() {
 		return (Long) Manager
@@ -153,9 +161,6 @@ public class User {
 				.getSession()
 				.createFilter(this.following, "select count(*) where enabled=1" )
 				.uniqueResult();
-	}
-	public void setFollowing(Set<Follower> following) {
-		this.following = following;
 	}
 	@SuppressWarnings("deprecation")
 	public Long getFollowers() {
@@ -165,9 +170,6 @@ public class User {
 				.createFilter(this.followers, "select count(*) where enabled=1" )
 				.uniqueResult();
 	}
-	public void setFollowers(Set<Follower> followers) {
-		this.followers = followers;
-	}
 	@SuppressWarnings("deprecation")
 	public Long getTooeats() {
 		return (Long) Manager
@@ -175,8 +177,5 @@ public class User {
 				.getSession()
 				.createFilter(this.tooeats, "select count(*) where enabled=1" )
 				.uniqueResult();
-	}
-	public void setTooeats(Set<Tooeat> tooeats) {
-		this.tooeats = tooeats;
 	}
 }

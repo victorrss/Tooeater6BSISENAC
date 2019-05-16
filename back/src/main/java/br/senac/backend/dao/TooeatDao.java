@@ -26,26 +26,25 @@ public class TooeatDao {
 	}
 
 	public Tooeat getById(final int id) {
-		Tooeat t =em.find(Tooeat.class, id); 
-		em.clear();
-		return t;
+	
+		return em.find(Tooeat.class, id);
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Tooeat> getByUserId(final Integer userId) {
+		em.clear();
 		Query query = em.createQuery("FROM "+Tooeat.class.getName()+" WHERE enabled = 1 AND user=:user_id");
 		query.setParameter("user_id", userId);
-		em.clear();
 		return query.getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Tooeat> findAll(final Integer userId) {
+		em.clear();
 		Query query = em.createQuery("FROM " +Tooeat.class.getName()+ " t"+
 				" WHERE t.enabled = 1 "+
 				" AND t.user IN ("+userId+", (SELECT f.userMaster FROM "+Follower.class.getName()+" f WHERE f.userSlave = " + userId+ "))"+
 				" ORDER BY 1 DESC");
-		em.clear();
 		return query.getResultList();
 	}
 

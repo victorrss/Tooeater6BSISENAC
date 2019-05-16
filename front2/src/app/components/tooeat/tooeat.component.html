@@ -4,37 +4,110 @@
     <div class="col">
         <div class="card">
             <div class="card-body">
+                <!-- BEGIN - header card tooeat -> nickname, createdAt, updateAt and dropdown for Update and Delete tooeat -->
                 <div class="row">
                     <div class="col">
                         <div class="row">
-                            <div class="col-1">
-                                <img src="{{ t.photo }}" class="avatar rounded-circle">
-                            </div>
+                            <div class="col-1"> <img src="{{ t.user.photo }}" class="avatar rounded-circle"> </div>
                             <div class="col ml-4">
                                 <h4 class="p-0 m-0">{{t.user.nickname}}</h4>
                                 <a class="h5 font-weight-300 p-0 m-0" title="{{ globals.getSimpleDate(t.createdAt) }}">
-                                    {{ globals.getTimeRelative(t.createdAt) }}</a> <span
-                                    class="h5 font-weight-300 p-0 m-0"
+                                    {{ globals.getTimeRelative(t.createdAt) }}</a>
+                                <span class="h5 font-weight-300 p-0 m-0"
                                     title="{{ globals.getSimpleDate(t.updateAt) }}, {{ globals.getTimeRelative(t.updateAt) }}"
                                     *ngIf="t.updateAt"> - Editado</span>
-
                             </div>
                         </div>
                     </div>
                     <div class="col">
                         <div class="row d-flex justify-content-end">
                             <li ngbDropdown placement="bottom-right" *ngIf="t.user.id == globals.userLoggedIn.id">
-                                <a class="pr-3" role="button" ngbDropdownToggle>
-                                    <i class="ni ni-bold-down"></i>
-                                </a>
+                                <a class="pr-3" role="button" ngbDropdownToggle><i class="ni ni-bold-down"></i></a>
                                 <div class="dropdown-menu-arrow dropdown-menu-right" ngbDropdownMenu>
-                                    <a (click)="changeMode()" class="dropdown-item">
-                                        <i class="fas fa-edit" style="color: goldenrod;"></i>
-                                        <span>{{mode == 'create' ? 'Editar' : 'Cancelar edição' }}</span>
+                                    <a (click)="changeModeTooeat()" class="dropdown-item">
+                                        <i class="fas fa-edit"
+                                            style="color: goldenrod;"></i><span>{{mode == 'create' ? 'Editar' : 'Cancelar edição' }}</span>
                                     </a>
-                                    <a (click)="delete()" class="dropdown-item">
-                                        <i class="far fa-trash-alt text-danger"></i>
-                                        <span>Excluir</span>
+                                    <a (click)="deleteTooeat()" class="dropdown-item">
+                                        <i class="far fa-trash-alt text-danger"></i> <span>Excluir</span>
+                                    </a>
+                                </div>
+                            </li>
+                        </div>
+                    </div>
+                </div>
+                <!-- END - header card tooeat -> nickname, createdAt, updateAt and dropdown for Update and Delete tooeat -->
+
+                <!-- BEGIN - form for edit tooeat -->
+                <form *ngIf="mode == 'update'" (ngSubmit)="onSubmitUpdateTooeat()" role="form"
+                    #tooeatUpdateForm="ngForm">
+                    <textarea type="text" (keydown.control.enter)="tooeatUpdateForm.form.valid ? onSubmitUpdate(): ''"
+                        [(ngModel)]="formUpdateTooeat.text" name="textTooeat" #textTooeat="ngModel" rows="3"
+                        class="form-control m-0 mt-2 {{ (textTooeat.valid) ? 'is-valid' : 'is-invalid' }}"
+                        required></textarea>
+                    <button type="submit" class="m-0 mt-2 btn btn-info btn-lg btn-block"
+                        [disabled]="!tooeatUpdateForm.form.valid">Editar</button>
+                </form>
+                <!-- END - form for edit tooeat -->
+
+                <!-- BEGIN - form for create tooeat -->
+                <div *ngIf="mode == 'create'">
+                    <p class="card-text p-0 m-0 mt-3">{{ t.text }}</p>
+                    <hr class="my-3">
+                    <div class="row">
+                        <div class="col m-0 mr-1">
+                            <button class="btn btn-icon btn-outline-primary btn-block" type="button">
+                                <span class="btn-inner--icon"><i class="ni ni-like-2"></i></span>
+                                <span class="btn-inner--text">Curtir({{ (t.likesObj && t.likesObj.length) ? t.likesObj.length : t.likes }})</span>
+                            </button>
+                        </div>
+                        <div class="col m-0 ml-1">
+                            <button class="btn btn-icon btn-outline-primary btn-block" type="button"
+                                (click)="openModalComments(content)">
+                                <span class="btn-inner--icon"><i class="far fa-comments"></i></span>
+                                <span class="btn-inner--text">Comentar{{ (t.commentsObj && t.commentsObj.length) ? '(' + t.commentsObj.length+")" : '' }}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- END - form for create tooeat -->
+
+            </div>
+        </div>
+    </div>
+    <div class="col-1"></div>
+</div>
+
+<!-- BEGIN - modal for comment -->
+<ng-template #content let-modal class="row">
+    <div #modalComment class="modal-header">
+        <h4 class="modal-title">Comentários</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body pt-0 pb-0">
+        <div class="card bg-gradient-secondary mb-3" *ngFor="let c of t.commentsObj">
+            <div class="card-body">
+                <!-- BEGIN - header card comment-> nickname, createdAt and dropdown for delete comment-->
+                <div class="row">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col-1"> <img src="{{ c.user.photo }}" class="avatar rounded-circle"> </div>
+                            <div class="col ml-4">
+                                <h4 class="p-0 m-0">{{c.user.nickname}}</h4>
+                                <a class="h5 font-weight-300 p-0 m-0" title="{{ globals.getSimpleDate(c.createdAt) }}">
+                                    {{ globals.getTimeRelative(c.createdAt) }}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row d-flex justify-content-end">
+                            <li ngbDropdown placement="bottom-right" *ngIf="c.user.id == globals.userLoggedIn.id">
+                                <a class="pr-3" role="button" ngbDropdownToggle> <i class="ni ni-bold-down"></i> </a>
+                                <div class="dropdown-menu-arrow dropdown-menu-right" ngbDropdownMenu>
+                                    <a (click)="deleteComment(c)" class="dropdown-item">
+                                        <i class="far fa-trash-alt text-danger"></i> <span>Excluir</span>
                                     </a>
                                 </div>
                             </li>
@@ -43,60 +116,31 @@
 
                     </div>
                 </div>
+                <!-- END - header card comment-> nickname, createdAt and dropdown for delete comment-->
 
-                <form *ngIf="mode == 'update'" (ngSubmit)="onSubmitUpdate()" role="form" #tooeatUpdateForm="ngForm">
-                    <textarea type="text" [(ngModel)]="formUpdate.text" name="text" #text="ngModel" rows="3"
-                        class="form-control m-0 mt-2 {{ (text.valid) ? 'is-valid' : 'is-invalid' }}"
-                        required></textarea>
-                    <button type="submit" class="m-0 mt-2 btn btn-info btn-lg btn-block"
-                        [disabled]="!tooeatUpdateForm.form.valid">Editar</button>
-                </form>
-
-                <div *ngIf="mode == 'create'">
-                    <p class="card-text p-0 m-0 mt-3">{{ t.text }}</p>
-                    <hr class="my-3">
-                    <div class="row">
-                        <div class="col m-0 mr-1">
-                            <button class="btn btn-icon btn-outline-primary btn-block" type="button">
-                                <span class="btn-inner--icon"><i class="ni ni-like-2"></i></span>
-                                <span class="btn-inner--text">Curtir({{ t.likes }})</span>
-                            </button>
-                        </div>
-                        <div class="col m-0 ml-1">
-                            <button class="btn btn-icon btn-outline-primary btn-block" type="button"
-                                (click)="openModalComments(content,t.id)">
-                                <span class="btn-inner--icon"><i class="far fa-comments"></i></span>
-                                <span class="btn-inner--text">Comentar({{ t.comments }})</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
+                <!-- BEGIN - message of comment -->
+                <p class="card-text mt-1">{{c.text}}</p>
+                <!-- END - message of comment -->
             </div>
         </div>
     </div>
-    <div class="col-1"></div>
-</div>
 
-<ng-template #content let-modal class="row">
-    <div class="modal-header">
-        <h4 class="modal-title">Comentários</h4>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body">
-        <p>One fine body&hellip;</p>
-    </div>
-
-    <form>
+    <!-- BEGIN - form for post comment -->
+    <form (ngSubmit)="onSubmitComment()" role="form" #commentForm="ngForm">
         <div class="row w-100 p-0 m-0">
             <div class="col-md-9 col-sm-8 col-9 p-1 m-0 pl-3 pb-3">
-                <textarea class="form-control" id="txAreaComment" rows="3" placeholder="Comente..."></textarea>
+                <textarea  (keydown.control.enter)="commentForm.form.valid ? onSubmitComment(): ''"
+                    [(ngModel)]="formSubmitComment.text" name="textComment" #textComment="ngModel"
+                    class="form-control {{ (textComment.valid) ? 'is-valid' : 'is-invalid' }}" rows="3"
+                    placeholder="Comente..." required></textarea>
             </div>
             <div class="col-md-3 col-sm-4 col-3 p-1 m-0 pr-3 pb-3">
-                <button type="submit" class="btn btn-default btn-lg w-100 h-100">Comentar</button>
+                <button type="submit" class="btn btn-default btn-lg w-100 h-100"
+                    [disabled]="!commentForm.form.valid">Comentar</button>
             </div>
         </div>
     </form>
+    <!-- END - form for post comment -->
+
 </ng-template>
+<!-- END - modal for comment -->

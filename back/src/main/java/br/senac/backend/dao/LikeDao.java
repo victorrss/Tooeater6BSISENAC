@@ -21,11 +21,13 @@ public class LikeDao {
 	}
 
 	public Like getById(final int id) {
+		em.clear(); 
 		return em.find(Like.class, id);
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Like> findAll(final int tooeatId) {
+		em.clear();
 		Query query = em.createQuery("FROM " +Like.class.getName()+ " WHERE tooeat_id=:tooeat_id");
 		query.setParameter("tooeat_id", tooeatId);
 		return query.getResultList();
@@ -40,6 +42,7 @@ public class LikeDao {
 			ex.printStackTrace();
 			em.getTransaction().rollback();
 		}
+		em.clear();
 	}
 
 	public void removeById(final int id) {
@@ -52,6 +55,7 @@ public class LikeDao {
 			ex.printStackTrace();
 			em.getTransaction().rollback();
 		}
+		em.clear();
 	}
 
 }

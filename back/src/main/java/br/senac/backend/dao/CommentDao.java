@@ -7,7 +7,7 @@ import br.senac.backend.model.Comment;
 import br.senac.backend.util.Util;
 
 public class CommentDao {
-	
+
 	private static CommentDao instance;
 	protected EntityManager em;
 
@@ -18,15 +18,17 @@ public class CommentDao {
 	}
 
 	private CommentDao() {
-		em = Manager.getInstance().entityManager;
+		em = Manager.getInstance().getEntityManager();
 	}
 
 	public Comment getById(final int id) {
+		em.clear(); 
 		return em.find(Comment.class, id);
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Comment> findAll(final int tooeatId) {
+		em.clear();
 		Query query = em.createQuery("FROM " + Comment.class.getName() + " WHERE enabled = 1 AND tooeat_id=:tooeat_id ORDER BY 1 DESC");
 		query.setParameter("tooeat_id", tooeatId);
 		return query.getResultList();
@@ -34,15 +36,16 @@ public class CommentDao {
 
 	public void persist(Comment comment) {
 		try {
+			em.detach(comment.getUser());
 			em.getTransaction().begin();
 			comment.setCreatedAt(Util.getDateNow());
-			comment.setEnabled(true);
 			em.persist(comment);
 			em.getTransaction().commit();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			em.getTransaction().rollback();
 		}
+		em.clear();
 	}
 
 	public void remove(Comment comment) {
@@ -55,6 +58,7 @@ public class CommentDao {
 			ex.printStackTrace();
 			em.getTransaction().rollback();
 		}
+		em.clear();
 	}
 
 	public void removeById(final int id) {
@@ -64,6 +68,7 @@ public class CommentDao {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		em.clear();
 	}
-	
+
 }

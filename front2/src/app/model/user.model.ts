@@ -13,6 +13,7 @@ export class UserModel {
     public email: string;
     public createdAt: Date;
     public updateAt: Date;
+    public password: string;
 
     public acceptPolicy: boolean; // only FRONT END
 }

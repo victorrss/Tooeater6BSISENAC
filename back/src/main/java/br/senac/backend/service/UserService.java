@@ -18,6 +18,7 @@ import br.senac.backend.dao.UserDao;
 import br.senac.backend.exception.UserException;
 import br.senac.backend.model.User;
 import br.senac.backend.model.pojo.UserCreatePojo;
+import br.senac.backend.model.pojo.UserUpdatePojo;
 import br.senac.backend.util.Util;
 import br.senac.backend.validator.UserValidator;
 import io.swagger.annotations.Api;
@@ -73,8 +74,8 @@ public class UserService {
 
 	@GET
 	@Path("/me")
-	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
 	@ApiImplicitParams({@ApiImplicitParam(
 			name = "Authorization", 
 			value = "Bearer {JWT Token}",
@@ -82,6 +83,10 @@ public class UserService {
 			dataType = "string",
 			paramType = "header"
 			)})
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Sucesso!"),
+			@ApiResponse(code = 400, message = "Fail on create, try-catch")
+	})
 	public Response readMe(@Context SecurityContext securityContext) {
 		Response response;
 		try {
@@ -105,15 +110,29 @@ public class UserService {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response update(User user){
+	@Secured
+	@ApiImplicitParams({@ApiImplicitParam(
+			name = "Authorization", 
+			value = "Bearer {JWT Token}",
+			required = true,
+			dataType = "string",
+			paramType = "header"
+			)})
+	@ApiResponses(value = { 
+			@ApiResponse(code = 204, message = "Sucesso!"),
+			@ApiResponse(code = 406, message = "Falha validação, User Exception com retorno de: "+ "{\"message\": \"Message\"}"),
+			@ApiResponse(code = 400, message = "Fail on create, try-catch") 
+	})
+	public Response update(UserUpdatePojo pojo){
 		Response response;
 		try {
-			UserException userException = UserValidator.validate(user);
+			User user = UserDao.getInstance().getById(pojo.getId());
+			user = UserUpdatePojo.convertToModel(user, pojo);
+		
+			UserException userException = UserValidator.validateUpdate(user, user.getNickname());
 			if (userException != null)
 				throw userException;
-
-			user.setUpdateAt(Util.getDateNow());
-
+			
 			UserDao.getInstance().merge(user);
 			response = Response
 					.status(Response.Status.NO_CONTENT)
@@ -138,6 +157,18 @@ public class UserService {
 
 	@DELETE
 	@Path("/{id}")
+	@Secured
+	@ApiImplicitParams({@ApiImplicitParam(
+			name = "Authorization", 
+			value = "Bearer {JWT Token}",
+			required = true,
+			dataType = "string",
+			paramType = "header"
+			)})
+	@ApiResponses(value = { 
+			@ApiResponse(code = 204, message = "Sucesso!"),
+			@ApiResponse(code = 400, message = "Fail on create, try-catch") 
+	})
 	public Response delete(@PathParam("id") Integer id) {
 		Response response;
 		try {

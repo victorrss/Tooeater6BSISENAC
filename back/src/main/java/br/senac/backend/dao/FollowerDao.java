@@ -21,11 +21,13 @@ public class FollowerDao {
 	}
 
 	public Follower getById(final Integer id) {
+		em.clear(); 
 		return em.find(Follower.class, id);
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<Follower> findAllFollowing(final Integer userId) {
+		em.clear();
 		Query query = em.createQuery("FROM " +Follower.class.getName()+ " WHERE enabled = 1 AND slave_user_id=:user_id");
 		query.setParameter("user_id", userId);
 		return query.getResultList();
@@ -33,6 +35,7 @@ public class FollowerDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Follower> findAllFollowers(final Integer userId) {
+		em.clear();
 		Query query = em.createQuery("FROM " +Follower.class.getName()+ " WHERE enabled = 1 AND master_user_id=:user_id");
 		query.setParameter("user_id", userId);
 		return query.getResultList();
@@ -42,6 +45,7 @@ public class FollowerDao {
 	public List<Follower> findAllInvites(final Integer userId) {
 		Query query = em.createQuery("FROM " +Follower.class.getName()+ " WHERE enabled is null AND master_user_id=:user_id");
 		query.setParameter("user_id", userId);
+		em.clear();
 		return query.getResultList();
 	}
 
@@ -55,6 +59,7 @@ public class FollowerDao {
 			ex.printStackTrace();
 			em.getTransaction().rollback();
 		}
+		em.clear();
 	}
 
 	public void merge(Follower follower) {
@@ -66,6 +71,7 @@ public class FollowerDao {
 			ex.printStackTrace();
 			em.getTransaction().rollback();
 		}
+		em.clear();
 	}
 
 	public void removeById(final int id) {
@@ -79,6 +85,7 @@ public class FollowerDao {
 			ex.printStackTrace();
 			em.getTransaction().rollback();
 		}
+		em.clear();
 	}
 
 }

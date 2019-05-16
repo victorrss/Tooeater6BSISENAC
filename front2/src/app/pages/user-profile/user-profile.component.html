@@ -75,19 +75,19 @@
       </div>
     </div>
     <div class="col-xl-8 order-xl-1">
-      <div class="card bg-secondary shadow">
-        <div class="card-header bg-white border-0">
-          <div class="row align-items-center">
-            <div class="col-8">
-              <h3 class="mb-0">Minha conta</h3>
-            </div>
-            <div class="col-4 text-right">
-              <a href="#!" class="btn btn-sm btn-default">Salvar alterações</a>
+      <form (ngSubmit)="onSubmit()" role="form" #userForm="ngForm">
+        <div class="card bg-secondary shadow">
+          <div class="card-header bg-white border-0">
+            <div class="row align-items-center">
+              <div class="col-8">
+                <h3 class="mb-0">Minha conta</h3>
+              </div>
+              <div class="col-4 text-right">
+                <button type="submit" *ngIf="!userForm.pristine" class="btn-sm btn-default">Salvar alterações</button>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="card-body">
-          <form (ngSubmit)="onSubmit()" role="form" #userForm="ngForm">
+          <div class="card-body">
             <h6 class="heading-small text-muted mb-4">Informações do usuário</h6>
             <div class="pl-lg-4">
 
@@ -109,13 +109,12 @@
                   </div>
                 </div>
               </div>
-
               <div class="row">
                 <div class="col-lg-6">
                   <div class="form-group">
                     <label class="form-control-label">Sexo</label>
                     <select [(ngModel)]="user.gender" name="gender" #gender="ngModel"
-                      [class]="(gender.valid) ? 'form-control is-valid' : 'form-control is-invalid'">
+                      [class]="(gender.valid) ? 'form-control is-valid' : 'form-control is-invalid'" required>
                       <option value="1" [selected]="gender.value == 1">Masculino</option>
                       <option value="0" [selected]="gender.value == 0">Feminino</option>
                     </select>
@@ -124,16 +123,11 @@
                 <div class="col-lg-6">
                   <div class="form-group">
                     <label class="form-control-label">Nascimento</label>
-                    <!-- <input placeholder="Nascimento" type="date" [(ngModel)]="user.birthday" name="birthday"
-                      #birthday="ngModel"
-                      [class]="(birthday.valid) ? 'form-control is-valid' : 'form-control is-invalid'"> -->
-
                     <input type="date" name="birthday" [ngModel]="user.birthday | date:'yyyy-MM-dd'"
-                      (ngModelChange)="user.birthday = $event" [value]="user.birthday | date:'yyyy-MM-dd'"
-                      #birthday="ngModel"
+                      (ngModelChange)="user.birthday = $event; user.birthday = $event;"
+                      [value]="user.birthday | date:'yyyy-MM-dd'" #birthday="ngModel"
+                      max="{{ today | date:'yyyy-MM-dd' }}"
                       [class]="(birthday.valid) ? 'form-control is-valid' : 'form-control is-invalid'" required>
-
-
                   </div>
                 </div>
               </div>
@@ -144,7 +138,7 @@
                     <label class="form-control-label">Nickname</label>
                     <input type="text" placeholder="Nickname" [(ngModel)]="user.nickname" name="nickname"
                       #nickname="ngModel"
-                      [class]="(nickname.valid) ? 'form-control is-valid' : 'form-control is-invalid'">
+                      [class]="(nickname.valid) ? 'form-control is-valid' : 'form-control is-invalid'" required>
                   </div>
                 </div>
                 <div class="col-lg-6">
@@ -169,46 +163,18 @@
                   </div>
                 </div>
               </div>
-
             </div>
-            <!-- 
             <hr class="my-4" />
-            <h6 class="heading-small text-muted mb-4">Contact information</h6>
+            <!-- Security -->
+            <h6 class="heading-small text-muted mb-4">Segurança</h6>
             <div class="pl-lg-4">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label class="form-control-label">Address</label>
-                    <input placeholder="Home Address"
-                      value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09" type="text">
+                <div class="form-group">
+                    <label class="form-control-label">Senha</label>
+                    <input type="password" placeholder="Informe a senha somente se houver alteração" [(ngModel)]="user.password" name="password"
+                      #password="ngModel"
+                      [class]="(password.valid) ? 'form-control is-valid' : 'form-control is-invalid'">
                   </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-4">
-                  <div class="form-group">
-                    <label class="form-control-label">City</label>
-                    <input type="text" placeholder="City"
-                      value="New York">
-                  </div>
-                </div>
-                <div class="col-lg-4">
-                  <div class="form-group">
-                    <label class="form-control-label">Country</label>
-                    <input type="text"
-                      placeholder="Country" value="United States">
-                  </div>
-                </div>
-                <div class="col-lg-4">
-                  <div class="form-group">
-                    <label class="form-control-label">Postal code</label>
-                    <input type="number" 
-                      placeholder="Postal code">
-                  </div>
-                </div>
-              </div>
             </div>
-            -->
             <hr class="my-4" />
             <!-- Description -->
             <h6 class="heading-small text-muted mb-4">Sobre mim</h6>
@@ -219,9 +185,9 @@
                   #bio="ngModel" [class]="(bio.valid) ? 'form-control is-valid' : 'form-control is-invalid'"></textarea>
               </div>
             </div>
-          </form>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </div>

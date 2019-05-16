@@ -1,14 +1,21 @@
 import { Injectable } from '@angular/core';
-import * as moment from 'moment';
+
 import { ToastrService } from 'ngx-toastr';
+
 import { UserModel } from '../model/user.model';
+
+import * as moment from 'moment';
 
 @Injectable()
 export class Globals {
   uri: string = 'http://localhost:8080/tooeater/api';
   loading: boolean = false;
   userLoggedIn: UserModel;
-  
+  msgErrApi: string = 'Desculpe, estamos com problemas técnicos. Por favor, tente novamente mais tarde.';
+  froalaOptions: Object = {
+    placeholderText: 'Edit Your Content Here!',
+    charCounterCount: false
+  }
   constructor(private toastr: ToastrService) {
     try {
       this.userLoggedIn = <UserModel>JSON.parse(localStorage.getItem('user'));
