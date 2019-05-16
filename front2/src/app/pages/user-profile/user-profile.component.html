@@ -95,16 +95,14 @@
                 <div class="col-lg-6">
                   <div class="form-group">
                     <label class="form-control-label">Nome</label>
-                    <input type="text" placeholder="Nome" [(ngModel)]="user.firstName" name="firstName"
-                      #firstName="ngModel"
+                    <input type="text" placeholder="Nome" [(ngModel)]="user.firstName" name="firstName" #firstName="ngModel"
                       [class]="(firstName.valid) ? 'form-control is-valid' : 'form-control is-invalid'" required>
                   </div>
                 </div>
                 <div class="col-lg-6">
                   <div class="form-group">
                     <label class="form-control-label">Sobrenome</label>
-                    <input type="text" placeholder="Sobrenome" [(ngModel)]="user.lastName" name="lastName"
-                      #lastName="ngModel"
+                    <input type="text" placeholder="Sobrenome" [(ngModel)]="user.lastName" name="lastName" #lastName="ngModel"
                       [class]="(lastName.valid) ? 'form-control is-valid' : 'form-control is-invalid'">
                   </div>
                 </div>
@@ -113,20 +111,18 @@
                 <div class="col-lg-6">
                   <div class="form-group">
                     <label class="form-control-label">Sexo</label>
-                    <select [(ngModel)]="user.gender" name="gender" #gender="ngModel"
-                      [class]="(gender.valid) ? 'form-control is-valid' : 'form-control is-invalid'" required>
-                      <option value="1" [selected]="gender.value == 1">Masculino</option>
-                      <option value="0" [selected]="gender.value == 0">Feminino</option>
+                    <select [(ngModel)]="user.gender" name="gender" #gender="ngModel" [class]="(gender.valid) ? 'form-control is-valid' : 'form-control is-invalid'"
+                      required>
+                      <option [value]="true" [selected]="gender.value">Masculino</option>
+                      <option [value]="true" [selected]="!gender.value">Feminino</option>
                     </select>
                   </div>
                 </div>
                 <div class="col-lg-6">
                   <div class="form-group">
                     <label class="form-control-label">Nascimento</label>
-                    <input type="date" name="birthday" [ngModel]="user.birthday | date:'yyyy-MM-dd'"
-                      (ngModelChange)="user.birthday = $event; user.birthday = $event;"
-                      [value]="user.birthday | date:'yyyy-MM-dd'" #birthday="ngModel"
-                      max="{{ today | date:'yyyy-MM-dd' }}"
+                    <input type="date" name="birthday" [ngModel]="user.birthday | date:'yyyy-MM-dd'" (ngModelChange)="user.birthday = $event"
+                      [value]="user.birthday | date:'yyyy-MM-dd'" #birthday="ngModel" max="{{ today | date:'yyyy-MM-dd' }}"
                       [class]="(birthday.valid) ? 'form-control is-valid' : 'form-control is-invalid'" required>
                   </div>
                 </div>
@@ -136,8 +132,7 @@
                 <div class="col-lg-6">
                   <div class="form-group">
                     <label class="form-control-label">Nickname</label>
-                    <input type="text" placeholder="Nickname" [(ngModel)]="user.nickname" name="nickname"
-                      #nickname="ngModel"
+                    <input type="text" placeholder="Nickname" [(ngModel)]="user.nickname" name="nickname" #nickname="ngModel"
                       [class]="(nickname.valid) ? 'form-control is-valid' : 'form-control is-invalid'" required>
                   </div>
                 </div>
@@ -168,12 +163,11 @@
             <!-- Security -->
             <h6 class="heading-small text-muted mb-4">Segurança</h6>
             <div class="pl-lg-4">
-                <div class="form-group">
-                    <label class="form-control-label">Senha</label>
-                    <input type="password" placeholder="Informe a senha somente se houver alteração" [(ngModel)]="user.password" name="password"
-                      #password="ngModel"
-                      [class]="(password.valid) ? 'form-control is-valid' : 'form-control is-invalid'">
-                  </div>
+              <div class="form-group">
+                <label class="form-control-label">Senha</label>
+                <input type="password" placeholder="Informe a senha somente se houver alteração" [(ngModel)]="user.password"
+                  name="password" #password="ngModel" [class]="(password.valid) ? 'form-control is-valid' : 'form-control is-invalid'">
+              </div>
             </div>
             <hr class="my-4" />
             <!-- Description -->
@@ -181,8 +175,8 @@
             <div class="pl-lg-4">
               <div class="form-group">
                 <label>Bio</label>
-                <textarea rows="4" placeholder="Algumas palavras sobre mim..." [(ngModel)]="user.bio" name="bio"
-                  #bio="ngModel" [class]="(bio.valid) ? 'form-control is-valid' : 'form-control is-invalid'"></textarea>
+                <textarea rows="4" placeholder="Algumas palavras sobre mim..." [(ngModel)]="user.bio" name="bio" #bio="ngModel"
+                  [class]="(bio.valid) ? 'form-control is-valid' : 'form-control is-invalid'"></textarea>
               </div>
             </div>
           </div>

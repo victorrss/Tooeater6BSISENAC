@@ -40,8 +40,8 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-circle-08"></i></span>
                 </div>
-                <input type="text" class="form-control" placeholder="Sobrenome" [(ngModel)]="user.lastName"
-                  name="lastName" #lastName="ngModel">
+                <input type="text" class="form-control" placeholder="Sobrenome" [(ngModel)]="user.lastName" name="lastName"
+                  #lastName="ngModel">
               </div>
             </div>
             <div class="form-group mb-3 {{nickname.pristine?'':(nickname.valid)?'has-success':'has-danger'}}">
@@ -49,8 +49,8 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-single-02"></i></span>
                 </div>
-                <input type="text" class="form-control" placeholder="Nickname" [(ngModel)]="user.nickname"
-                  name="nickname" #nickname="ngModel" required>
+                <input type="text" class="form-control" placeholder="Nickname" [(ngModel)]="user.nickname" name="nickname"
+                  #nickname="ngModel" required>
               </div>
             </div>
             <div class="form-group mb-3 {{birthday.pristine?'':(birthday.valid)?'has-success':'has-danger'}}">
@@ -58,9 +58,10 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                 </div>
-                <input type="date" class="form-control" name="birthday" [ngModel]="user.birthday | date:'yyyy-MM-dd'"
-                  (ngModelChange)="user.birthday = $event" [value]="user.birthday | date:'yyyy-MM-dd'"
-                  max="{{ today | date:'yyyy-MM-dd' }}" #birthday="ngModel" placeholder="Nascimento" required>
+                <input type="date" name="birthday" [ngModel]="user.birthday | date:'yyyy-MM-dd'" (ngModelChange)="user.birthday = $event"
+                  [value]="user.birthday | date:'yyyy-MM-dd'" #birthday="ngModel" max="{{ today | date:'yyyy-MM-dd' }}"
+                  [class]="(birthday.valid) ? 'form-control is-valid' : 'form-control is-invalid'" placeholder="Nascimento"
+                  required>
               </div>
             </div>
             <div class="form-group mb-3 {{gender.pristine?'':(gender.valid)?'has-success':'has-danger'}}">
@@ -90,58 +91,50 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                 </div>
-                <input class="form-control" type="password" placeholder="Senha" [(ngModel)]="user.password"
-                  name="password" #password="ngModel" required autocomplete="off">
+                <input class="form-control" type="password" placeholder="Senha" [(ngModel)]="user.password" name="password"
+                  #password="ngModel" required autocomplete="off">
               </div>
             </div>
 
             <div class="row my-4">
               <div class="col-12">
                 <div class="custom-control custom-control-alternative custom-checkbox">
-                  <input class="custom-control-input" id="customCheckRegister" type="checkbox"
-                    [(ngModel)]="user.acceptPolicy" name="acceptPolicy" #acceptPolicy="ngModel" required>
+                  <input class="custom-control-input" id="customCheckRegister" type="checkbox" [(ngModel)]="user.acceptPolicy"
+                    name="acceptPolicy" #acceptPolicy="ngModel" required>
                   <label class="custom-control-label" for="customCheckRegister">
-                    <span class="text-muted">Eu aceito a <a href="javascript:void(0)" class="font-weight-bold"
-                        (click)="openModalPolicy(content)">Política de Privavidade</a> do Tooeater</span>
+                    <span class="text-muted">Eu aceito a <a href="javascript:void(0)" class="font-weight-bold" (click)="openModalPolicy(content)">Política
+                        de Privavidade</a> do Tooeater</span>
                   </label>
                 </div>
               </div>
             </div>
             <div class="text-center text-danger">
               <ul class="list-group">
-                <li class="list-group-item p-1"
-                  *ngIf="email && !email.pristine && email.errors && email.errors.pattern">
+                <li class="list-group-item p-1" *ngIf="email && !email.pristine && email.errors && email.errors.pattern">
                   <p class="m-0 font-weight-bold">E-mail inválido</p>
                 </li>
-                <li class="list-group-item p-1"
-                  *ngIf="firstName && !firstName.pristine && firstName.errors && firstName.errors.required">
+                <li class="list-group-item p-1" *ngIf="firstName && !firstName.pristine && firstName.errors && firstName.errors.required">
                   <p class="m-0 font-weight-bold">O nome é obrigatório</p>
                 </li>
-                <li class="list-group-item p-1"
-                  *ngIf="nickname && !nickname.pristine && nickname.errors && nickname.errors.required">
+                <li class="list-group-item p-1" *ngIf="nickname && !nickname.pristine && nickname.errors && nickname.errors.required">
                   <p class="m-0 font-weight-bold">O nickname é obrigatório</p>
                 </li>
-                <li class="list-group-item p-1"
-                  *ngIf="birthday && !birthday.pristine && birthday.errors && birthday.errors.required">
+                <li class="list-group-item p-1" *ngIf="birthday && !birthday.pristine && birthday.errors && birthday.errors.required">
                   <p class="m-0 font-weight-bold">A data de nascimento é obrigatória</p>
                 </li>
-                <li class="list-group-item p-1"
-                  *ngIf="gender && !gender.pristine && gender.errors && gender.errors.required">
+                <li class="list-group-item p-1" *ngIf="gender && !gender.pristine && gender.errors && gender.errors.required">
                   <p class="m-0 font-weight-bold">O sexo é obrigatório</p>
                 </li>
-                <li class="list-group-item p-1"
-                  *ngIf="email && !email.pristine && email.errors && email.errors.required">
+                <li class="list-group-item p-1" *ngIf="email && !email.pristine && email.errors && email.errors.required">
                   <p class="m-0 font-weight-bold">O e-mail é obrigatório</p>
                 </li>
-                <li class="list-group-item p-1"
-                  *ngIf="password && !password.pristine && password.errors && password.errors.required">
+                <li class="list-group-item p-1" *ngIf="password && !password.pristine && password.errors && password.errors.required">
                   <p class="m-0 font-weight-bold">A senha é obrigatória</p>
                 </li>
               </ul>
             </div>
             <div class="text-center">
-              <button type="submit" class="btn btn-primary mt-4"
-                [disabled]="!registerForm.form.valid || registerForm.form.pristine">Criar
+              <button type="submit" class="btn btn-primary mt-4" [disabled]="!registerForm.form.valid || registerForm.form.pristine">Criar
                 Conta</button>
             </div>
           </form>
@@ -170,7 +163,8 @@
     <p>A informação pessoal recolhida pode incluir o seu nome, e-mail, número de telefone e/ou telemóvel, morada, data
       de nascimento e/ou outros.</p>
     <p>O uso do Tooeater pressupõe a aceitação deste Acordo de privacidade. A equipa do Tooeater reserva-se ao direito
-      de alterar este acordo sem aviso prévio. Deste modo, recomendamos que consulte a nossa política de privacidade com
+      de alterar este acordo sem aviso prévio. Deste modo, recomendamos que consulte a nossa política de privacidade
+      com
       regularidade de forma a estar sempre atualizado.</p>
     <h2>Os anúncios</h2>
     <p>Tal como outros websites, coletamos e utilizamos informação contida nos anúncios. A informação contida nos
@@ -190,16 +184,20 @@
     <p>Em adição também utilizamos publicidade de terceiros no nosso website para suportar os custos de manutenção.
       Alguns destes publicitários, poderão utilizar tecnologias como os cookies e/ou web beacons quando publicitam no
       nosso website, o que fará com que esses publicitários (como o Google através do Google AdSense) também recebam a
-      sua informação pessoal, como o endereço IP, o seu ISP, o seu browser, etc. Esta função é geralmente utilizada para
+      sua informação pessoal, como o endereço IP, o seu ISP, o seu browser, etc. Esta função é geralmente utilizada
+      para
       geotargeting (mostrar publicidade de Lisboa apenas aos leitores oriundos de Lisboa por ex.) ou apresentar
       publicidade direcionada a um tipo de utilizador (como mostrar publicidade de restaurante a um utilizador que
       visita sites de culinária regularmente, por ex.).</p>
     <p>Você detém o poder de desligar os seus cookies, nas opções do seu browser, ou efetuando alterações nas
-      ferramentas de programas Anti-Virus, como o Norton Internet Security. No entanto, isso poderá alterar a forma como
-      interage com o nosso website, ou outros websites. Isso poderá afetar ou não permitir que faça logins em programas,
+      ferramentas de programas Anti-Virus, como o Norton Internet Security. No entanto, isso poderá alterar a forma
+      como
+      interage com o nosso website, ou outros websites. Isso poderá afetar ou não permitir que faça logins em
+      programas,
       sites ou fóruns da nossa e de outras redes.</p>
     <h2>Ligações a Sites de terceiros</h2>
-    <p>O Tooeater possui ligações para outros sites, os quais, a nosso ver, podem conter informações / ferramentas úteis
+    <p>O Tooeater possui ligações para outros sites, os quais, a nosso ver, podem conter informações / ferramentas
+      úteis
       para os nossos visitantes. A nossa política de privacidade não é aplicada a sites de terceiros, pelo que, caso
       visite outro site a partir do nosso deverá ler a politica de privacidade do mesmo.</p>
     <p>Não nos responsabilizamos pela política de privacidade ou conteúdo presente nesses mesmos sites.</p>
