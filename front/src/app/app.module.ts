@@ -18,6 +18,7 @@ import { Globals } from './services/globals';
 import { ApiService } from './services/api.service';
 import { ToastrModule } from 'ngx-toastr';
 import { HttpConfigInterceptor } from './interceptor/http.interceptor';
+import { ImageCropPickerComponent } from './components/image-crop-picker/image-crop-picker.component';
 
 @NgModule({
   imports: [
@@ -46,6 +47,9 @@ import { HttpConfigInterceptor } from './interceptor/http.interceptor';
     ApiService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents:[
+    ImageCropPickerComponent
+  ]
 })
 export class AppModule { }

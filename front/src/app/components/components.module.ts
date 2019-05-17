@@ -7,6 +7,8 @@ import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TooeatComponent } from './tooeat/tooeat.component';
 import { FormsModule } from '@angular/forms';
+import { ImageCropPickerComponent } from './image-crop-picker/image-crop-picker.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 @NgModule({
   imports: [
@@ -14,18 +16,21 @@ import { FormsModule } from '@angular/forms';
     RouterModule,
     NgbModule,
     FormsModule,
+    ImageCropperModule,
   ],
   declarations: [
     FooterComponent,
     NavbarComponent,
     SidebarComponent,
-    TooeatComponent
+    TooeatComponent,
+    ImageCropPickerComponent
   ],
   exports: [
     FooterComponent,
     NavbarComponent,
     SidebarComponent,
-    TooeatComponent
+    TooeatComponent,
+    ImageCropPickerComponent
   ]
 })
 export class ComponentsModule { }

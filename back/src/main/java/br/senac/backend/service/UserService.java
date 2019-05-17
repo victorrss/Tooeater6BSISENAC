@@ -11,14 +11,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
 import br.senac.backend.annotation.Secured;
 import br.senac.backend.dao.UserDao;
 import br.senac.backend.exception.UserException;
 import br.senac.backend.model.User;
+import br.senac.backend.model.pojo.ImagePojo;
 import br.senac.backend.model.pojo.UserCreatePojo;
 import br.senac.backend.model.pojo.UserUpdatePojo;
+import br.senac.backend.util.ImageUtil;
 import br.senac.backend.util.Util;
 import br.senac.backend.validator.UserValidator;
 import io.swagger.annotations.Api;
@@ -34,6 +37,42 @@ import io.swagger.annotations.Tag;
 @SwaggerDefinition(tags= {@Tag (name="User Service", description="REST Endpoint for User Service")})
 public class UserService {
 	@Context SecurityContext securityContext;
+
+	@GET
+	@Path( "teste/download" )
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response download()
+	{
+		String fileName = "/1.jpg";
+		try {
+			String folderPath = System.getProperty("user.dir") + "/tooeater_files/images/user";
+
+			ImagePojo pojo = new ImagePojo();
+			pojo.setPhoto(ImageUtil.read(folderPath, fileName));
+
+			return Response.ok(pojo).build();
+		}
+		catch (Exception e) {
+			return Response
+					.status(Status.NOT_FOUND)
+					.entity(e.getMessage())
+					.build();
+		}
+	}
+
+	@POST
+	@Path("teste/upload/{primaryKey}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void uploadImage(ImagePojo pojo, @PathParam("primaryKey") String primaryKey) 
+	{
+		String folderPath = System.getProperty("user.dir") + "/tooeater_files/images/user";
+		String fileName =  "/"+primaryKey;
+		try {
+			ImageUtil.save(pojo.getPhoto(), folderPath, fileName);
+		} catch (Exception e) {
+			System.out.println("erro");
+		}
+	}
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -52,6 +91,17 @@ public class UserService {
 
 			user.setPassword(Util.sha1(user.getPassword()));
 			user.setCreatedAt(Util.getDateNow());
+
+			//IMAGE SAVE
+			try {
+				if (!user.getPhoto().isEmpty()) {
+					String folderPath = System.getProperty("user.dir") + "/tooeater_files/images/user";
+					String fileName =  "/"+user.getId();
+					ImageUtil.save(user.getPhoto(), folderPath, fileName);
+					user.setPhoto(user.getId()+ImageUtil.getExtension(ImageUtil.getMimeType(user.getPhoto())));
+				}	
+			} catch(Exception e) {}
+
 
 			UserDao.getInstance().persist(user);
 			return Response
@@ -128,11 +178,21 @@ public class UserService {
 		try {
 			User user = UserDao.getInstance().getById(pojo.getId());
 			user = UserUpdatePojo.convertToModel(user, pojo);
-		
+
 			UserException userException = UserValidator.validateUpdate(user, user.getNickname());
 			if (userException != null)
 				throw userException;
-			
+
+			//IMAGE UPDATE
+			try {
+				if (!user.getPhoto().isEmpty()) {
+					String folderPath = System.getProperty("user.dir") + "/tooeater_files/images/user";
+					String fileName =  "/"+user.getId();
+					ImageUtil.save(user.getPhoto(), folderPath, fileName);
+					user.setPhoto(user.getId()+ImageUtil.getExtension(ImageUtil.getMimeType(user.getPhoto())));
+				}	
+			} catch(Exception e) {}
+
 			UserDao.getInstance().merge(user);
 			response = Response
 					.status(Response.Status.NO_CONTENT)

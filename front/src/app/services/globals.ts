@@ -12,11 +12,9 @@ export class Globals {
   loading: boolean = false;
   userLoggedIn: UserModel;
   msgErrApi: string = 'Desculpe, estamos com problemas técnicos. Por favor, tente novamente mais tarde.';
-  froalaOptions: Object = {
-    placeholderText: 'Edit Your Content Here!',
-    charCounterCount: false
-  }
+
   constructor(private toastr: ToastrService) {
+  
     try {
       this.userLoggedIn = <UserModel>JSON.parse(localStorage.getItem('user'));
     } catch (error) {

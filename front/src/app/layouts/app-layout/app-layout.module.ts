@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http'; import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 import { UserProfileComponent } from '../../pages/user-profile/user-profile.component';
 import { TooeatsComponent } from 'src/app/pages/tooeats/tooeats.component';
@@ -26,8 +27,7 @@ import { ClipboardModule } from 'ngx-clipboard';
     TooeatsComponent,
     UserProfileComponent,
   ],
-  providers: [
-  ]
+  providers: []
 })
 
 export class AppLayoutModule { }

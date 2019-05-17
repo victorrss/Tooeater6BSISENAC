@@ -22,7 +22,14 @@ public class UserUpdatePojo {
 	private String password = null;
 	private String bio;
 	private String nickname;
+	private String photo;
 
+	public String getPhoto() {
+		return photo;
+	}
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
 	public int getId() {
 		return id;
 	}
@@ -82,6 +89,7 @@ public class UserUpdatePojo {
 			if (!pojo.getPassword().isEmpty())
 				model.setPassword(Util.sha1(pojo.getPassword()));
 		} catch(Exception e) {}
+		model.setPhoto(pojo.getPhoto());
 		model.setBio(pojo.getBio());
 		model.setNickname(pojo.getNickname());
 		model.setUpdateAt(Util.getDateNow());

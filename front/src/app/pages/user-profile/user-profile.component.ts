@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Globals } from 'src/app/services/globals';
 import { UserModel } from 'src/app/model/user.model';
 import * as moment from 'moment';
 import { ApiService } from 'src/app/services/api.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ImageCropPickerComponent } from 'src/app/components/image-crop-picker/image-crop-picker.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -11,14 +14,14 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
-  user: UserModel;
+  user = new UserModel();
   apiSubscription: any;
   today = new Date();
-  constructor(private globals: Globals, private apiSvc: ApiService) { }
+
+  constructor(private globals: Globals, private apiSvc: ApiService, private modalService: NgbModal) { }
 
   ngOnInit() {
     this.getUser();
-    this.user = this.globals.userLoggedIn;
   }
 
   ngOnDestroy(): void {
@@ -28,13 +31,12 @@ export class UserProfileComponent implements OnInit {
 
   onSubmit() {
     let userUpdate = this.user;
-    delete(userUpdate.tooeats)
-    delete(userUpdate.following)
-    delete(userUpdate.followers)
-    delete(userUpdate.photo)
-    delete(userUpdate.email)
-    delete(userUpdate.createdAt)
-    delete(userUpdate.updateAt)
+    delete (userUpdate.tooeats)
+    delete (userUpdate.following)
+    delete (userUpdate.followers)
+    delete (userUpdate.email)
+    delete (userUpdate.createdAt)
+    delete (userUpdate.updateAt)
 
     this.apiSubscription = this.apiSvc.updateUser(this.user).subscribe(
       () => {
@@ -54,10 +56,17 @@ export class UserProfileComponent implements OnInit {
   getUser() {
     this.apiSubscription = this.apiSvc.getUserMe().subscribe((result: UserModel) => {
       localStorage.setItem('user', JSON.stringify(result));
-      this.globals.userLoggedIn = result;
-      this.user = result;
+      this.globals.userLoggedIn = this.user = result;
     }, (err) => {
       this.globals.showToast('Oh não!', 'Falha ao consultar os dados de seu usuário', 'error')
     });
+  }
+
+  openModalImageCropPicker() {
+    const modalRef = this.modalService.open(ImageCropPickerComponent, { size: 'lg' });
+    modalRef.componentInstance.image = this.user.photo ? this.user.photo : null;
+    modalRef.result.then((result) => {
+      console.log(result)
+    }).catch();
   }
 }

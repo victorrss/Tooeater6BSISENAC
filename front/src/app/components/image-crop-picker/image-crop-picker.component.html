@@ -1,0 +1,22 @@
+<input type="file" (change)="fileChangeEvent($event)" class="btn btn-primary" />
+<button (click)="rotateLeft()" class="btn btn-primary">Girar à esquerda</button>
+<button (click)="rotateRight()" class="btn btn-primary">Girar à direita</button>
+<button (click)="flipHorizontal()" class="btn btn-primary">Flip horizontal</button>
+<button (click)="flipVertical()" class="btn btn-primary">Flip vertical</button>
+
+<div>
+  <image-cropper
+      [imageChangedEvent]="imageChangedEvent"
+      [aspectRatio]="1 / 1"
+      [resizeToWidth]="128"
+      [cropperMinWidth]="128"
+      [onlyScaleDown]="true"
+      outputType="base64"
+      (imageCropped)="imageCropped($event)"
+      (imageLoaded)="imageLoaded()"
+      (cropperReady)="cropperReady()"
+      (loadImageFailed)="loadImageFailed()"
+      [style.display]="showCropper ? null : 'none'"
+  ></image-cropper>
+</div>
+<img [src]="croppedImage" />

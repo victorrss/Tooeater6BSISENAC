@@ -1,8 +1,12 @@
 package br.senac.backend.validator;
 
+import java.util.Arrays;
+import java.util.List;
+
 import br.senac.backend.dao.UserDao;
 import br.senac.backend.exception.UserException;
 import br.senac.backend.model.User;
+import br.senac.backend.util.ImageUtil;
 import br.senac.backend.util.Util;
 
 public class UserValidator {
@@ -18,7 +22,15 @@ public class UserValidator {
 		if (!Util.isValidEmailAddress(user.getEmail()))
 			return new UserException("O endereço de e-mail está inválido.");
 
-
+		// MIME TYPE PHOTO
+		try {
+			if (!user.getPhoto().isEmpty()) {
+				List<String> mimes = Arrays.asList(ImageUtil.mimeTypesAllow);
+				if (!mimes.contains(ImageUtil.getMimeType(user.getPhoto()))) 
+					return new UserException("A foto está com o formato("+ImageUtil.getExtension(ImageUtil.getMimeType(user.getPhoto()))+") invalido inválido.");
+			}	
+		} catch(Exception e) {}
+		
 		// NOT NULL
 		if (Util.empty(user.getFirstName()))
 			return new UserException("O nome é obrigatório.");
@@ -56,7 +68,15 @@ public class UserValidator {
 		if (!Util.isValidEmailAddress(user.getEmail()))
 			return new UserException("O endereço de e-mail está inválido.");
 
-
+		// MIME TYPE PHOTO
+		try {
+			if (!user.getPhoto().isEmpty()) {
+				List<String> mimes = Arrays.asList(ImageUtil.mimeTypesAllow);
+				if (!mimes.contains(ImageUtil.getMimeType(user.getPhoto()))) 
+					return new UserException("A foto está com o formato("+ImageUtil.getExtension(ImageUtil.getMimeType(user.getPhoto()))+") invalido inválido.");
+			}	
+		} catch(Exception e) {}
+		
 		// NOT NULL
 		if (Util.empty(user.getFirstName()))
 			return new UserException("O nome é obrigatório.");

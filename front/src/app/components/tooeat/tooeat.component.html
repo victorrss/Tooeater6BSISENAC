@@ -8,7 +8,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="row">
-                            <div class="col-1"> <img src="{{ t.user.photo }}" class="avatar rounded-circle"> </div>
+                            <div class="col-1"> <img src="{{ t.user.photo ? t.user.photo : '/assets/img/user/default.png' }}" class="avatar rounded-circle"> </div>
                             <div class="col ml-4">
                                 <h4 class="p-0 m-0">{{t.user.nickname}}</h4>
                                 <a class="h5 font-weight-300 p-0 m-0" title="{{ globals.getSimpleDate(t.createdAt) }}">
@@ -93,7 +93,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="row">
-                            <div class="col-1"> <img src="{{ c.user.photo }}" class="avatar rounded-circle"> </div>
+                            <div class="col-1"> <img src="{{ c.user.photo ? c.user.photo : '/assets/img/user/default.png' }}" class="avatar rounded-circle"> </div>
                             <div class="col ml-4">
                                 <h4 class="p-0 m-0">{{c.user.nickname}}</h4>
                                 <a class="h5 font-weight-300 p-0 m-0" title="{{ globals.getSimpleDate(c.createdAt) }}">

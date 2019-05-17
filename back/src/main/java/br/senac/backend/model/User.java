@@ -18,11 +18,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.senac.backend.dao.Manager;
+import br.senac.backend.util.ImageUtil;
 
 @Entity
 @Table(name="user")
 public class User {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -97,7 +97,10 @@ public class User {
 		this.gender = gender;
 	}
 	public String getPhoto() {
-		return photo;
+		String folderPath = System.getProperty("user.dir") + "/tooeater_files/images/user";
+		try {
+			return ImageUtil.read(folderPath, this.photo);
+		} catch(Exception e) { return null;}
 	}
 	public void setPhoto(String photo) {
 		this.photo = photo;
