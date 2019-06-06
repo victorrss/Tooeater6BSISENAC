@@ -2,19 +2,30 @@ package br.senac.backend.service;
 
 import java.util.List;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
+
+import br.senac.backend.annotation.Secured;
 import br.senac.backend.dao.LikeDao;
+import br.senac.backend.dao.TooeatDao;
+import br.senac.backend.dao.UserDao;
 import br.senac.backend.exception.LikeException;
 import br.senac.backend.model.Like;
+import br.senac.backend.model.Tooeat;
+import br.senac.backend.model.User;
+import br.senac.backend.util.Util;
 import br.senac.backend.validator.LikeValidator;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
 
@@ -22,22 +33,57 @@ import io.swagger.annotations.Tag;
 @Api("/Like Service")
 @SwaggerDefinition(tags= {@Tag (name="Like Service", description="REST Endpoint for Like Service")})
 public class LikeService {
+	@Context SecurityContext securityContext;
 
-
-	@POST
+	@GET
+	@Secured
+	@Path("/{tooeatId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response create(Like like) {
+	@ApiImplicitParams({@ApiImplicitParam(
+			name = "Authorization", 
+			value = "Bearer {JWT Token}",
+			required = true,
+			dataType = "string",
+			paramType = "header"
+			)})
+	@ApiResponses(value = { 
+			@ApiResponse(code = 201, message = "Liked!"),
+			@ApiResponse(code = 204, message = "Remove Like!"),
+			@ApiResponse(code = 400, message = "Falha geral, try-catch"), 
+			@ApiResponse(code = 406 , message = "Falha validação, Tooeat Exception com retorno de: {\"message\\\": \"Message\"}")
+	})
+	public Response like(@PathParam("tooeatId") Integer tooeatId, @Context SecurityContext securityContext) {
 		Response response;
 		try {
-			LikeException exception = LikeValidator.validate(like);
-			if (exception != null)
-				throw exception;
+			Integer userId = Util.stringToInteger(securityContext.getUserPrincipal().getName());
 
-			LikeDao.getInstance().persist(like);
-			response = Response
-					.status(Response.Status.NO_CONTENT)
-					.build();
+			User u = (User) UserDao.getInstance().getById(userId);
+			Tooeat t = TooeatDao.getInstance().getById(tooeatId);
+
+			Like like = new Like();
+			like.setTooeat(t);
+			like.setUser(u);
+
+			Like likeExists = LikeDao.getInstance().getByTooeatAndUser(u.getId(), t.getId());
+
+			if (likeExists == null) { //create
+				/*
+				LikeException exception = LikeValidator.validate(like);
+				if (exception != null)
+					throw exception;
+				 */
+				LikeDao.getInstance().persist(like);
+				response = Response
+						.status(Response.Status.CREATED)
+						.build();
+			} else {
+				LikeDao.getInstance().removeById(likeExists.getId());
+				response = Response
+						.status(Response.Status.NO_CONTENT)
+						.build();
+			}
+			/*
 		} catch (LikeException e) {
 			e.printStackTrace();
 			response = Response
@@ -45,6 +91,7 @@ public class LikeService {
 					.entity("{\"message\": \""+e.getMessage()+"\"}")
 					.type(MediaType.APPLICATION_JSON)
 					.build();
+			 */
 		} catch (Exception e) {
 			e.printStackTrace();
 			response = Response
@@ -56,7 +103,7 @@ public class LikeService {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{tooeatId}")
+	@Path("/list/{tooeatId}")
 	public Response read(@PathParam("tooeatId") Integer tooeatId) {
 		Response response;
 		try {
@@ -75,6 +122,7 @@ public class LikeService {
 		return response;
 	}
 
+	/*
 	@DELETE
 	@Path("/{id}")
 	public Response delete(@PathParam("id") Integer id) {
@@ -92,5 +140,6 @@ public class LikeService {
 		}
 		return response;
 	}
+	 */
 
 }

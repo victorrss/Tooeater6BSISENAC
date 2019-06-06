@@ -20,6 +20,7 @@ public class Like {
 	@ManyToOne
 	@JoinColumn(name="tooeat_id", nullable=false)
 	private Tooeat tooeat;
+
 	@ManyToOne
 	@JoinColumn(name="user_id", nullable=false)
 	@JsonIgnore
@@ -37,5 +38,11 @@ public class Like {
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}	
+	public Tooeat getTooeat() {
+		return tooeat;
+	}
+	public void setTooeat(Tooeat tooeat) {
+		this.tooeat = tooeat;
 	}
 }

@@ -4,6 +4,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import br.senac.backend.model.Like;
+import br.senac.backend.model.Tooeat;
+import br.senac.backend.model.User;
 
 public class LikeDao {
 
@@ -23,6 +25,20 @@ public class LikeDao {
 	public Like getById(final int id) {
 		em.clear(); 
 		return em.find(Like.class, id);
+	}
+
+
+	public Like getByTooeatAndUser(final Integer userId, final Integer tooeatId) {
+		em.clear();
+		Query query = em.createQuery("FROM " +Like.class.getName()+ " WHERE user=:user_id AND tooeat=:tooeat_id");
+		query.setParameter("user_id",Integer.valueOf(userId));
+		query.setParameter("tooeat_id",Integer.valueOf(tooeatId));
+
+		try {
+			return (Like) query.getResultList().get(0);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
