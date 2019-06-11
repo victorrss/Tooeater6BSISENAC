@@ -1,5 +1,8 @@
 package br.senac.backend.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -11,15 +14,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
 import br.senac.backend.annotation.Secured;
 import br.senac.backend.dao.UserDao;
 import br.senac.backend.exception.UserException;
 import br.senac.backend.model.User;
-import br.senac.backend.model.pojo.ImagePojo;
 import br.senac.backend.model.pojo.UserCreatePojo;
+import br.senac.backend.model.pojo.UserSearchPojo;
 import br.senac.backend.model.pojo.UserUpdatePojo;
 import br.senac.backend.util.ImageUtil;
 import br.senac.backend.util.Util;
@@ -37,42 +39,6 @@ import io.swagger.annotations.Tag;
 @SwaggerDefinition(tags= {@Tag (name="User Service", description="REST Endpoint for User Service")})
 public class UserService {
 	@Context SecurityContext securityContext;
-
-	@GET
-	@Path( "teste/download" )
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response download()
-	{
-		String fileName = "/1.jpg";
-		try {
-			String folderPath = System.getProperty("user.dir") + "/tooeater_files/images/user";
-
-			ImagePojo pojo = new ImagePojo();
-			pojo.setPhoto(ImageUtil.read(folderPath, fileName));
-
-			return Response.ok(pojo).build();
-		}
-		catch (Exception e) {
-			return Response
-					.status(Status.NOT_FOUND)
-					.entity(e.getMessage())
-					.build();
-		}
-	}
-
-	@POST
-	@Path("teste/upload/{primaryKey}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void uploadImage(ImagePojo pojo, @PathParam("primaryKey") String primaryKey) 
-	{
-		String folderPath = System.getProperty("user.dir") + "/tooeater_files/images/user";
-		String fileName =  "/"+primaryKey;
-		try {
-			ImageUtil.save(pojo.getPhoto(), folderPath, fileName);
-		} catch (Exception e) {
-			System.out.println("erro");
-		}
-	}
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -96,7 +62,7 @@ public class UserService {
 			try {
 				if (!user.getPhoto().isEmpty()) {
 					String folderPath = System.getProperty("user.dir") + "/tooeater_files/images/user";
-					String fileName =  "/"+user.getId();
+					String fileName = "/" + user.getId();
 					ImageUtil.save(user.getPhoto(), folderPath, fileName);
 					user.setPhoto(user.getId()+ImageUtil.getExtension(ImageUtil.getMimeType(user.getPhoto())));
 				}	
@@ -156,6 +122,48 @@ public class UserService {
 		}
 		return response;
 	}
+	
+	@GET
+	@Path("/search/{term}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@ApiImplicitParams({@ApiImplicitParam(
+			name = "Authorization", 
+			value = "Bearer {JWT Token}",
+			required = true,
+			dataType = "string",
+			paramType = "header"
+			)})
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Sucesso!"),
+			@ApiResponse(code = 400, message = "Fail on create, try-catch")
+	})
+	public Response search(@PathParam("term") String term) {
+		Response response;
+		try {
+			List<User> users = UserDao.getInstance().search(term);
+			
+			List <UserSearchPojo> result = new ArrayList<UserSearchPojo>();
+			
+			for (User user : users) {
+				UserSearchPojo pojo = new UserSearchPojo();
+				pojo.setUser(user);
+				result.add(pojo);
+			}
+			
+			response = Response
+					.status(Response.Status.OK)
+					.entity(result)
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			response  = Response
+					.status(Response.Status.BAD_REQUEST)
+					.build();
+		}
+		return response;
+	}
 
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -187,7 +195,7 @@ public class UserService {
 			try {
 				if (!user.getPhoto().isEmpty()) {
 					String folderPath = System.getProperty("user.dir") + "/tooeater_files/images/user";
-					String fileName =  "/"+user.getId();
+					String fileName = "/" + user.getId();
 					ImageUtil.save(user.getPhoto(), folderPath, fileName);
 					user.setPhoto(user.getId()+ImageUtil.getExtension(ImageUtil.getMimeType(user.getPhoto())));
 				}	

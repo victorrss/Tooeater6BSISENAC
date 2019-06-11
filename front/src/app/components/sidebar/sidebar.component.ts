@@ -12,7 +12,7 @@ declare interface RouteInfo {
 }
 export const ROUTES: RouteInfo[] = [
   { path: '/tooeats', title: 'Tooeats', icon: 'ni-tv-2 text-primary', class: '' },
-  { path: '/user-profile', title: 'Meu Perfil', icon: 'ni-single-02 text-yellow', class: '' },
+  { path: '/my-profile', title: 'Meu Perfil', icon: 'ni-single-02 text-yellow', class: '' },
 ];
 
 @Component({

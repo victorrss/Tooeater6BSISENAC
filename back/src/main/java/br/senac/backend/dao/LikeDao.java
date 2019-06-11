@@ -28,14 +28,14 @@ public class LikeDao {
 	}
 
 
-	public Like getByTooeatAndUser(final Integer userId, final Integer tooeatId) {
+	public Like getByTooeatAndUser(User user, Tooeat tooeat) {
 		em.clear();
-		Query query = em.createQuery("FROM " +Like.class.getName()+ " WHERE user=:user_id AND tooeat=:tooeat_id");
-		query.setParameter("user_id",Integer.valueOf(userId));
-		query.setParameter("tooeat_id",Integer.valueOf(tooeatId));
+		Query query = em.createQuery("FROM " +Like.class.getName()+ " WHERE user=:user AND tooeat=:tooeat");
+		query.setParameter("user",user);
+		query.setParameter("tooeat", tooeat);
 
 		try {
-			return (Like) query.getResultList().get(0);
+			return (Like) query.getSingleResult();
 		} catch (Exception e) {
 			return null;
 		}

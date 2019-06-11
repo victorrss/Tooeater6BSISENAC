@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
 
 
-import { UserProfileComponent } from '../../pages/user-profile/user-profile.component';
 import { TooeatsComponent } from 'src/app/pages/tooeats/tooeats.component';
+import { MyProfileComponent } from '../../pages/my-profile/my-profile.component';
 
 export const AppLayoutRoutes: Routes = [
     { path: 'tooeats', component: TooeatsComponent },
-    { path: 'user-profile', component: UserProfileComponent },
+    { path: 'my-profile', component: MyProfileComponent },
 ];

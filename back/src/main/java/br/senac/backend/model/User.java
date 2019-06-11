@@ -97,10 +97,13 @@ public class User {
 		this.gender = gender;
 	}
 	public String getPhoto() {
-		String folderPath = System.getProperty("user.dir") + "/tooeater_files/images/user";
-		try {
-			return ImageUtil.read(folderPath, this.photo);
-		} catch(Exception e) { return null;}
+		if (this.photo != null) {
+			String folderPath = System.getProperty("user.dir") + "/tooeater_files/images/user";
+			try {
+				String img = ImageUtil.read(folderPath, this.photo);
+				return img;
+			} catch(Exception e) { return null;}
+		} else return null;
 	}
 	public void setPhoto(String photo) {
 		this.photo = photo;

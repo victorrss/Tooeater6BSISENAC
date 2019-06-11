@@ -12,6 +12,8 @@ import { AppLayoutRoutes } from './app-layout.routing';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { ClipboardModule } from 'ngx-clipboard';
+import { SearchComponent } from '../../pages/search/search.component';
+import { MyProfileComponent } from '../../pages/my-profile/my-profile.component';
 
 @NgModule({
   imports: [
@@ -25,7 +27,9 @@ import { ClipboardModule } from 'ngx-clipboard';
   ],
   declarations: [
     TooeatsComponent,
+    MyProfileComponent,
     UserProfileComponent,
+    SearchComponent,
   ],
   providers: []
 })

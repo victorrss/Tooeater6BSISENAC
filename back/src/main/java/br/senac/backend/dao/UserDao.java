@@ -62,6 +62,14 @@ public class UserDao {
 		em.clear();
 		return em.createQuery("FROM User WHERE enabled = 1").getResultList();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<User> search(String term) {
+		em.clear();
+		Query query = em.createQuery("FROM User WHERE enabled = 1 AND (email LIKE :term OR nickname LIKE :term)");
+		query.setParameter("term", "%" + term + "%");
+		return query.getResultList();
+	}
 
 	public void persist(User user) {
 		try {

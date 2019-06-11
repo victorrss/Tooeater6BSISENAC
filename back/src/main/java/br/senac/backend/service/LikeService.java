@@ -57,22 +57,21 @@ public class LikeService {
 		Response response;
 		try {
 			Integer userId = Util.stringToInteger(securityContext.getUserPrincipal().getName());
-
-			User u = (User) UserDao.getInstance().getById(userId);
+			User u = UserDao.getInstance().getById(userId);
 			Tooeat t = TooeatDao.getInstance().getById(tooeatId);
 
 			Like like = new Like();
 			like.setTooeat(t);
 			like.setUser(u);
 
-			Like likeExists = LikeDao.getInstance().getByTooeatAndUser(u.getId(), t.getId());
+			Like likeExists = LikeDao.getInstance().getByTooeatAndUser(u, t);
 
 			if (likeExists == null) { //create
-				/*
+
 				LikeException exception = LikeValidator.validate(like);
 				if (exception != null)
 					throw exception;
-				 */
+
 				LikeDao.getInstance().persist(like);
 				response = Response
 						.status(Response.Status.CREATED)
@@ -83,7 +82,7 @@ public class LikeService {
 						.status(Response.Status.NO_CONTENT)
 						.build();
 			}
-			/*
+
 		} catch (LikeException e) {
 			e.printStackTrace();
 			response = Response
@@ -91,7 +90,7 @@ public class LikeService {
 					.entity("{\"message\": \""+e.getMessage()+"\"}")
 					.type(MediaType.APPLICATION_JSON)
 					.build();
-			 */
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			response = Response

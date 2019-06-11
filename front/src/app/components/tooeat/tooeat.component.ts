@@ -120,9 +120,11 @@ export class TooeatComponent {
   likeDislike(t: TooeatModel) {
     this.apiSubscription = this.apiSvc.getLikeDislike(t.id).subscribe(
       res => {
-        console.log("likeDislike: ", res);
+        if (res.status == 201) this.t.likes += 1;
+        else if (res.status == 204) this.t.likes -= 1;
       },
       () => this.globals.showToast("Oh não!", this.globals.msgErrApi, "error")
     );
   }
+
 }

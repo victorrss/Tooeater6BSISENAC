@@ -21,7 +21,7 @@ public class ImageUtil {
 	public static String read(String folderPath, String fileName) throws IOException {
 		createFolder(folderPath);
 		String base64Image = "";
-		File file = new File(folderPath + fileName);
+		File file = new File(folderPath +"/"+ fileName);
 		try (FileInputStream imageInFile = new FileInputStream(file)) {
 			// read file and convert to base64 string
 			byte imageData[] = new byte[(int) file.length()];
