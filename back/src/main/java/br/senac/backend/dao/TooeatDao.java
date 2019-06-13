@@ -8,6 +8,7 @@ import javax.persistence.Query;
 
 import br.senac.backend.model.Follower;
 import br.senac.backend.model.Tooeat;
+import br.senac.backend.model.User;
 import br.senac.backend.util.Util;
 
 public class TooeatDao {
@@ -26,16 +27,19 @@ public class TooeatDao {
 	}
 
 	public Tooeat getById(final int id) {
-	
+		em.clear();
 		return em.find(Tooeat.class, id);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Tooeat> getByUserId(final Integer userId) {
-		em.clear();
-		Query query = em.createQuery("FROM "+Tooeat.class.getName()+" WHERE enabled = 1 AND user=:user_id");
-		query.setParameter("user_id", userId);
-		return query.getResultList();
+	public List<Tooeat> getByUserId(User user) {
+		Query query = em.createQuery("FROM Tooeat WHERE enabled = 1 AND user=:user");
+		query.setParameter("user", user);
+		try {
+			return query.getResultList();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -45,7 +49,11 @@ public class TooeatDao {
 				" WHERE t.enabled = 1 "+
 				" AND t.user IN ("+userId+", (SELECT f.userMaster FROM "+Follower.class.getName()+" f WHERE f.userSlave = " + userId+ "))"+
 				" ORDER BY 1 DESC");
-		return query.getResultList();
+		try {
+			return query.getResultList();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public void persist(Tooeat tooeat) {

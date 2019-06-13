@@ -17,8 +17,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 import br.senac.backend.annotation.Secured;
+import br.senac.backend.dao.TooeatDao;
 import br.senac.backend.dao.UserDao;
 import br.senac.backend.exception.UserException;
+import br.senac.backend.model.Tooeat;
 import br.senac.backend.model.User;
 import br.senac.backend.model.pojo.UserCreatePojo;
 import br.senac.backend.model.pojo.UserSearchPojo;
@@ -122,7 +124,7 @@ public class UserService {
 		}
 		return response;
 	}
-	
+
 	@GET
 	@Path("/search/{term}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -142,18 +144,57 @@ public class UserService {
 		Response response;
 		try {
 			List<User> users = UserDao.getInstance().search(term);
-			
+
 			List <UserSearchPojo> result = new ArrayList<UserSearchPojo>();
-			
+
 			for (User user : users) {
+
 				UserSearchPojo pojo = new UserSearchPojo();
 				pojo.setUser(user);
 				result.add(pojo);
 			}
-			
+
 			response = Response
 					.status(Response.Status.OK)
 					.entity(result)
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			response  = Response
+					.status(Response.Status.BAD_REQUEST)
+					.build();
+		}
+		return response;
+	}
+
+	@GET
+	@Path("/nickname/{nickname}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Secured
+	@ApiImplicitParams({@ApiImplicitParam(
+			name = "Authorization", 
+			value = "Bearer {JWT Token}",
+			required = true,
+			dataType = "string",
+			paramType = "header"
+			)})
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Sucesso!"),
+			@ApiResponse(code = 400, message = "Fail on create, try-catch")
+	})
+	public Response getByNickname(@PathParam("nickname") String nickname) {
+		Response response;
+		try {
+			User user = UserDao.getInstance().getByNickName(nickname);
+			List<Tooeat> tooeats= TooeatDao.getInstance().getByUserId(user);
+			UserSearchPojo pojo = new UserSearchPojo();			
+			pojo.setTooeats(tooeats);
+			pojo.setUser(user);
+
+			response = Response
+					.status(Response.Status.OK)
+					.entity(pojo)
 					.type(MediaType.APPLICATION_JSON)
 					.build();
 		} catch (Exception e) {

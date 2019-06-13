@@ -1,196 +1,81 @@
-<div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center">
-  <!-- style="min-height: 600px; background-image: url(assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;" -->
-  <!-- Mask -->
-  <span class="mask bg-gradient-default opacity-8"></span>
-  <!-- Header container -->
-  <div class="container-fluid d-flex align-items-center">
-    <div class="row">
-      <div class="col">
-        <h1 class="display-2 text-white">Olá, {{ user.firstName }}.</h1>
-        <p class="text-white mt-0 mb-2">Esta é a sua página de perfil.</p>
-        <!-- <a href="#!" class="btn btn-info">Editar perfil</a> -->
+<div class="header bg-gradient-info pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row mt-5">
+
+        <div class="col-1"></div>
+
+        <div class="col">
+          <div class="card card-profile shadow">
+            <div class="row justify-content-center">
+              <div class="col-lg-3 order-lg-2">
+                <div class="card-profile-image">
+                  <img src="{{ user.photo ? user.photo : '/assets/img/user/default.png' }}" class="rounded-circle">
+                </div>
+              </div>
+            </div>
+            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+            </div>
+            <div class="card-body pt-0 pt-md-4">
+              <div class="row">
+                <div class="col">
+                  <div class="card-profile-stats d-flex justify-content-center mt-md-5">
+                    <div>
+                      <span class="heading">{{user.tooeats}}</span>
+                      <span class="description">Tooeats</span>
+                    </div>
+                    <div>
+                      <span class="heading">{{user.following}}</span>
+                      <span class="description">Seguindo</span>
+                    </div>
+                    <div>
+                      <span class="heading">{{user.followers}}</span>
+                      <span class="description">Seguidores</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center">
+                <h1>{{ user.firstName }}{{ ' '+user.lastName }} - @{{user.nickname}}</h1>
+                <hr class="my-4" />
+                <p>{{ user.bio }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-1"></div>
+
       </div>
     </div>
   </div>
 </div>
 <div class="container-fluid mt--7">
-  <div class="row">
-    <div class="col-xl-4 order-xl-2 mb-5 mb-xl-0">
-      <div class="card card-profile shadow">
-        <div class="row justify-content-center">
-          <div class="col-lg-3 order-lg-2">
-            <div class="card-profile-image">
-              <a href="javascript:void(0)">
 
+  <div class="col-1"></div>
+  <div class="col">
 
-                <img src="{{ user.photo ? user.photo : '/assets/img/user/default.png' }}" class="rounded-circle">
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
-          <div class="d-flex justify-content-end">
-            <a href="javascript:void(0)" (click)="openModalImageCropPicker()" class="btn btn-sm btn-danger mr--2">Alterar foto</a>
-            <!-- <a href="javascript:void(0)" class="btn btn-sm btn-default float-right">Message</a> -->
-          </div>
-        </div>
-        <div class="card-body pt-0 pt-md-4">
+    <div class="card box-effect">
+      <div class="card-body">
+
+        <div class="col">
           <div class="row">
-            <div class="col">
-              <div class="card-profile-stats d-flex justify-content-center mt-md-5">
-                <div>
-                  <span class="heading">{{user.tooeats}}</span>
-                  <span class="description">Tooeats</span>
-                </div>
-                <div>
-                  <span class="heading">{{user.following}}</span>
-                  <span class="description">Seguindo</span>
-                </div>
-                <div>
-                  <span class="heading">{{user.followers}}</span>
-                  <span class="description">Seguidores</span>
-                </div>
-              </div>
-            </div>
+            <h1>Tooeats</h1>
           </div>
-          <div class="text-center">
-            <h3>
-              {{ user.firstName }}{{ ' '+user.lastName }}<span class="font-weight-light">,
-                {{ getBirthday() }}</span>
-            </h3>
-            <!-- 
-            <div class="h5 font-weight-300">
-              <i class="ni location_pin mr-2"></i>Bucharest, Romania
+          <div class="row text-center" *ngIf="!tooeats.length">
+            <p>Nenhum tooeat publicado</p>
+          </div>
+
+          <div class="row" *ngFor="let tooeat of tooeats">
+            <div class="col">
+              <app-tooeat [tooeat]="tooeat"></app-tooeat>
             </div>
-            <div class="h5 mt-4">
-              <i class="ni business_briefcase-24 mr-2"></i>Solution Manager - Creative Tim Officer
-            </div>
-            <div>
-              <i class="ni education_hat mr-2"></i>University of Computer Science
-            </div>
-            -->
-            <hr class="my-4" />
-            <p>{{ user.bio }}</p>
-            <!-- <a href="javascript:void(0)">Show more</a> -->
           </div>
         </div>
       </div>
     </div>
-    <div class="col-xl-8 order-xl-1">
-      <form (ngSubmit)="onSubmit()" role="form" #userForm="ngForm">
-        <div class="card bg-secondary shadow">
-          <div class="card-header bg-white border-0">
-            <div class="row align-items-center">
-              <div class="col-8">
-                <h3 class="mb-0">Minha conta</h3>
-              </div>
-              <div class="col-4 text-right">
-                <button type="submit" *ngIf="!userForm.pristine" class="btn-sm btn-default">Salvar alterações</button>
-              </div>
-            </div>
-          </div>
-          <div class="card-body">
-            <h6 class="heading-small text-muted mb-4">Informações do usuário</h6>
-            <div class="pl-lg-4">
 
-              <div class="row">
-                <div class="col-lg-6">
-                  <div class="form-group">
-                    <label class="form-control-label">Nome</label>
-                    <input type="text" placeholder="Nome" [(ngModel)]="user.firstName" name="firstName"
-                      #firstName="ngModel"
-                      [class]="(firstName.valid) ? 'form-control is-valid' : 'form-control is-invalid'" required>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="form-group">
-                    <label class="form-control-label">Sobrenome</label>
-                    <input type="text" placeholder="Sobrenome" [(ngModel)]="user.lastName" name="lastName"
-                      #lastName="ngModel"
-                      [class]="(lastName.valid) ? 'form-control is-valid' : 'form-control is-invalid'">
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-lg-6">
-                  <div class="form-group">
-                    <label class="form-control-label">Sexo</label>
-                    <select [(ngModel)]="user.gender" name="gender" #gender="ngModel"
-                      [class]="(gender.valid) ? 'form-control is-valid' : 'form-control is-invalid'" required>
-                      <option [value]="true" [selected]="gender.value">Masculino</option>
-                      <option [value]="true" [selected]="!gender.value">Feminino</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="form-group">
-                    <label class="form-control-label">Nascimento</label>
-                    <input type="date" name="birthday" [ngModel]="user.birthday | date:'yyyy-MM-dd'"
-                      (ngModelChange)="user.birthday = $event" [value]="user.birthday | date:'yyyy-MM-dd'"
-                      #birthday="ngModel" max="{{ today | date:'yyyy-MM-dd' }}"
-                      [class]="(birthday.valid) ? 'form-control is-valid' : 'form-control is-invalid'" required>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-lg-6">
-                  <div class="form-group">
-                    <label class="form-control-label">Nickname</label>
-                    <input type="text" placeholder="Nickname" [(ngModel)]="user.nickname" name="nickname"
-                      #nickname="ngModel"
-                      [class]="(nickname.valid) ? 'form-control is-valid' : 'form-control is-invalid'" required>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="form-group">
-                    <label class="form-control-label">E-mail</label>
-                    <input type="email" class="form-control" [value]="user.email" disabled>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-lg-6">
-                  <div class="form-group">
-                    <label class="form-control-label">Tooeater desde</label>
-                    <input type="text" class="form-control" [value]="user.createdAt | date:'dd/MM/yyyy HH:mm'" disabled>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="form-group">
-                    <label class="form-control-label">Última atualização de perfil</label>
-                    <input type="text" class="form-control" [value]="user.updateAt | date:'dd/MM/yyyy HH:mm'" disabled>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <hr class="my-4" />
-            <!-- Security -->
-            <h6 class="heading-small text-muted mb-4">Segurança</h6>
-            <div class="pl-lg-4">
-              <div class="form-group">
-                <label class="form-control-label">Senha</label>
-                <input type="password" placeholder="Informe a senha somente se houver alteração"
-                  [(ngModel)]="user.password" name="password" #password="ngModel"
-                  [class]="(password.valid) ? 'form-control is-valid' : 'form-control is-invalid'">
-              </div>
-            </div>
-            <hr class="my-4" />
-            <!-- Description -->
-            <h6 class="heading-small text-muted mb-4">Sobre mim</h6>
-            <div class="pl-lg-4">
-              <div class="form-group">
-                <label>Bio</label>
-                <textarea rows="4" placeholder="Algumas palavras sobre mim..." [(ngModel)]="user.bio" name="bio"
-                  #bio="ngModel" [class]="(bio.valid) ? 'form-control is-valid' : 'form-control is-invalid'"></textarea>
-              </div>
-
-
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
   </div>
+  <div class="col-1"></div>
+
 </div>

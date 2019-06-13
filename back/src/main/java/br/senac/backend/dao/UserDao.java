@@ -3,11 +3,11 @@ package br.senac.backend.dao;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+
 import br.senac.backend.model.User;
 import br.senac.backend.util.Util;
 
 public class UserDao {
-
 
 	private static UserDao instance;
 	protected EntityManager em;
@@ -19,7 +19,7 @@ public class UserDao {
 	}
 
 	private UserDao() {
-		em = Manager.getInstance().entityManager;
+		em = Manager.getInstance().getEntityManager();
 	}
 
 	public User getById(final int id) { 
@@ -28,7 +28,6 @@ public class UserDao {
 	}
 
 	public User getByNickName(final String nickname) {
-		em.clear();
 		Query query = em.createQuery("FROM User where enabled = 1 AND nickname=:nickname");
 		query.setParameter("nickname", nickname);
 		try {
@@ -66,9 +65,14 @@ public class UserDao {
 	@SuppressWarnings("unchecked")
 	public List<User> search(String term) {
 		em.clear();
-		Query query = em.createQuery("FROM User WHERE enabled = 1 AND (email LIKE :term OR nickname LIKE :term)");
+		Query query = em.createQuery("FROM User WHERE enabled = 1 AND (email LIKE :term OR nickname LIKE :term OR bio LIKE :term OR firstname LIKE :term OR lastname LIKE :term)");
 		query.setParameter("term", "%" + term + "%");
-		return query.getResultList();
+		
+		try {
+			return query.getResultList();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public void persist(User user) {

@@ -34,6 +34,7 @@ import { ImageCropPickerComponent } from './components/image-crop-picker/image-c
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,
     }),
+    RouterModule
   ],
   declarations: [
     AppComponent,

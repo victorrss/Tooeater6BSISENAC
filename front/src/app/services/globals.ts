@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UserModel } from '../model/user.model';
 
 import * as moment from 'moment';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class Globals {
@@ -13,8 +14,8 @@ export class Globals {
   userLoggedIn: UserModel;
   msgErrApi: string = 'Desculpe, estamos com problemas técnicos. Por favor, tente novamente mais tarde.';
 
-  constructor(private toastr: ToastrService) {
-  
+  constructor(private toastr: ToastrService, private router: Router) {
+
     try {
       this.userLoggedIn = <UserModel>JSON.parse(localStorage.getItem('user'));
     } catch (error) {
@@ -59,4 +60,18 @@ export class Globals {
     }
 
   }
+
+  search(term: string) {
+    this.router.navigate(["/search/" + term]);
+  }
+
+  goToUser(nickname: string) {
+    this.router.navigate(["/profile/" + nickname]);
+  }
+  goToTooeats() {
+    this.router.navigate(["/tooeats"]);
+  }
+
+
+
 }

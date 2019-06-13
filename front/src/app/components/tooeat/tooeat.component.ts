@@ -6,45 +6,45 @@ import {
   ViewChild,
   ElementRef,
   Renderer2
-} from "@angular/core";
-import { TooeatModel } from "src/app/model/tooeat.model";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { Globals } from "src/app/services/globals";
+} from '@angular/core';
+import { TooeatModel } from 'src/app/model/tooeat.model';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Globals } from 'src/app/services/globals';
 
-import { ApiService } from "src/app/services/api.service";
-import { HttpErrorResponse } from "@angular/common/http";
-import { CommentModel } from "src/app/model/comment.model";
+import { ApiService } from 'src/app/services/api.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { CommentModel } from 'src/app/model/comment.model';
 
 @Component({
-  selector: "app-tooeat",
-  templateUrl: "./tooeat.component.html"
+  selector: 'app-tooeat',
+  templateUrl: './tooeat.component.html'
 })
 export class TooeatComponent {
-  formUpdateTooeat = { text: "" };
-  formSubmitComment = { text: "" };
+  formUpdateTooeat = { text: '' };
+  formSubmitComment = { text: '' };
   apiSubscription: any;
-  @Input("tooeat") t: TooeatModel;
+  @Input('tooeat') t: TooeatModel;
   @Output() onDelete = new EventEmitter<boolean>();
   @Output() onUpdate = new EventEmitter<any>();
 
-  mode: string = "create"; // create or update
+  mode: string = 'create'; // create or update
   tooeatUpdateStage: TooeatModel;
   constructor(
     private modalService: NgbModal,
-    private globals: Globals,
+    protected globals: Globals,
     private apiSvc: ApiService,
     private _renderer: Renderer2
   ) {}
 
   changeModeTooeat() {
-    if (this.mode == "create") {
-      this.mode = "update";
+    if (this.mode == 'create') {
+      this.mode = 'update';
       this.formUpdateTooeat.text = this.t.text;
-    } else this.mode = "create";
+    } else this.mode = 'create';
   }
 
   onSubmitUpdateTooeat() {
-    let tooeat = new TooeatModel();
+    const tooeat = new TooeatModel();
     tooeat.id = this.t.id;
     tooeat.text = this.formUpdateTooeat.text;
     this.apiSubscription = this.apiSvc.updateTooeat(tooeat).subscribe(
@@ -55,7 +55,7 @@ export class TooeatComponent {
         this.changeModeTooeat();
       },
       (err: HttpErrorResponse) => {
-        let msg =
+        const msg =
           err.status == 406 ? err.error.message : this.globals.msgErrApi;
         this.onUpdate.emit({ success: false, message: msg });
       }
@@ -76,30 +76,30 @@ export class TooeatComponent {
       (comments: CommentModel[]) => {
         this.t.commentsObj = comments;
         this.modalService.open(content, {
-          ariaLabelledBy: "modal-basic-title",
-          size: "lg"
+          ariaLabelledBy: 'modal-basic-title',
+          size: 'lg'
         });
       },
       (err: HttpErrorResponse) => {
-        this.globals.showToast("Oh não!", this.globals.msgErrApi, "error");
+        this.globals.showToast('Oh não!', this.globals.msgErrApi, 'error');
       }
     );
   }
 
   onSubmitComment() {
-    let comment = new CommentModel();
+    const comment = new CommentModel();
     comment.text = this.formSubmitComment.text;
     this.apiSubscription = this.apiSvc
       .postComment(this.t.id, comment)
       .subscribe(
         (comment: CommentModel) => {
           this.t.commentsObj.push(comment);
-          this.formSubmitComment.text = "";
+          this.formSubmitComment.text = '';
         },
         (err: HttpErrorResponse) => {
-          let msg =
+          const msg =
             err.status == 406 ? err.error.message : this.globals.msgErrApi;
-          this.globals.showToast("Oh não!", msg, "error");
+          this.globals.showToast('Oh não!', msg, 'error');
         }
       );
   }
@@ -113,7 +113,7 @@ export class TooeatComponent {
             this.t.commentsObj,
             comment
           )),
-        () => this.globals.showToast("Oh não!", this.globals.msgErrApi, "error")
+        () => this.globals.showToast('Oh não!', this.globals.msgErrApi, 'error')
       );
   }
 
@@ -123,7 +123,7 @@ export class TooeatComponent {
         if (res.status == 201) this.t.likes += 1;
         else if (res.status == 204) this.t.likes -= 1;
       },
-      () => this.globals.showToast("Oh não!", this.globals.msgErrApi, "error")
+      () => this.globals.showToast('Oh não!', this.globals.msgErrApi, 'error')
     );
   }
 

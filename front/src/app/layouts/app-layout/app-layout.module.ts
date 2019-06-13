@@ -14,6 +14,7 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { ClipboardModule } from 'ngx-clipboard';
 import { SearchComponent } from '../../pages/search/search.component';
 import { MyProfileComponent } from '../../pages/my-profile/my-profile.component';
+import { FollowersFollowingComponent } from '../../pages/followers-following/followers-following.component';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { MyProfileComponent } from '../../pages/my-profile/my-profile.component'
     MyProfileComponent,
     UserProfileComponent,
     SearchComponent,
+    FollowersFollowingComponent,
   ],
   providers: []
 })

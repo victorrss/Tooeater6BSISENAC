@@ -13,6 +13,8 @@ declare interface RouteInfo {
 export const ROUTES: RouteInfo[] = [
   { path: '/tooeats', title: 'Tooeats', icon: 'ni-tv-2 text-primary', class: '' },
   { path: '/my-profile', title: 'Meu Perfil', icon: 'ni-single-02 text-yellow', class: '' },
+  { path: '/my-profile/followers', title: 'Meus seguidores', icon: 'ni-single-02 text-blue', class: '' },
+  { path: '/my-profile/following', title: 'Quem estou seguindo', icon: 'ni-single-02 text-green', class: '' },
 ];
 
 @Component({
@@ -36,6 +38,10 @@ export class SidebarComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+  }
+
+  search(term) {
+    this.globals.search(term);
   }
 
   getUser(): UserModel {

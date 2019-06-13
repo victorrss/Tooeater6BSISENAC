@@ -1,25 +1,126 @@
-<div class="header bg-gradient-success pb-8 pt-5 pt-md-8">
+<div class="header bg-gradient-warning pb-8 pt-5 pt-md-8">
   <div class="container-fluid">
     <div class="header-body">
-
       <div class="row">
 
         <div class="col-1"></div>
+
         <div class="col">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title text-uppercase text-muted mb-0">Pesquisa</h5>
-
+              <h1> Você pesquisou por <i>{{term}}</i></h1>
             </div>
           </div>
-
         </div>
+
         <div class="col-1"></div>
 
       </div>
     </div>
   </div>
 </div>
-<div class="container-fluid mt--7">
+<div class="container-fluid mt--8">
 
+  <div class="row mt-6" *ngFor="let result of results">
+
+    <div class="col-1"></div>
+
+    <div class="col">
+      <div class="card card-profile shadow">
+        <div class="row justify-content-center">
+          <div class="col-lg-3 order-lg-2">
+            <div class="card-profile-image">
+              <img src="{{ result.user.photo ? result.user.photo : '/assets/img/user/default.png' }}"
+                class="rounded-circle">
+            </div>
+          </div>
+        </div>
+        <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+
+          <div class="d-flex justify-content-end" *ngIf="result.user.isFollower">
+            <a *ngIf="result.user.isFollower!=2" href="javascript:void(0)" (click)="followDisfollow(result.user)"
+              class="btn btn-sm btn-success mr--2">
+              {{result.user.isFollower == 1 ? 'Seguir' :'Deixar de seguir'}}</a>
+            <a *ngIf="result.user.isFollower==2" class="btn btn-sm btn-success mr--2">Aguardando solicitação</a>
+          </div>
+
+        </div>
+        <div class="card-body pt-0 pt-md-4">
+          <div class="row">
+            <div class="col">
+              <div class="card-profile-stats d-flex justify-content-center mt-md-5">
+                <div>
+                  <span class="heading">{{result.user.tooeats}}</span>
+                  <span class="description">Tooeats</span>
+                </div>
+                <div>
+                  <span class="heading">{{result.user.following}}</span>
+                  <span class="description">Seguindo</span>
+                </div>
+                <div>
+                  <span class="heading">{{result.user.followers}}</span>
+                  <span class="description">Seguidores</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-center">
+            <h1 class="cursor-pointer" (click)="goToUserProfile(result.user)">
+              {{ result.user.firstName }}{{ ' '+result.user.lastName }} - @{{result.user.nickname}}
+            </h1>
+            <hr class="my-4" />
+            <p>{{ result.user.bio }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-1"></div>
+
+  </div>
 </div>
+
+
+
+<!-- <div class="card box-effect">
+          <div class="card-body cursor-pointer" (click)="goToUserProfile(result.user)">
+           BEGIN - header card  -> nickname, createdAt, updateAt and dropdown for Update and Delete
+            <div class="row">
+              <div class="col-3 d-flex align-items-center">
+                <img src="{{ result.user.photo ? result.user.photo : '/assets/img/user/default.png' }}"
+                  class=" rounded-circle" style="width: 100%">
+              </div>
+              <div class="col">
+
+                <div class="row">
+                  <h2>{{result.user.firstName}} {{result.user.lastName}} - @{{result.user.nickname}}</h2>
+                </div>
+
+                <div class="row">
+                  <b>Sexo:</b>
+                  <span class="ml-1"> {{result.user.gender ? 'Masculino' : 'Femenino'}}</span>
+                </div>
+
+                <div class="row">
+                  <b>Seguindo:</b>
+                  <span class="ml-1">{{result.user.following}}</span>
+                </div>
+
+                <div class="row">
+                  <b>Seguidores:</b>
+                  <span class="ml-1">{{result.user.followers}}</span>
+                </div>
+
+                <div class="row">
+                  <b>Biografia:</b>
+                  <span class="ml-1">{{result.user.bio}}</span>
+                </div>
+
+              </div>
+            </div>
+          </div>
+       END - header card  -> nickname, createdAt, updateAt and dropdown for Update and Delete
+
+
+      </div> -->

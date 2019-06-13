@@ -33,6 +33,18 @@ public class FollowerDao {
 		return query.getResultList();
 	}
 
+	public Follower getByMasterAndSlaveWithoutEnabled(final Integer userSlaveId, final Integer userMasterId) {
+		em.clear();
+		Query query = em.createQuery("FROM " +Follower.class.getName()+ " WHERE slave_user_id=:userSlaveId AND master_user_id=:userMasterId");
+		query.setParameter("userSlaveId", userSlaveId);
+		query.setParameter("userMasterId", userMasterId);
+		try {
+			return (Follower) query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<Follower> findAllFollowers(final Integer userId) {
 		em.clear();
@@ -80,6 +92,18 @@ public class FollowerDao {
 			Follower follower = getById(id);
 			follower.setEnabled(true);
 			em.merge(follower);
+			em.getTransaction().commit();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			em.getTransaction().rollback();
+		}
+		em.clear();
+	}
+	
+	public void remove(final Follower follower) {
+		try {
+			em.getTransaction().begin();
+			em.remove(follower);
 			em.getTransaction().commit();
 		} catch (Exception ex) {
 			ex.printStackTrace();

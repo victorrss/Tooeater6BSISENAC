@@ -57,9 +57,9 @@
       <!-- Form -->
       <form class="mt-4 mb-3 d-md-none">
         <div class="input-group input-group-rounded input-group-merge">
-          <input type="search" class="form-control form-control-rounded form-control-prepended" placeholder="Pesquisa"
+          <input type="search" class="form-control form-control-rounded form-control-prepended" placeholder="Pesquisa" #inputSearch (keydown.enter)="search(inputSearch.value)"
             aria-label="Pesquisa">
-          <div class="input-group-prepend">
+          <div class="input-group-prepend" (click)="search(inputSearch.value)">
             <div class="input-group-text">
               <span class="fa fa-search"></span>
             </div>

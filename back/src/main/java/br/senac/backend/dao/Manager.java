@@ -31,5 +31,4 @@ public class Manager {
 	public Session getSession() {
 		return entityManager.unwrap(Session.class);
 	}
-
 }

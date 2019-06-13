@@ -7,6 +7,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ImageCropPickerComponent } from 'src/app/components/image-crop-picker/image-crop-picker.component';
+import { ActivatedRoute } from '@angular/router';
+import { SearchModel } from '../../model/search.model';
+import { TooeatModel } from '../../model/tooeat.model';
 
 @Component({
   selector: 'app-user-profile',
@@ -15,58 +18,36 @@ import { ImageCropPickerComponent } from 'src/app/components/image-crop-picker/i
 })
 export class UserProfileComponent implements OnInit {
   user = new UserModel();
+  tooeats: TooeatModel[] = [];
   apiSubscription: any;
   today = new Date();
+  nickname: string;
 
-  constructor(private globals: Globals, private apiSvc: ApiService, private modalService: NgbModal) { }
+  constructor(private globals: Globals, private apiSvc: ApiService, private modalService: NgbModal, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.nickname = <string>this.route.snapshot.params['nickname'];
     this.getUser();
   }
 
+  // tslint:disable-next-line: use-life-cycle-interface
   ngOnDestroy(): void {
-    if (this.apiSubscription)
+    if (this.apiSubscription) {
       this.apiSubscription.unsubscribe();
-  }
-
-  onSubmit() {
-    let userUpdate = this.user;
-    delete (userUpdate.tooeats)
-    delete (userUpdate.following)
-    delete (userUpdate.followers)
-    delete (userUpdate.email)
-    delete (userUpdate.createdAt)
-    delete (userUpdate.updateAt)
-
-    this.apiSubscription = this.apiSvc.updateUser(this.user).subscribe(
-      () => {
-        this.globals.showToast('Aí sim!', 'Usuário atualizado com sucesso!', 'success')
-        this.getUser()
-      },
-      (err: HttpErrorResponse) => this.globals.showToast('Oh não!', (err.status == 406) ? err.error.message : this.globals.msgErrApi, 'error')
-    );
-  }
-
-  getBirthday() {
-    let d: Date = new Date(this.user.birthday);
-    let age: number = moment().diff(d, 'years');
-    return !Number.isInteger(age) || age > 130 ? '' : age
+    }
   }
 
   getUser() {
-    this.apiSubscription = this.apiSvc.getUserMe().subscribe((result: UserModel) => {
-      localStorage.setItem('user', JSON.stringify(result));
-      this.globals.userLoggedIn = this.user = result;
+    this.apiSubscription = this.apiSvc.getByNickname(this.nickname).subscribe((result: SearchModel) => {
+      this.user = result.user;
+      this.tooeats = result.tooeats;
+      if (!this.user) {
+        this.globals.showToast('Oh não', 'Usuário não encontrado!', 'error');
+        this.globals.goToTooeats();
+      }
     }, (err) => {
-      this.globals.showToast('Oh não!', 'Falha ao consultar os dados de seu usuário', 'error')
+      this.globals.showToast('Oh não!', 'Falha ao carregar o usuário', 'error');
+      this.globals.goToTooeats();
     });
-  }
-
-  openModalImageCropPicker() {
-    const modalRef = this.modalService.open(ImageCropPickerComponent, { size: 'lg' });
-    modalRef.componentInstance.image = this.user.photo ? this.user.photo : null;
-    modalRef.result.then((result) => {
-      console.log(result)
-    }).catch();
   }
 }
