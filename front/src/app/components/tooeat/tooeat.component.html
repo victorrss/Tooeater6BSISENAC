@@ -11,7 +11,7 @@
               <div class="col-1"> <img src="{{ t.user.photo ? t.user.photo : '/assets/img/user/default.png' }}"
                   class="avatar rounded-circle"> </div>
               <div class="col ml-4">
-                <h4 class="p-0 m-0">{{t.user.nickname}}</h4>
+                <h4 class="p-0 m-0">@{{t.user.nickname}}({{t.user.firstName}} {{t.user.lastName}})</h4>
                 <a class="h5 font-weight-300 p-0 m-0" title="{{ globals.getSimpleDate(t.createdAt) }}">
                   {{ globals.getTimeRelative(t.createdAt) }}</a>
                 <span class="h5 font-weight-300 p-0 m-0"

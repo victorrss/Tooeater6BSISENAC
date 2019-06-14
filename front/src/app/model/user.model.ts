@@ -17,5 +17,5 @@ export class UserModel {
 
   // artificial
   public acceptPolicy: boolean; // only FRONT END
-  public isFollower: number = null; // NULL - AGUARDANDO HTTP RESPONSE; 1 - NAO SEGUE; 2 - AGUARDANDO INVITE; 3 - ESTÁ SEGUINDO
+  public isFollower: boolean = false;
 }

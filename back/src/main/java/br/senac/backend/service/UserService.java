@@ -22,10 +22,8 @@ import br.senac.backend.dao.UserDao;
 import br.senac.backend.exception.UserException;
 import br.senac.backend.model.Tooeat;
 import br.senac.backend.model.User;
-import br.senac.backend.model.pojo.UserCreatePojo;
 import br.senac.backend.model.pojo.UserSearchPojo;
 import br.senac.backend.model.pojo.UserUpdatePojo;
-import br.senac.backend.util.ImageUtil;
 import br.senac.backend.util.Util;
 import br.senac.backend.validator.UserValidator;
 import io.swagger.annotations.Api;
@@ -50,26 +48,26 @@ public class UserService {
 			@ApiResponse(code = 406, message = "Falha validação, User Exception com retorno de: "+ "{\"message\": \"Message\"}"),
 			@ApiResponse(code = 400, message = "Fail on create, try-catch") 
 	})
-	public Response create(UserCreatePojo pojo) {
+	public Response create(User user) {
 		try {
-			User user = UserCreatePojo.convertToModel(pojo);
+			//User user = UserCreatePojo.convertToModel(pojo);
 			UserException userException = UserValidator.validate(user);
 			if (userException != null)
 				throw userException;
 
 			user.setPassword(Util.sha1(user.getPassword()));
 			user.setCreatedAt(Util.getDateNow());
-
+/*
 			//IMAGE SAVE
 			try {
-				if (!user.getPhoto().isEmpty()) {
-					String folderPath = System.getProperty("user.dir") + "/tooeater_files/images/user";
-					String fileName = "/" + user.getId();
-					ImageUtil.save(user.getPhoto(), folderPath, fileName);
-					user.setPhoto(user.getId()+ImageUtil.getExtension(ImageUtil.getMimeType(user.getPhoto())));
-				}	
+				//if (!user.getPhoto().isEmpty()) {
+				String folderPath = System.getProperty("user.dir") + "\\tooeater_files\\images\\user";
+				String fileName = "\\" + user.getId();
+				ImageUtil.save(user.getPhoto(), folderPath, fileName);
+				user.setPhoto(user.getId()+ImageUtil.getExtension(ImageUtil.getMimeType(user.getPhoto())));
+				//}	
 			} catch(Exception e) {}
-
+*/
 
 			UserDao.getInstance().persist(user);
 			return Response
@@ -227,21 +225,21 @@ public class UserService {
 		try {
 			User user = UserDao.getInstance().getById(pojo.getId());
 			user = UserUpdatePojo.convertToModel(user, pojo);
-
+			
 			UserException userException = UserValidator.validateUpdate(user, user.getNickname());
 			if (userException != null)
 				throw userException;
-
+/*
 			//IMAGE UPDATE
 			try {
 				if (!user.getPhoto().isEmpty()) {
-					String folderPath = System.getProperty("user.dir") + "/tooeater_files/images/user";
-					String fileName = "/" + user.getId();
+					String folderPath = System.getProperty("user.dir") + "\\tooeater_files\\images\\user";
+					String fileName = "\\" + user.getId();
 					ImageUtil.save(user.getPhoto(), folderPath, fileName);
 					user.setPhoto(user.getId()+ImageUtil.getExtension(ImageUtil.getMimeType(user.getPhoto())));
 				}	
 			} catch(Exception e) {}
-
+*/
 			UserDao.getInstance().merge(user);
 			response = Response
 					.status(Response.Status.NO_CONTENT)

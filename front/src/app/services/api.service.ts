@@ -33,6 +33,7 @@ export class ApiService {
 
   // BEGIN - CRUD USER
   postUser(user: UserModel) {
+    delete(user.isFollower);
     return <Observable<UserModel>>(
       this.http.post(this.globals.uri + '/user', user)
     );
@@ -41,6 +42,7 @@ export class ApiService {
     return <Observable<UserModel>>this.http.get(this.globals.uri + '/user/me');
   }
   updateUser(user: UserModel) {
+    delete(user.isFollower);
     return this.http.put(this.globals.uri + '/user', user);
   }
   deleteUser() {
@@ -94,7 +96,7 @@ export class ApiService {
   }
 
   getIsFollower(nickname: string) {
-    return this.http.get(this.globals.uri + '/follower/isFollower/' + nickname, { observe: 'response' }).pipe(this.http_retry());
+    return this.http.get(this.globals.uri + '/follower/isFollower/' + nickname, { observe: 'response' });
   }
 
   postFollowerInvite(nickname: string) {

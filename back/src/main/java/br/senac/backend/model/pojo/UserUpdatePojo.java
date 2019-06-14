@@ -23,7 +23,7 @@ public class UserUpdatePojo {
 	private String bio;
 	private String nickname;
 	private String photo;
-
+	
 	public String getPhoto() {
 		return photo;
 	}

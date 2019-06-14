@@ -2,7 +2,6 @@
   <div class="container-fluid">
     <div class="header-body">
       <div class="row mt-5">
-
         <div class="col-1"></div>
 
         <div class="col">
@@ -10,33 +9,55 @@
             <div class="row justify-content-center">
               <div class="col-lg-3 order-lg-2">
                 <div class="card-profile-image">
-                  <img src="{{ user.photo ? user.photo : '/assets/img/user/default.png' }}" class="rounded-circle">
+                  <img
+                    src="{{
+                      user.photo ? user.photo : '/assets/img/user/default.png'
+                    }}"
+                    class="rounded-circle"
+                  />
                 </div>
               </div>
             </div>
-            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+            <div
+              class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4"
+            >
+              <div class="d-flex justify-content-end">
+                <a
+                  href="javascript:void(0)"
+                  (click)="followDisfollow(user)"
+                  class="btn btn-sm btn-success mr--2"
+                >
+                  Follow/Disfollow</a
+                >
+              </div>
             </div>
             <div class="card-body pt-0 pt-md-4">
               <div class="row">
                 <div class="col">
-                  <div class="card-profile-stats d-flex justify-content-center mt-md-5">
+                  <div
+                    class="card-profile-stats d-flex justify-content-center mt-md-5"
+                  >
                     <div>
-                      <span class="heading">{{user.tooeats}}</span>
+                      <span class="heading">{{ user.tooeats }}</span>
                       <span class="description">Tooeats</span>
                     </div>
                     <div>
-                      <span class="heading">{{user.following}}</span>
+                      <span class="heading">{{ user.following }}</span>
                       <span class="description">Seguindo</span>
                     </div>
                     <div>
-                      <span class="heading">{{user.followers}}</span>
+                      <span class="heading">{{ user.followers }}</span>
                       <span class="description">Seguidores</span>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="text-center">
-                <h1>{{ user.firstName }}{{ ' '+user.lastName }} - @{{user.nickname}}</h1>
+                <h1>
+                  {{ user.firstName }}{{ " " + user.lastName }} - @{{
+                    user.nickname
+                  }}
+                </h1>
                 <hr class="my-4" />
                 <p>{{ user.bio }}</p>
               </div>
@@ -45,19 +66,15 @@
         </div>
 
         <div class="col-1"></div>
-
       </div>
     </div>
   </div>
 </div>
 <div class="container-fluid mt--7">
-
   <div class="col-1"></div>
   <div class="col">
-
     <div class="card box-effect">
       <div class="card-body">
-
         <div class="col">
           <div class="row">
             <h1>Tooeats</h1>
@@ -74,8 +91,6 @@
         </div>
       </div>
     </div>
-
   </div>
   <div class="col-1"></div>
-
 </div>

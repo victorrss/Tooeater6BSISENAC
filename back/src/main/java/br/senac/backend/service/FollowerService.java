@@ -3,7 +3,6 @@ package br.senac.backend.service;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -67,7 +66,7 @@ public class FollowerService {
 			f.setUserSlave(uSlave);
 			f.setUserMaster(uMaster);
 
-			Follower followExists = FollowerDao.getInstance().getByMasterAndSlaveWithoutEnabled(uSlave.getId(), uMaster.getId());
+			Follower followExists = FollowerDao.getInstance().getByMasterAndSlave(uSlave.getId(), uMaster.getId());
 
 			if (followExists == null) {
 				// follow, THEN CREATE
@@ -75,24 +74,13 @@ public class FollowerService {
 				response = Response
 						.status(Response.Status.CREATED)
 						.build();
-			} else {
-				if (followExists.getEnabled() == null) {
-					// aguardando aceitar o invite
-					response = Response
-							.status(Response.Status.PARTIAL_CONTENT)
-							.build();
-				} else if (followExists.getEnabled() == true) {
-					// disfollow, then delete
-					FollowerDao.getInstance().remove(f);
-					response = Response
-							.status(Response.Status.NO_CONTENT)
-							.build();
-				} else {
-					// false - não implementado
-					response = Response
-							.status(Response.Status.FORBIDDEN)
-							.build();
-				}
+			} else  {
+				// disfollow, then delete
+				FollowerDao.getInstance().remove(f);
+				response = Response
+						.status(Response.Status.NO_CONTENT)
+						.build();
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -128,7 +116,7 @@ public class FollowerService {
 			User uMaster = UserDao.getInstance().getById(userId);
 			User uSlave = UserDao.getInstance().getByUserName(nickname);
 
-			Follower followExists = FollowerDao.getInstance().getByMasterAndSlaveWithoutEnabled(uSlave.getId(), uMaster.getId());
+			Follower followExists = FollowerDao.getInstance().getByMasterAndSlave(uSlave.getId(), uMaster.getId());
 
 			if (followExists == null) {
 				// NÃO ESTÁ SEGUINDO
@@ -136,22 +124,10 @@ public class FollowerService {
 						.status(Response.Status.PARTIAL_CONTENT)
 						.build();
 			} else {
-				if (followExists.getEnabled() == null) {
-					// AGUARDANDO ACEITE DO INVITE
-					response = Response
-							.status(Response.Status.NO_CONTENT)
-							.build();
-				} else if (followExists.getEnabled() == true) {
-					// ESTÁ SEGUINDO
-					response = Response
-							.status(Response.Status.OK)
-							.build();
-				} else {
-					// false - não implementado
-					response = Response
-							.status(Response.Status.FORBIDDEN)
-							.build();
-				}
+				// ESTÁ SEGUINDO
+				response = Response
+						.status(Response.Status.OK)
+						.build();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -164,12 +140,14 @@ public class FollowerService {
 
 
 	@GET
+	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/followers")
-	public Response readFollowers() {
-		Integer userId = null;
+	public Response readFollowers(@Context SecurityContext securityContext) {
 		Response response;
 		try {
+			Integer userId = Util.stringToInteger(securityContext.getUserPrincipal().getName());
+			User u = UserDao.getInstance().getById(userId);
 			List<Follower> list = FollowerDao.getInstance().findAllFollowers(userId);
 			response = Response
 					.status(Response.Status.OK)
@@ -186,12 +164,13 @@ public class FollowerService {
 	}
 
 	@GET
+	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/following")
-	public Response readFollowing() {
-		Integer userId = null;
+	public Response readFollowing(@Context SecurityContext securityContext) {
 		Response response;
 		try {
+			Integer userId = Util.stringToInteger(securityContext.getUserPrincipal().getName());
 			List<Follower> list = FollowerDao.getInstance().findAllFollowing(userId);
 			response = Response
 					.status(Response.Status.OK)
@@ -207,7 +186,7 @@ public class FollowerService {
 		return response;
 	}
 
-
+/*
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/invite")
@@ -215,6 +194,7 @@ public class FollowerService {
 		Integer userId = null;
 		Response response;
 		try {
+			if()
 			List<Follower> list = FollowerDao.getInstance().findAllInvites(userId);
 			response = Response
 					.status(Response.Status.OK)
@@ -229,7 +209,7 @@ public class FollowerService {
 		}
 		return response;
 	}
-
+*/
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -260,7 +240,7 @@ public class FollowerService {
 
 		return response;
 	}
-
+/*
 	@DELETE
 	@Path("/{id}")
 	public Response delete(@PathParam("id") Integer id) {
@@ -278,5 +258,5 @@ public class FollowerService {
 		}
 		return response;
 	}
-
+*/
 }

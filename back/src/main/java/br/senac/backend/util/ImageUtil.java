@@ -21,7 +21,8 @@ public class ImageUtil {
 	public static String read(String folderPath, String fileName) throws IOException {
 		createFolder(folderPath);
 		String base64Image = "";
-		File file = new File(folderPath +"/"+ fileName);
+		
+		File file = new File(folderPath +"\\"+ fileName);
 		try (FileInputStream imageInFile = new FileInputStream(file)) {
 			// read file and convert to base64 string
 			byte imageData[] = new byte[(int) file.length()];
@@ -48,6 +49,7 @@ public class ImageUtil {
 		String base64 = fileArr[1];
 		try {
 			String extension = getExtension(getMimeType(base64String));
+			System.out.println(extension);
 			FileOutputStream fos = new FileOutputStream(folderPath + fileName + extension);
 			byte byteArray[] = Base64.getDecoder().decode(base64);
 			fos.write(byteArray);
